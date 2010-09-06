@@ -9,6 +9,6 @@ Currently the only directory is src which contains the libs and samples built of
 ## Future Plans
 
 * Set up a scripted build system (probably using [Jam][jam-link])
-* Decide on a small project and starting building classes and libs as needed.
+* Decide on a small project and start building classes and libs as needed.
 
 [jam-link]: http://www.perforce.com/jam/jam.html  "Jam build tool"
