@@ -1,9 +1,14 @@
+#pragma once
+
 // -- types
 typedef char* pointer;
+typedef const pointer cpointer;
+typedef void* vpointer;
+typedef const vpointer cvpointer;
 
 // -- integer types
 typedef int nint;
-typedef unsigned int unint;
+typedef unsigned int nuint;
 typedef char int8;
 typedef unsigned char uint8;
 typedef short int16;

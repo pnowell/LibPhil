@@ -1,0 +1,346 @@
+## ================================================================================================
+## Utility functions
+## ================================================================================================
+
+## ================================================================================================
+## General case search and replace within a string
+## ================================================================================================
+rule SearchReplace {
+    ## -- name all the arguments
+    local STRINGS = $(1) ;
+    local PATTERN = $(2) ;
+    local REPLACE = $(3) ;
+
+    local RESULT ;
+    for STRING in $(STRINGS) {
+        while true {
+            local MATCHRESULT = [ MATCH "(.*)($(PATTERN))(.*)" : $(STRING) ] ;
+            if ! $(MATCHRESULT) { break ; }
+            STRING = $(MATCHRESULT[1])$(REPLACE)$(MATCHRESULT[3]) ;
+        }
+        RESULT += $(STRING) ;
+    }
+
+    return $(RESULT) ;
+}
+
+## ================================================================================================
+## Fix a path string according to our standards
+## ================================================================================================
+rule FixPath {
+    ## -- name the arguments
+    local RESULT = $(1) ;
+
+    ## -- make sure we use forward slashes instead of backslashes
+    RESULT = [ SearchReplace $(RESULT) : "\\\\" : "/" ] ;
+
+    ## -- make sure the drive letter is lower case
+    local MATCHRESULT = [ MATCH "^([A-Z]:/)(.*)" : $(RESULT) ] ;
+    if $(MATCHRESULT) { RESULT = $(MATCHRESULT[1]:L)$(MATCHRESULT[2]) ; }
+    return $(RESULT) ;
+}
+
+## ================================================================================================
+## Return the relative path of the first absolute path relative to the second
+## ================================================================================================
+rule MakeRelative {
+    ## -- name the arguments
+    local PATH = $(1) ;
+    local BASE = $(2) ;
+
+    return [ SearchReplace $(PATH) : $(BASE)/ : "" ] ;
+}
+
+## ================================================================================================
+## Fix up some environment variables
+## ================================================================================================
+LIBPHIL_BASEDIR = [ FixPath $(LIBPHIL_BASEDIR) ] ;
+LIBPHIL_CWD = [ FixPath $(LIBPHIL_CWD) ] ;
+
+## ================================================================================================
+## Give defaults to variables that might be customized on the command line
+## ================================================================================================
+LIBPHIL_TARGET ?= winvs ;
+
+## ================================================================================================
+## Rule to set various global variables according to the current working directory
+## ================================================================================================
+rule ChangeCWD {
+    LIBPHIL_RELCWD = [ MakeRelative $(LIBPHIL_CWD) : $(LIBPHIL_BASEDIR) ] ;
+    LIBPHIL_DIRNAME = $(LIBPHIL_CWD:B) ;
+
+    ## -- set up the target directory for any sources we're currently dealingg with
+    ## -- strip "src" off the beginning if neceesary
+    LIBPHIL_RELTARGDIR = [ SearchReplace $(LIBPHIL_RELCWD) : "^src/?" : "" ] ;
+    LIBPHIL_TARGDIR = $(LIBPHIL_BASEDIR)/_$(LIBPHIL_TARGET)/$(LIBPHIL_RELTARGDIR) ;
+}
+
+## -- invoke the rule to set these global values initially
+ChangeCWD ;
+
+## ================================================================================================
+## Global variables
+## ================================================================================================
+LIBPHIL_TARGETS = winvs ;
+LIBPHIL_PLATFORM = $(OS:L) ;
+LIBPHIL_PLATFORMS = cygwin ;
+LIBPHIL_JAMCORE = $(LIBPHIL_BASEDIR)/jamcore ;
+LIBPHIL_INCLUDES = "$(LIBPHIL_BASEDIR)/src/libs" ;
+LIBPHIL_HDRSCAN = "^[\t ]*#[\t ]*include[\t ]*[\"]([^\"]*)[\"]" ;
+
+## ================================================================================================
+## Built in jam globals
+## ================================================================================================
+SEARCH = $(LIBPHIL_INCLUDES) ;
+HDRRULE = HeaderRule ;
+
+## ================================================================================================
+## Do some validation on initial global variables
+## ================================================================================================
+if ! ( $(LIBPHIL_TARGET) in $(LIBPHIL_TARGETS) ) {
+    Exit "Unsupported target : " $(LIBPHIL_TARGET) ;
+}
+
+if ! ( $(LIBPHIL_PLATFORM) in $(LIBPHIL_PLATFORMS) ) {
+    Exit "Unsupported platform : " $(LIBPHIL_PLATFORM) ;
+}
+
+## ================================================================================================
+## Rules for actual dependency graph creation
+## ================================================================================================
+
+## ================================================================================================
+## Create a directory (just the rule, which only needs to inform the dependency graph
+## that we don't care about the modified time of the directory)
+## ================================================================================================
+rule CreateDirectory {
+    NOUPDATE $(1) ;
+}
+
+## ================================================================================================
+## Resolve a relative directory/file in a list of search directories
+## ================================================================================================
+rule ResolveAbsolute {
+    ## -- name arguments
+    local REL = $(1) ;
+    local DIRS = $(2) ;
+
+    local RESOLVED ;
+    for CURRDIR in $(DIRS) {
+        ## -- check each search directory to see if that's where it came from
+        CURR = $(CURRDIR)/$(REL) ;
+
+        ## -- separate the directory and file
+        CURRDIR = $(CURR:D) ;
+        CURR = $(CURR:BS) ;
+
+        ## -- check to see if this file is in this directory
+        RESOLVED = [ GLOB $(CURRDIR) : $(CURR) ] ;
+
+        ## -- if that found it, we're done
+        if $(RESOLVED) {
+            break ;
+        }
+    }
+    return $(RESOLVED) ;
+}
+
+## ================================================================================================
+## Handle header includes
+## ================================================================================================
+rule HeaderRule {
+    ## -- name arguments
+    local INCLUDER = $(1) ;
+    local INCLUDEDS = $(2) ;
+
+    ## -- transform all the included files into absolute paths
+    local CURRINC ;
+    local RESOLVED ;
+    for CURRINC in $(INCLUDEDS) {
+        RESOLVED = [ ResolveAbsolute $(CURRINC) : $(SEARCH) ] ;
+
+        ## -- just in case this header was included in a comment, we can't assert
+        ## -- that the header actually exists.  We'll let the compiler worry about that
+        if ! $(RESOLVED) {
+            return ;
+        }
+
+        ## -- deal with this resolved include
+        Includes $(INCLUDER) : $(RESOLVED) ;
+
+        ## -- and recurse into this header
+        HDRSCAN on $(RESOLVED) = $(LIBPHIL_HDRSCAN) ;
+    }
+}
+
+## ================================================================================================
+## Rule for setting up dependencies and actions for an object file
+## ================================================================================================
+rule ObjectList {
+    ## -- name arguments
+    local SOURCES = $(1) ;
+
+    ## -- get a list of object names
+    local OBJECTS ;
+    local SOURCE ;
+    for SOURCE in $(SOURCES) {
+        ## -- change the suffix and reroot the file
+        local ABSSOURCE = $(LIBPHIL_CWD)/$(SOURCE) ;
+        local OBJECT = $(LIBPHIL_TARGDIR)/$(SOURCE:S=".$(OBJ_SUFFIX)") ;
+        Depends $(OBJECT) : $(ABSSOURCE) ;
+        OBJECTS += $(OBJECT) ;
+    }
+
+    ## -- then transform the whole list of sources into absolute paths
+    SOURCES = $(LIBPHIL_CWD)/$(SOURCES) ;
+
+    ## -- set up scanning for header includes on our sources
+    HDRSCAN on $(SOURCES) = $(LIBPHIL_HDRSCAN) ;
+
+    ## -- all the objects that we want to create depend on the target directory existing
+    Depends $(OBJECTS) : $(LIBPHIL_TARGDIR) ;
+
+    ## -- invoke the rule for creating the directory
+    CreateDirectory $(LIBPHIL_TARGDIR) ;
+
+    ## -- make sure this gets built if you're building everything
+    Depends all : $(OBJECTS) ;
+
+    ## -- invoke the rule to compile the list of objects
+    CompileObjectList $(OBJECTS) : $(SOURCES) ;
+
+    return $(OBJECTS) ;
+}
+
+## ================================================================================================
+## Recurse into the given absolute path
+## ================================================================================================
+rule RecurseInto {
+    ## -- name arguments
+    local DIR = $(1) ;
+
+    ## -- only process this directory once
+    on $(DIR) if $(PROCESSED) {
+        return ;
+    }
+
+    ## -- mark this directory as processed
+    PROCESSED on $(DIR) = true ;
+
+    ## -- backup the previous CWD
+    local PREVCWD = $(LIBPHIL_CWD) ;
+
+    ## -- change to the new CWD
+    LIBPHIL_CWD = $(DIR) ;
+    ChangeCWD ;
+
+    ## -- recurse into that directory by just parsing that directory's jamfile
+    include $(LIBPHIL_CWD)/Jamfile.jam ;
+
+    ## -- reset the CWD
+    LIBPHIL_CWD = $(PREVCWD) ;
+    ChangeCWD ;
+}
+
+## ================================================================================================
+## Rule for recursing into and processing the given list of libraries into the dependency graph
+## ================================================================================================
+rule LibraryList {
+    ## -- name arguments
+    local LIBNAMES = $(1) ;
+
+    local CURR ;
+    local RESOLVED ;
+    local RESULTS ;
+    for CURR in $(LIBNAMES) {
+        ## -- resolve each library to an absolute path
+        RESOLVED = [ ResolveAbsolute $(CURR) : $(SEARCH) ] ;
+
+        if ! $(RESOLVED) {
+            Exit "LibraryList: Unable to resolve " $(CURR) " in " $(SEARCH) ;
+        }
+
+        ## -- recurse into that library
+        RecurseInto $(RESOLVED) ;
+
+        ## -- get the resulting library from that recursion
+        on $(RESOLVED) RESULTS += $(TARGET_LIB) ;
+    }
+
+    return $(RESULTS) ;
+}
+
+## ================================================================================================
+## Rule for setting up dependencies and actions for a library
+## ================================================================================================
+rule Library {
+    ## -- name all the arguments
+    local SOURCES = $(1) ;
+
+    ## -- build a library name
+    LIB_NAME = $(LIBPHIL_TARGDIR).$(LIB_SUFFIX) ;
+
+    ## -- set up the objects for our list of sources
+    local OBJECTS = [ ObjectList $(SOURCES) ] ;
+
+    ## -- let jam know that this library is dependant on these objects
+    Depends $(LIB_NAME) : $(OBJECTS) ;
+
+    ## -- also add this library to the list of things to build
+    Depends all : $(LIB_NAME) ;
+
+    ## -- invoke the rule to link the library
+    LinkLibrary $(LIB_NAME) : $(OBJECTS) ;
+
+    ## -- mark this directory with the resulting library
+    TARGET_LIB on $(LIBPHIL_CWD) = $(LIB_NAME) ;
+}
+
+## ================================================================================================
+## Rule for setting up dependencies and actions for a library
+## ================================================================================================
+rule Executable {
+    ## -- name all the arguments
+    local SOURCES = $(1) ;
+    local LIBNAMES = $(2) ;
+
+    ## -- build an executable name from the current directory name
+    EXE_NAME = $(LIBPHIL_TARGDIR)/$(LIBPHIL_DIRNAME).$(EXE_SUFFIX) ;
+
+    ## -- set up the objects for our list of sources
+    local OBJECTS = [ ObjectList $(SOURCES) ] ;
+
+    ## -- set up the libraries that we depend on
+    local LIBRARIES = [ LibraryList $(LIBNAMES) ] ;
+
+    ## -- let jam know that this executable depends on all the given sources and libraries
+    Depends $(EXE_NAME) : $(OBJECTS) $(LIBRARIES) ;
+
+    ## -- also let jam know that this executable is one of the things to build
+    Depends all : $(EXE_NAME) ;
+
+    ## -- invoke the rule to link the executable
+    LinkExecutable $(EXE_NAME) : $(OBJECTS) $(LIBRARIES) ;
+}
+
+## ================================================================================================
+## Simply recurse into subdirectories and process their jamfiles
+## ================================================================================================
+rule SubDirectories {
+    ## -- name arguments
+    local SUBDIRS = $(1) ;
+
+    ## -- process each subdir in 
+    local CURR ;
+    for CURR in $(SUBDIRS) {
+        RecurseInto $(LIBPHIL_CWD)/$(CURR) ;
+    }
+}
+
+## ================================================================================================
+## Include the appropriate platform specific file and finally include the Jamfile
+## ================================================================================================
+include $(LIBPHIL_JAMCORE)/Jamplat_$(LIBPHIL_PLATFORM).jam ;
+include $(LIBPHIL_JAMCORE)/Jamtarg_$(LIBPHIL_TARGET).jam ;
+include $(LIBPHIL_CWD)/Jamfile.jam ;
+

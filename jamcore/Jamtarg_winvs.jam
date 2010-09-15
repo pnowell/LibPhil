@@ -1,0 +1,30 @@
+## ================================================================================================
+## Target specific variables
+## ================================================================================================
+OBJ_SUFFIX = obj ;
+LIB_SUFFIX = lib ;
+EXE_SUFFIX = exe ;
+
+CC = cl ;
+CCOPTS = /nologo /c /W4 /Zc:forScope /wd4100 /I$(LIBPHIL_INCLUDES) /Od ;
+LINK = link ;
+LINKOPTS = /nologo /DEBUG ;
+LIB = lib ;
+LIBOPTS = /nologo ;
+
+## ================================================================================================
+## Target specific actions
+## ================================================================================================
+actions CompileObjectList {
+    cd $(1:D)
+    $(CC) $(CCOPTS) $(2)
+}
+
+actions LinkLibrary {
+    $(LIB) $(LIBOPTS) /out:$(1) $(2)
+}
+
+actions LinkExecutable {
+    $(LINK) $(LINKOPTS) /out:$(1) $(2)
+}
+
