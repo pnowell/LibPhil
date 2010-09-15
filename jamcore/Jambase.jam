@@ -55,6 +55,7 @@ rule MakeRelative {
 ## Fix up some environment variables
 ## ================================================================================================
 LIBPHIL_BASEDIR = [ FixPath $(LIBPHIL_BASEDIR) ] ;
+LIBPHIL_CWD ?= $(LIBPHIL_BASEDIR)/src ;
 LIBPHIL_CWD = [ FixPath $(LIBPHIL_CWD) ] ;
 
 ## ================================================================================================
