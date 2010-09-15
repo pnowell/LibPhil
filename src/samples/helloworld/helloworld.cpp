@@ -44,12 +44,12 @@ nint main(nint argc, int8* argv[]) {
         allocs[i] = CMemory::Alloc(allocsize[i]);
 
     // -- now resize those
-    printf("Resizing bigger\n");
+    printf("ReAlloc bigger\n");
     for(nuint i = 0; i < numallocs; i++)
         allocs[i] = CMemory::ReAlloc(allocs[i], allocsize[i] * 2);
 
     // -- and resize them back down
-    printf("Resizing down\n");
+    printf("ReAlloc smaller\n");
     for(nuint i = 0; i < numallocs; i++)
         allocs[i] = CMemory::ReAlloc(allocs[i], allocsize[i] / 2);
 
