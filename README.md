@@ -5,20 +5,20 @@ This is repository of all the utility classes I've written for my own purposes
 ## Directory Structure
 
 * src
-** libs
-*** all of the various basic libs that any of my applications can use
-** samples
-*** a place for all the applications I write with those libs to live
+    * libs
+        * all of the various basic libs that any of my applications can use
+    * samples
+        * a place for all the applications I write with those libs to live
 * jamcore
-** the location of the various jam configuration files split up according to target/platform specificity
+    * the location of the various jam configuration files split up according to target/platform specificity
 
 ## Configuration
 
 * Environment variables
-** LIBPHIL_BASEDIR - The path to parent directory of the libphil directory structure.  This is the only requred environment variable
+    * LIBPHIL_BASEDIR - The path to parent directory of the libphil directory structure.  This is the only requred environment variable
 * Jam variables (settable with the -s command line argument)
-** LIBPHIL_CWD - What part of the code tree you want to build
-** LIBPHIL_TARGET - So far this can only be set to winvs
+    * LIBPHIL_CWD - What part of the code tree you want to build
+    * LIBPHIL_TARGET - So far this can only be set to winvs
 
 ## Future Plans
 
