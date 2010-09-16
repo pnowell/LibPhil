@@ -4,13 +4,18 @@ This is repository of all the utility classes I've written for my own purposes
 
 ## Directory Structure
 
+* bin
+    * build.py to grab the CWD and pass it to the jam build system
+    * build.bat to first call visual studio's setenv batch file and then pass off to build.py
+* jamcore
+    * the location of the various jam configuration files split up according to target/platform specificity
 * src
     * libs
         * all of the various basic libs that any of my applications can use
     * samples
         * a place for all the applications I write with those libs to live
-* jamcore
-    * the location of the various jam configuration files split up according to target/platform specificity
+* vim
+    * vim configuration files
 
 ## Configuration
 
