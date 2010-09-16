@@ -23,7 +23,6 @@ This is repository of all the utility classes I've written for my own purposes
 ## Future Plans
 
 * Continue flushing out my [Jam][jam-link]-based build system
-* Integrate my build process with vim (for ease of fixing compiler errors)
 * Begin working toward a graphical sandbox (for a possible projector-based party favor)
 * Possibly set up some unit tests to try to ensure some basic level of functionality in the libs that I'm writing
 * Add support for winvs32 VS winvs64 target (right now winvs is 32-bit)
