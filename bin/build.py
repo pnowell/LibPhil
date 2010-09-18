@@ -4,7 +4,7 @@ import subprocess
 
 ## -- build our command line for kicking off jam
 cwd = os.getcwd()
-commandline = r'jam -f c:\\code\\jamcore\\Jambase.jam -s LIBPHIL_CWD="' + cwd + r'"'
+commandline = r'jam -f c:\code\jamcore\Jambase.jam -d 0 -q -g -s LIBPHIL_CWD="' + cwd + r'"'
 for arg in sys.argv[1:]:
     commandline += " " + arg
 result = subprocess.call(commandline)

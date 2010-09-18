@@ -21,10 +21,12 @@ actions CompileObjectList {
 }
 
 actions LinkLibrary {
+    echo "Linking library $(1:B)"
     $(LIB) $(LIBOPTS) /out:$(1) $(2)
 }
 
 actions LinkExecutable {
+    echo "Linking executable $(1:BS)"
     $(LINK) $(LINKOPTS) /out:$(1) $(2)
 }
 

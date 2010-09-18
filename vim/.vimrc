@@ -83,22 +83,6 @@ map g<S-F7> :call MyResetCompile()<CR>
 
 map <F7> :call Compile("", "")<CR>
 
-function! SplitToFileDirectory()
-    let dir = expand("%:h")
-    if(dir == "")
-        let dir = "."
-    endif
-    silent execute 'sp ' . dir
-endfunction
-
-function! TabSplitToFileDirectory()
-    let dir = expand("%:h")
-    if(dir == "")
-        let dir = "."
-    endif
-    silent execute 'tabe ' . dir
-endfunction
-
 "" ================================================================================================
 "" Global variable initializations
 "" ================================================================================================
@@ -116,12 +100,58 @@ END_OF_PYTHON
         endif
     endfunction
 
+    call InitGlobal("g:initialized", 0)
     call InitGlobal("g:errornum", -1)
     call InitGlobal("g:errorswrap", 1)
     call InitGlobal("g:errorheight", 5)
     call InitGlobal("g:compileminimized", 0)
     call InitGlobal("g:temppath", "\"" . expand("~") . "\\Local Settings\\Temp\"")
 endif
+
+"" ================================================================================================
+"" Instead of the default vim behavior of editing one argument at a time, I'll just split
+"" them all into different windows
+"" ================================================================================================
+function! OpenArgsInWindows()
+    let c = argc()
+    let i = 0
+    while i < c
+        if i > 0
+            sp
+        endif
+        silent execute "argument! " . (i + 1)
+        let i = i + 1
+    endwhile
+endfunction
+
+if g:initialized != 1
+    let g:initialized = 1
+    if argc() == 0
+        cd $LIBPHIL_BASEDIR
+    else
+        call OpenArgsInWindows()
+        execute "normal! \<C-w>W\<C-w>_"
+    endif
+endif
+
+"" ================================================================================================
+"" Basic window / tab utilities
+"" ================================================================================================
+function! SplitToFileDirectory()
+    let dir = expand("%:h")
+    if(dir == "")
+        let dir = "."
+    endif
+    silent execute 'sp ' . dir
+endfunction
+
+function! TabSplitToFileDirectory()
+    let dir = expand("%:h")
+    if(dir == "")
+        let dir = "."
+    endif
+    silent execute 'tabe ' . dir
+endfunction
 
 "" ================================================================================================
 "" Make sure the preview window and error window are ready, and the errorformat is set correctly

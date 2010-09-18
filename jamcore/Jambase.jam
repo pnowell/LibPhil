@@ -339,6 +339,21 @@ rule SubDirectories {
 }
 
 ## ================================================================================================
+## Utilities for automatically detecting a list of subdirectories and source
+## ================================================================================================
+rule SourceList {
+    local RESULT = [ GLOB $(LIBPHIL_CWD) : "*.cpp" ] ;
+    return $(RESULT:BS) ;
+}
+
+rule SubDirectoryList {
+    local RESULT = [ GLOB $(LIBPHIL_CWD) : [^.]* ] ;
+    RESULT = [ GLOB $(RESULT) : "Jamfile.jam" ] ;
+    RESULT = $(RESULT:D) ;
+    return $(RESULT:B) ;
+}
+
+## ================================================================================================
 ## Include the appropriate platform specific file and finally include the Jamfile
 ## ================================================================================================
 include $(LIBPHIL_JAMCORE)/Jamplat_$(LIBPHIL_PLATFORM).jam ;
