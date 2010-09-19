@@ -82,7 +82,7 @@ ChangeCWD ;
 ## ================================================================================================
 ## Global variables
 ## ================================================================================================
-LIBPHIL_TARGETS = winvs ;
+LIBPHIL_TARGETS = winvs wingcc ;
 LIBPHIL_PLATFORM = $(OS:L) ;
 LIBPHIL_PLATFORMS = cygwin ;
 LIBPHIL_JAMCORE = $(LIBPHIL_BASEDIR)/jamcore ;

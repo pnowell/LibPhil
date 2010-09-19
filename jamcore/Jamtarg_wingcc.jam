@@ -1,0 +1,33 @@
+## ================================================================================================
+## Target specific variables
+## ================================================================================================
+OBJ_SUFFIX = o ;
+LIB_SUFFIX = a ;
+EXE_SUFFIX = exe ;
+
+CC = gcc-3 ;
+CCOPTS = -c -Wall -I$(LIBPHIL_INCLUDES) -O0 ;
+LINK = gcc-3 ;
+LINKOPTS = ;
+LIB = ar ;
+LIBOPTS = cr ;
+
+## ================================================================================================
+## Target specific actions
+## ================================================================================================
+actions CompileObjectList {
+    echo "Compiling " $(2:BS)
+    cd $(1:D)
+    $(CC) $(CCOPTS) $(2)
+}
+
+actions LinkLibrary {
+    echo "Linking library $(1:B)"
+    $(LIB) $(LIBOPTS) $(1) $(2)
+}
+
+actions LinkExecutable {
+    echo "Linking executable $(1:BS)"
+    $(LINK) $(LINKOPTS) -o $(1) $(2)
+}
+

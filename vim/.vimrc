@@ -76,12 +76,13 @@ map F :call SplitToFileDirectory()<CR>;
 map <C-S-f> :call TabSplitToFileDirectory()<CR>
 
 map <F4> :call OpenErrorAndPreview()<CR>
-map g<F7> :call MyCompileResults()<CR>
-map gc :call MyLastCompileResults()<CR>
-map gC :call MyNextCompileResults()<CR>
-map g<S-F7> :call MyResetCompile()<CR>
+map g<F7> :call CompileResults()<CR>
+map gc :call LastCompileResults()<CR>
+map gC :call NextCompileResults()<CR>
+map g<S-F7> :call ResetCompile()<CR>
 
-map <F7> :call Compile("", "")<CR>
+map <F7> :call Compile("", "-s LIBPHIL_TARGET=\"winvs\"")<CR>
+map <M-F7> :call Compile("", "-s LIBPHIL_TARGET=\"wingcc\"")<CR>
 
 "" ================================================================================================
 "" Global variable initializations
