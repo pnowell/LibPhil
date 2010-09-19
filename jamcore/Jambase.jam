@@ -356,6 +356,7 @@ rule SubDirectoryList {
 ## ================================================================================================
 ## Include the appropriate platform specific file and finally include the Jamfile
 ## ================================================================================================
+Echo "Building platform:$(LIBPHIL_PLATFORM) target:$(LIBPHIL_TARGET)" ;
 include $(LIBPHIL_JAMCORE)/Jamplat_$(LIBPHIL_PLATFORM).jam ;
 include $(LIBPHIL_JAMCORE)/Jamtarg_$(LIBPHIL_TARGET).jam ;
 include $(LIBPHIL_CWD)/Jamfile.jam ;

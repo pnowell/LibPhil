@@ -16,7 +16,7 @@ LIBOPTS = cr ;
 ## Target specific actions
 ## ================================================================================================
 actions CompileObjectList {
-    echo "Compiling " $(2:BS)
+    echo $(2:BS)
     cd $(1:D)
     $(CC) $(CCOPTS) $(2)
 }
