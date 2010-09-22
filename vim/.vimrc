@@ -81,8 +81,8 @@ map gc :call LastCompileResults()<CR>
 map gC :call NextCompileResults()<CR>
 map g<S-F7> :call ResetCompile()<CR>
 
-map <F7> :call Compile("", "-s LIBPHIL_TARGET=\"winvs\"")<CR>
-map <M-F7> :call Compile("", "-s LIBPHIL_TARGET=\"wingcc\"")<CR>
+map <F7> :call Compile("", "-s LIBPHIL_TARGETPLAT=\"winvs\"")<CR>
+map <M-F7> :call Compile("", "-s LIBPHIL_TARGETPLAT=\"wingcc\"")<CR>
 
 "" ================================================================================================
 "" Global variable initializations

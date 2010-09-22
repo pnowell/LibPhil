@@ -61,7 +61,8 @@ LIBPHIL_CWD = [ FixPath $(LIBPHIL_CWD) ] ;
 ## ================================================================================================
 ## Give defaults to variables that might be customized on the command line
 ## ================================================================================================
-LIBPHIL_TARGET ?= winvs ;
+LIBPHIL_TARGETPLAT ?= winvs ;
+LIBPHIL_TARGET ?= debug ;
 
 ## ================================================================================================
 ## Rule to set various global variables according to the current working directory
@@ -73,7 +74,8 @@ rule ChangeCWD {
     ## -- set up the target directory for any sources we're currently dealingg with
     ## -- strip "src" off the beginning if neceesary
     LIBPHIL_RELTARGDIR = [ SearchReplace $(LIBPHIL_RELCWD) : "^src/?" : "" ] ;
-    LIBPHIL_TARGDIR = $(LIBPHIL_BASEDIR)/_$(LIBPHIL_TARGET)/$(LIBPHIL_RELTARGDIR) ;
+    LIBPHIL_TARGDIR = $(LIBPHIL_BASEDIR)/_$(LIBPHIL_TARGETPLAT) ;
+    LIBPHIL_TARGDIR = $(LIBPHIL_TARGDIR)/$(LIBPHIL_TARGET)/$(LIBPHIL_RELTARGDIR) ;
 }
 
 ## -- invoke the rule to set these global values initially
@@ -82,9 +84,8 @@ ChangeCWD ;
 ## ================================================================================================
 ## Global variables
 ## ================================================================================================
-LIBPHIL_TARGETS = winvs wingcc ;
 LIBPHIL_PLATFORM = $(OS:L) ;
-LIBPHIL_PLATFORMS = cygwin ;
+LIBPHIL_TARGETS = debug ;
 LIBPHIL_JAMCORE = $(LIBPHIL_BASEDIR)/jamcore ;
 LIBPHIL_INCLUDES = "$(LIBPHIL_BASEDIR)/src/libs" ;
 LIBPHIL_HDRSCAN = "^[\t ]*#[\t ]*include[\t ]*[\"]([^\"]*)[\"]" ;
@@ -94,17 +95,6 @@ LIBPHIL_HDRSCAN = "^[\t ]*#[\t ]*include[\t ]*[\"]([^\"]*)[\"]" ;
 ## ================================================================================================
 SEARCH = $(LIBPHIL_INCLUDES) ;
 HDRRULE = HeaderRule ;
-
-## ================================================================================================
-## Do some validation on initial global variables
-## ================================================================================================
-if ! ( $(LIBPHIL_TARGET) in $(LIBPHIL_TARGETS) ) {
-    Exit "Unsupported target : " $(LIBPHIL_TARGET) ;
-}
-
-if ! ( $(LIBPHIL_PLATFORM) in $(LIBPHIL_PLATFORMS) ) {
-    Exit "Unsupported platform : " $(LIBPHIL_PLATFORM) ;
-}
 
 ## ================================================================================================
 ## Rules for actual dependency graph creation
@@ -347,17 +337,63 @@ rule SourceList {
 }
 
 rule SubDirectoryList {
-    local RESULT = [ GLOB $(LIBPHIL_CWD) : [^.]* ] ;
+    local RESULT = [ GLOB $(LIBPHIL_CWD) : "[^.]*" ] ;
     RESULT = [ GLOB $(RESULT) : "Jamfile.jam" ] ;
     RESULT = $(RESULT:D) ;
     return $(RESULT:B) ;
 }
 
 ## ================================================================================================
-## Include the appropriate platform specific file and finally include the Jamfile
+## Do some validation on the desired platform, target platform and build target
 ## ================================================================================================
-Echo "Building platform:$(LIBPHIL_PLATFORM) target:$(LIBPHIL_TARGET)" ;
+rule VerifyEnv {
+    local FILES ;
+    local CURR ;
+
+    local PLATFORMS ;
+    FILES = [ GLOB $(LIBPHIL_JAMCORE) : "Jamplat_*.jam" ] ;
+    for CURR in $(FILES) {
+        CURR = [ MATCH ".*Jamplat_(.*).jam" : $(CURR) ] ;
+        if $(CURR) {
+            PLATFORMS += $(CURR[1]) ;
+        }
+    }
+    if ! ( $(LIBPHIL_PLATFORM) in $(PLATFORMS) ) {
+        Echo "Unsupported platform : " $(LIBPHIL_PLATFORM) ;
+        Exit "Should be one of     : " $(PLATFORMS) ;
+    }
+
+    local TARGETPLATS ;
+    FILES = [ GLOB $(LIBPHIL_JAMCORE) : "Jamtarg_*.jam" ] ;
+    for CURR in $(FILES) {
+        CURR = [ MATCH ".*Jamtarg_(.*).jam" : $(CURR) ] ;
+        if $(CURR) {
+            TARGETPLATS += $(CURR[1]) ;
+        }
+    }
+    if ! ( $(LIBPHIL_TARGETPLAT) in $(TARGETPLATS) ) {
+        Echo "Unsupported target platform : " $(LIBPHIL_TARGETPLAT) ;
+        Exit "Should be one of            : " $(TARGETPLATS) ;
+    }
+
+    if ! ( $(LIBPHIL_TARGET) in $(LIBPHIL_TARGETS) ) {
+        Echo "Unsupported target : " $(LIBPHIL_TARGET) ;
+        Exit "Should be one of   : " $(LIBPHIL_TARGETS) ;
+    }
+}
+VerifyEnv ;
+
+## ================================================================================================
+## Tell the user what exactly is being built
+## ================================================================================================
+Echo "Building Platform        : $(LIBPHIL_PLATFORM)" ;
+Echo "         Target Platform : $(LIBPHIL_TARGETPLAT)" ;
+Echo "         Target          : $(LIBPHIL_TARGET)" ;
+
+## ================================================================================================
+## Include the appropriate setting-specific jam files and finally include the Jamfile
+## ================================================================================================
 include $(LIBPHIL_JAMCORE)/Jamplat_$(LIBPHIL_PLATFORM).jam ;
-include $(LIBPHIL_JAMCORE)/Jamtarg_$(LIBPHIL_TARGET).jam ;
+include $(LIBPHIL_JAMCORE)/Jamtarg_$(LIBPHIL_TARGETPLAT).jam ;
 include $(LIBPHIL_CWD)/Jamfile.jam ;
 
