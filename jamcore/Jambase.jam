@@ -296,7 +296,12 @@ rule Executable {
     local LIBNAMES = $(2) ;
 
     ## -- build an executable name from the current directory name
-    EXE_NAME = $(LIBPHIL_TARGDIR)/$(LIBPHIL_DIRNAME).$(EXE_SUFFIX) ;
+    EXE_NAME = $(LIBPHIL_TARGDIR)/$(LIBPHIL_DIRNAME) ;
+
+    EXE_NAME = $(LIBPHIL_TARGDIR)/$(LIBPHIL_DIRNAME) ;
+    if $(EXE_SUFFIX) {
+        EXE_NAME = $(EXE_NAME).$(EXE_SUFFIX) ;
+    }
 
     ## -- set up the objects for our list of sources
     local OBJECTS = [ ObjectList $(SOURCES) ] ;
