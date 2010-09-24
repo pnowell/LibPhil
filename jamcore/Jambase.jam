@@ -297,8 +297,6 @@ rule Executable {
 
     ## -- build an executable name from the current directory name
     EXE_NAME = $(LIBPHIL_TARGDIR)/$(LIBPHIL_DIRNAME) ;
-
-    EXE_NAME = $(LIBPHIL_TARGDIR)/$(LIBPHIL_DIRNAME) ;
     if $(EXE_SUFFIX) {
         EXE_NAME = $(EXE_NAME).$(EXE_SUFFIX) ;
     }
