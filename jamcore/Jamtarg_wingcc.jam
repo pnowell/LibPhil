@@ -1,4 +1,14 @@
 ## ================================================================================================
+## Target specific rules
+## ================================================================================================
+rule CompileIncludes {
+    ## -- name all the arguments
+    local INCLUDES = $(1) ;
+
+    return -I$(INCLUDES) ;
+}
+
+## ================================================================================================
 ## Target specific variables
 ## ================================================================================================
 OBJ_SUFFIX = o ;
@@ -6,7 +16,8 @@ LIB_SUFFIX = a ;
 EXE_SUFFIX = exe ;
 
 CC = gcc-3 ;
-CCOPTS = -c -Wall -I$(LIBPHIL_INCLUDES) -O0 ;
+CCOPTS = -c -Wall -O0 ;
+CCOPTS += [ CompileIncludes $(LIBPHIL_INCLUDES) ] ;
 LINK = gcc-3 ;
 LINKOPTS = ;
 LIB = ar ;
@@ -18,7 +29,7 @@ LIBOPTS = cr ;
 actions CompileObjectList {
     echo $(2:BS)
     cd $(1:D)
-    $(CC) $(CCOPTS) $(2)
+    $(CC) $(CCOPTS) $(EXTRACCOPTS) $(2)
 }
 
 actions LinkLibrary {

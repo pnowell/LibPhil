@@ -1,4 +1,14 @@
 ## ================================================================================================
+## Target specific rules
+## ================================================================================================
+rule CompileIncludes {
+    ## -- name all the arguments
+    local INCLUDES = $(1) ;
+
+    return -I$(INCLUDES) ;
+}
+
+## ================================================================================================
 ## Target specific variables
 ## ================================================================================================
 OBJ_SUFFIX = obj ;
@@ -6,7 +16,8 @@ LIB_SUFFIX = lib ;
 EXE_SUFFIX = exe ;
 
 CC = cl ;
-CCOPTS = /nologo /c /W4 /Zc:forScope /wd4100 /I$(LIBPHIL_INCLUDES) /Od ;
+CCOPTS = /nologo /c /W4 /Zc:forScope /wd4100 /Od ;
+CCOPTS += [ CompileIncludes $(LIBPHIL_INCLUDES) ] ;
 LINK = link ;
 LINKOPTS = /nologo /DEBUG ;
 LIB = lib ;
@@ -17,7 +28,7 @@ LIBOPTS = /nologo ;
 ## ================================================================================================
 actions CompileObjectList {
     cd $(1:D)
-    $(CC) $(CCOPTS) $(2)
+    $(CC) $(CCOPTS) $(EXTRACCOPTS) $(2)
 }
 
 actions LinkLibrary {

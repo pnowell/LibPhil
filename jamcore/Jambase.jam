@@ -170,6 +170,7 @@ rule HeaderRule {
 rule ObjectList {
     ## -- name arguments
     local SOURCES = $(1) ;
+    local EXTRAINCLUDES = $(2) ;
 
     ## -- get a list of object names
     local OBJECTS ;
@@ -196,6 +197,9 @@ rule ObjectList {
 
     ## -- make sure this gets built if you're building everything
     Depends all : $(OBJECTS) ;
+
+    ## -- set up the compile options
+    EXTRACCOPTS on $(OBJECTS) = [ CompileIncludes $(EXTRAINCLUDES) ] ;
 
     ## -- invoke the rule to compile the list of objects
     CompileObjectList $(OBJECTS) : $(SOURCES) ;
@@ -294,6 +298,7 @@ rule Executable {
     ## -- name all the arguments
     local SOURCES = $(1) ;
     local LIBNAMES = $(2) ;
+    local EXTRAINCLUDES = $(3) ;
 
     ## -- build an executable name from the current directory name
     EXE_NAME = $(LIBPHIL_TARGDIR)/$(LIBPHIL_DIRNAME) ;
@@ -302,7 +307,7 @@ rule Executable {
     }
 
     ## -- set up the objects for our list of sources
-    local OBJECTS = [ ObjectList $(SOURCES) ] ;
+    local OBJECTS = [ ObjectList $(SOURCES) : $(EXTRAINCLUDES) ] ;
 
     ## -- set up the libraries that we depend on
     local LIBRARIES = [ LibraryList $(LIBNAMES) ] ;
