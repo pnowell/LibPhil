@@ -25,3 +25,8 @@ typedef bool nflag;
 typedef float nreal;
 typedef float real32;
 typedef double real64;
+
+// -- constants
+#ifndef NULL
+#define NULL 0
+#endif

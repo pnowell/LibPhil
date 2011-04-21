@@ -128,7 +128,7 @@ endfunction
 if g:initialized != 1
     let g:initialized = 1
     if argc() == 0
-        cd $LIBPHIL_BASEDIR
+        cd $LIBPHIL_BASEDIR/src
     else
         call OpenArgsInWindows()
         execute "normal! \<C-w>W\<C-w>_"
@@ -189,11 +189,10 @@ function! SetErrorFormat()
     " link error
     set errorformat+=LINK\ :\ fatal\ %trror\ LNK%n:\ %m
 
-    " KJam errors
-    set errorformat+=In\ %f\\,\ %l:\ %m
-    set errorformat+=%f\\,\ %l:\ %m
-    set errorformat+=%f(%l)\ :\ %trror\ %m
-    set errorformat+=KJam:\ %trror\ in\ %f\ :\ %m
+    " gcc errors
+    set errorformat +=%f:%l:\ %trror:\ %m
+    " gcc warnings
+    set errorformat +=%f:%l:\ %tarning:\ %m
 endfunction
 
 "" ================================================================================================

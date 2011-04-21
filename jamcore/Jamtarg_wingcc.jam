@@ -1,11 +1,41 @@
 ## ================================================================================================
 ## Target specific rules
 ## ================================================================================================
-rule CompileIncludes {
+rule CompileOptIncludes {
     ## -- name all the arguments
     local INCLUDES = $(1) ;
 
     return -I$(INCLUDES) ;
+}
+
+## ================================================================================================
+## Turn a list of defines into compile options
+## ================================================================================================
+rule CompileOptDefines {
+    ## -- name all the arguments
+    local DEFINES = $(1) ;
+
+    return -D$(DEFINES) ;
+}
+
+## ================================================================================================
+## Turn a list of lib search directories into link options
+## ================================================================================================
+rule LinkOptLibDirs {
+    ## -- name all the arguments
+    local LIBDIRS = $(1) ;
+
+    return -L$(LIBDIRS) ;
+}
+
+## ================================================================================================
+## Turn a list of libs into link options
+## ================================================================================================
+rule LinkOptLibs {
+    ## -- name all the arguments
+    local LIBS = $(1) ;
+
+    return -l$(LIBS) ;
 }
 
 ## ================================================================================================
@@ -17,7 +47,7 @@ EXE_SUFFIX = exe ;
 
 CC = gcc-3 ;
 CCOPTS = -c -Wall -O0 ;
-CCOPTS += [ CompileIncludes $(LIBPHIL_INCLUDES) ] ;
+CCOPTS += [ CompileOptIncludes $(LIBPHIL_INCLUDES) ] ;
 LINK = gcc-3 ;
 LINKOPTS = ;
 LIB = ar ;
@@ -39,6 +69,7 @@ actions LinkLibrary {
 
 actions LinkExecutable {
     echo "Linking executable $(1:BS)"
-    $(LINK) $(LINKOPTS) -o $(1) $(2)
+    echo $(LINK) -o $(1) $(2) $(LINKOPTS) $(EXTRALINKOPTS)
+    $(LINK) -o $(1) $(2) $(LINKOPTS) $(EXTRALINKOPTS) -mno-cygwin
 }
 

@@ -52,6 +52,24 @@ rule MakeRelative {
 }
 
 ## ================================================================================================
+## Subtract the elements from the second list from the first
+## ================================================================================================
+rule ListSubtract {
+    ## -- name the arguments
+    local LIST = $(1) ;
+    local TOSUBTRACT = $(2) ;
+
+    local RESULTS ;
+    for CAND in $(LIST) {
+        if ! ( $(CAND) in $(TOSUBTRACT) ) {
+            RESULTS += $(CAND) ;
+        }
+    }
+
+    return $(RESULTS) ;
+}
+
+## ================================================================================================
 ## Fix up some environment variables
 ## ================================================================================================
 LIBPHIL_BASEDIR = [ FixPath $(LIBPHIL_BASEDIR) ] ;
@@ -199,7 +217,7 @@ rule ObjectList {
     Depends all : $(OBJECTS) ;
 
     ## -- set up the compile options
-    EXTRACCOPTS on $(OBJECTS) = [ CompileIncludes $(EXTRAINCLUDES) ] ;
+    EXTRACCOPTS on $(OBJECTS) = [ CompileOptIncludes $(EXTRAINCLUDES) ] ;
 
     ## -- invoke the rule to compile the list of objects
     CompileObjectList $(OBJECTS) : $(SOURCES) ;
@@ -298,7 +316,10 @@ rule Executable {
     ## -- name all the arguments
     local SOURCES = $(1) ;
     local LIBNAMES = $(2) ;
-    local EXTRAINCLUDES = $(3) ;
+    local EXTERNINCLUDES = $(3) ;
+    local EXTRADEFINES = $(4) ;
+    local EXTERNLIBDIRS = $(5) ;
+    local EXTERNLIBS = $(6) ;
 
     ## -- build an executable name from the current directory name
     EXE_NAME = $(LIBPHIL_TARGDIR)/$(LIBPHIL_DIRNAME) ;
@@ -307,7 +328,7 @@ rule Executable {
     }
 
     ## -- set up the objects for our list of sources
-    local OBJECTS = [ ObjectList $(SOURCES) : $(EXTRAINCLUDES) ] ;
+    local OBJECTS = [ ObjectList $(SOURCES) : $(EXTERNINCLUDES) : $(EXTRADEFINES) ] ;
 
     ## -- set up the libraries that we depend on
     local LIBRARIES = [ LibraryList $(LIBNAMES) ] ;
@@ -317,6 +338,10 @@ rule Executable {
 
     ## -- also let jam know that this executable is one of the things to build
     Depends all : $(EXE_NAME) ;
+
+    ## -- set up the link options
+    EXTRALINKOPTS on $(EXE_NAME) += [ LinkOptLibDirs $(EXTERNLIBDIRS) ] ;
+    EXTRALINKOPTS on $(EXE_NAME) += [ LinkOptLibs $(EXTERNLIBS) ] ;
 
     ## -- invoke the rule to link the executable
     LinkExecutable $(EXE_NAME) : $(OBJECTS) $(LIBRARIES) ;

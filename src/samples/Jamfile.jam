@@ -1,4 +1,7 @@
 ## ================================================================================================
 ## Jamfile
 ## ================================================================================================
-SubDirectories [ SubDirectoryList ] ;
+local SUBDIRS = [ SubDirectoryList ] ;
+SUBDIRS = [ ListSubtract $(SUBDIRS) : "testgl" ] ;
+
+SubDirectories $(SUBDIRS) ;
