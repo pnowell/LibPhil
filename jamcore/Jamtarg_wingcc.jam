@@ -46,17 +46,24 @@ LIB_SUFFIX = a ;
 EXE_SUFFIX = exe ;
 
 CC = gcc-3 ;
-CCOPTS = -c -Wall -O0 ;
+CCOPTS = -c -Wall ;
 CCOPTS += [ CompileOptIncludes $(LIBPHIL_INCLUDES) ] ;
 LINK = gcc-3 ;
 LINKOPTS = ;
 LIB = ar ;
 LIBOPTS = cr ;
 
+if ( $(LIBPHIL_BUILDTYPE) = debug ) {
+    CCOPTS += -O0 ;
+}
+else if ( $(LIBPHIL_BUILDTYPE) = release ) {
+    CCOPTS += -O2 ;
+}
+
 ## ================================================================================================
 ## Target specific actions
 ## ================================================================================================
-actions CompileObjectList {
+actions updated piecemeal CompileObjectList {
     echo $(2:BS)
     cd $(1:D)
     $(CC) $(CCOPTS) $(EXTRACCOPTS) $(2)

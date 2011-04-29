@@ -4,6 +4,7 @@
 // -- libs includes
 #include "core/types.h"
 #include "core/utils.h"
+#include "core/assert.h"
 
 // -- consts
 static const char number[] =
@@ -27,33 +28,32 @@ static const char number[] =
 "84580156166097919133875499200524063689912560717606"
 "05886116467109405077541002256983155200055935729725"
 "71636269561882670428252483600823257530420752963450";
-static const uint32 numberlen = ArraySize_(number);
-static const uint32 numdigits = 5;
+static const nuint kNumberLen = ArraySize_(number);
+static const nuint kNumDigits = 5;
+static const nuint kAnswer = 40824;
 
 // ================================================================================================
 // Find the largest product of 5 consecutive digits of the given number
 // ================================================================================================
 int32 Problem8() {
-    for(uint32 i = 0; i < numberlen; ++i)
-        printf("%c", number[i]);
-    printf("\n");
-
-    uint32 largest = 0;
-    uint32 largestidx = 0;
-    uint32 last = numberlen - numdigits;
-    for(uint32 i = 0; i < last; ++i) {
-        uint32 product = 1;
-        for(uint32 j = 0; j < numdigits; ++j)
-            product *= uint32(number[i+j] - '0');
+    nuint largest = 0;
+    nuint largestidx = 0;
+    nuint last = kNumberLen - kNumDigits;
+    for(nuint i = 0; i < last; ++i) {
+        nuint product = 1;
+        for(nuint j = 0; j < kNumDigits; ++j)
+            product *= nuint(number[i+j] - '0');
         if(product > largest) {
             largest = product;
             largestidx = i;
         }
     }
 
-    printf("Largest product comes from [%d] %c * %c * %c * %c * %c = %d\n", largestidx,
-           number[largestidx], number[largestidx+1], number[largestidx+2], number[largestidx+3],
-           number[largestidx+4], largest);
+    printf("Largest product comes from [" NUintFmt_ "] %c * %c * %c * %c * %c = " NUintFmt_ "\n",
+           largestidx, number[largestidx], number[largestidx+1], number[largestidx+2],
+           number[largestidx+3], number[largestidx+4], largest);
+
+    Assert_(largest == kAnswer, "Incorrect answer");
 
     return 0;
 }

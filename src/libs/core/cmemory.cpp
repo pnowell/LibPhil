@@ -1,5 +1,6 @@
 // -- system includes
 #include <stdlib.h>
+#include <string.h>
 
 // -- libs includes
 #include "core/cmemory.h"
@@ -22,9 +23,23 @@ vpointer CMemory::ReAlloc(vpointer mem, nuint size) {
 }
 
 // ================================================================================================
+// Allocate memory and clear it with all zeros
+// ================================================================================================
+vpointer CMemory::CAlloc(nuint size) {
+    return calloc(size, 1);
+}
+
+// ================================================================================================
 // Free the given memory
 // ================================================================================================
 void CMemory::Free(vpointer mem) {
     free(mem);
+}
+
+// ================================================================================================
+// Move memory from one place to another
+// ================================================================================================
+void CMemory::Move(vpointer to, vpointer from, nuint size) {
+    memmove(to, from, size);
 }
 

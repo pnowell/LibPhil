@@ -6,24 +6,24 @@
 #include "core/utils.h"
 #include "numerics/cprimecalculator.h"
 
-static const uint64 numdivisors = 500;
-static const uint64 kAnswer = 76576500;
+static const nuint kNumDivisors = 500;
+static const nuint kAnswer = 76576500;
 
 // ================================================================================================
 // Problem 12
 // ================================================================================================
 int32 Problem12() {
     // -- start at the triangle closest to (and not greater than) numdivisors to save a little time
-    //uint64 triidx = (IntSqrt(1 + 8 * numdivisors) - 1) >> 1;
+    //nuint triidx = (IntSqrt(1 + 8 * numdivisors) - 1) >> 1;
     // -- start off at the triangle number just less than 500
-    uint64 triidx = 31;
-    uint64 trinum = (triidx * (triidx + 1)) >> 1;
-    uint64 trisqrt = 1;
-    uint64 product,numprimes,i,temp,currprime,factorpow;
+    nuint triidx = 31;
+    nuint trinum = (triidx * (triidx + 1)) >> 1;
+    nuint trisqrt = 1;
 
     // -- initialize our prime list
     CPrimeCalculator primecalc;
 
+    nuint product = 0;
     do {
         // -- move on to the next triangle number
         ++triidx;
@@ -38,11 +38,11 @@ int32 Problem12() {
 
         // -- and take the product of the powers of each prime factor plus one
         product = 1;
-        numprimes = primecalc.NumPrimes();
-        temp = trinum;
-        for(i = 0; i < numprimes && temp > 1; ++i) {
-            currprime = primecalc.Prime(i);
-            factorpow = 1;
+        nuint numprimes = primecalc.NumPrimes();
+        nuint temp = trinum;
+        for(nuint i = 0; i < numprimes && temp > 1; ++i) {
+            nuint currprime = primecalc.Prime(i);
+            nuint factorpow = 1;
             while((temp % currprime) == 0) {
                 ++factorpow;
                 temp = temp / currprime;
@@ -51,21 +51,23 @@ int32 Problem12() {
         }
 
         // -- if we've found a number with more than the required number of divisors, we can stop
-    } while(product <= numdivisors);
+    } while(product <= kNumDivisors);
 
-    printf("%lld (the %lld triangle number) has %lld divisors\n\n", trinum, triidx, product);
+    printf(NUintFmt_ " (the " NUintFmt_ " triangle number) has " NUintFmt_ " divisors\n",
+           trinum, triidx, product);
 
-    printf("%lld = ", trinum);
-    temp = trinum;
-    for(i = 0; i < numprimes && temp > 1; ++i) {
-        currprime = primecalc.Prime(i);
-        factorpow = 0;
+    printf(NUintFmt_ " = ", trinum);
+    nuint temp = trinum;
+    nuint numprimes = primecalc.NumPrimes();
+    for(nuint i = 0; i < numprimes && temp > 1; ++i) {
+        nuint currprime = primecalc.Prime(i);
+        nuint factorpow = 0;
         while((temp % currprime) == 0) {
             ++factorpow;
             temp = temp / currprime;
         }
         if(factorpow > 0)
-            printf("%lld^%lld ", currprime, factorpow);
+            printf(NUintFmt_ "^" NUintFmt_ " ", currprime, factorpow);
     }
     printf("\n");
 

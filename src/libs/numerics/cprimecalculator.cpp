@@ -1,38 +1,35 @@
 // -- system includes
-#include <stdlib.h>
 #include <stdio.h>
 
 // -- libs includes
+#include "core/cmemory.h"
 #include "numerics/cprimecalculator.h"
 
 // -- constants
-static const uint32 kPrimeAlloc = 1024;
+static const nuint kPrimeAlloc = 1024;
 
 // ================================================================================================
 // Constructor
 // ================================================================================================
-CPrimeCalculator::CPrimeCalculator() : sieve() {
+CPrimeCalculator::CPrimeCalculator() : sieve(), primes(kPrimeAlloc) {
     // -- start the primes off with all the primes up to 30
-    primealloc = kPrimeAlloc;
-    primes = reinterpret_cast<uint64*>(malloc(primealloc * sizeof(uint64)));
-    primes[0] = 2;
-    primes[1] = 3;
-    primes[2] = 5;
-    primes[3] = 7;
-    primes[4] = 11;
-    primes[5] = 13;
-    primes[6] = 17;
-    primes[7] = 19;
-    primes[8] = 23;
-    primes[9] = 29;
-    primecount = 10;
+    primes.Grow(2);
+    primes.Grow(3);
+    primes.Grow(5);
+    primes.Grow(7);
+    primes.Grow(11);
+    primes.Grow(13);
+    primes.Grow(17);
+    primes.Grow(19);
+    primes.Grow(23);
+    primes.Grow(29);
 
     // -- what's the next number we should check
     currnum = 30;
     currsqrt = 6;
 
     // -- initialize the sieve
-    sieve.Prepare(primes, 5);
+    sieve.Prepare(primes.GetElem(0), 5);
     currnum += sieve.GetInitialOffset(currnum, currsieve);
 }
 
@@ -40,8 +37,6 @@ CPrimeCalculator::CPrimeCalculator() : sieve() {
 // Destructor
 // ================================================================================================
 CPrimeCalculator::~CPrimeCalculator() {
-    if(primes != NULL)
-        free(primes);
 }
 
 // ================================================================================================
@@ -53,7 +48,7 @@ void CPrimeCalculator::CheckNext() {
         ++currsqrt;
 
     nflag isprime = true;
-    for(uint64 i = 0; primes[i] <= currsqrt; ++i) {
+    for(nuint i = 0; primes[i] <= currsqrt; ++i) {
         if((currnum % primes[i]) == 0) {
             isprime = false;
             break;
@@ -61,16 +56,8 @@ void CPrimeCalculator::CheckNext() {
     }
 
     // -- add it to the list of primes, if necessary
-    if(isprime) {
-        if(primecount == primealloc) {
-            uint32 newprimealloc = primealloc + kPrimeAlloc;
-            primes = reinterpret_cast<uint64*>(realloc(primes, newprimealloc * sizeof(uint64)));
-            primealloc = newprimealloc;
-        }
-
-        primes[primecount] = currnum;
-        ++primecount;
-    }
+    if(isprime)
+        primes.Grow(currnum);
 
     // -- move on to the next number to check, and update our position in the sieve iterator
     currnum += sieve.Offset(currsieve);

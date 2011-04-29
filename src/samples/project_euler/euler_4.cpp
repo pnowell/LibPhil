@@ -3,20 +3,25 @@
 
 // -- libs includes
 #include "core/types.h"
+#include "core/assert.h"
 
 // -- consts
-static const uint32 kMaxDigits = 8;
+static const nuint kMaxDigits = 8;
+static const nuint kAnswer = 906609;
 
 // ================================================================================================
 // Find the largest palindrome that's a product of a pair of 3 digit numbers
 // ================================================================================================
 int32 Problem4() {
-    uint32 f1 = 999;
-    uint32 f2 = 999;
-    uint32 product;
-    uint32 digits[kMaxDigits];
-    uint32 i, j;
-    uint32 largest = 0;
+    for(nuint i = 0; i < 1; i=0) {
+    }
+
+    nuint f1 = 999;
+    nuint f2 = 999;
+    nuint product;
+    nuint digits[kMaxDigits];
+    nuint i, j;
+    nuint largest = 0;
 
     while(f2 > 0 && f2 * 999 > largest) {
         product = f1 * f2;
@@ -30,17 +35,13 @@ int32 Problem4() {
 
         // -- there's one more digit than i
         for(j = 0; j < i; ++j, --i) {
-            if(digits[j] != digits[i]) {
-                /*
-                printf("%d * %d = %d isn't a palindrome because %d != %d\n",
-                       f1, f2, f1*f2, digits[i], digits[j]);
-                */
+            if(digits[j] != digits[i])
                 break;
-            }
         }
 
         if(j >= i) {
-            printf("Found the palindrome %d = %d * %d\n", f1 * f2, f1, f2);
+            printf("Found the palindrome " NUintFmt_ " = " NUintFmt_ " * " NUintFmt_ "\n",
+                   f1 * f2, f1, f2);
             if(f1 * f2 > largest)
                 largest = f1 * f2;
 
@@ -48,7 +49,7 @@ int32 Problem4() {
             f2 -= 1;
             f1 = 999;
 
-            printf("f2 * 999 = %d * 999 = %d\n", f2, f2 * f2);
+            printf("f2 * 999 = " NUintFmt_ " * 999 = " NUintFmt_ "\n", f2, f2 * f2);
         }
         else {
             f1 -= 1;
@@ -59,10 +60,9 @@ int32 Problem4() {
         }
     }
 
-    if(largest == 0)
-        printf("Didn't find anything!\n");
-    else
-        printf("Found the largest is %d\n", largest);
+    printf("Found the largest is " NUintFmt_ "\n", largest);
+
+    Assert_(largest == kAnswer, "Incorrect answer");
 
     return 0;
 }

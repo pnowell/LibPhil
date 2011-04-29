@@ -1,7 +1,6 @@
-// -- system includes
-#include <stdlib.h>
-
 // -- libs includes
+#include "core/cmemory.h"
+#include "core/utils.h"
 #include "numerics/csieve.h"
 
 // ================================================================================================
@@ -9,27 +8,27 @@
 // ================================================================================================
 CSieve::~CSieve() {
     if(offsets != NULL)
-        free(offsets);
+        CMemory::Free(offsets);
 }
 
 // ================================================================================================
 // Prepare the sieve with a list of primes
 // ================================================================================================
-void CSieve::Prepare(uint64* primes, uint32 count) {
-    uint32 i;
+void CSieve::Prepare(nuint* primes, nuint count) {
+    nuint i;
 
     sievesize = 1;
     for(i = 0; i < count; ++i)
-        sievesize *= uint32(primes[i]);
+        sievesize *= nuint(primes[i]);
 
     // -- temporarily allocate that much memory and store it
-    pointer sieve = reinterpret_cast<pointer>(calloc(sievesize, sizeof(char)));
+    pointer sieve = recast_<pointer>(CMemory::CAlloc(sievesize));
 
     // -- go through and mark all the multiples of the given
     for(i = 0; i < count; ++i) {
-        uint32 prime = uint32(primes[i]);
-        uint32 lim = sievesize / prime;
-        for(uint32 j = 1; j <= lim; ++j)
+        nuint prime = nuint(primes[i]);
+        nuint lim = sievesize / prime;
+        for(nuint j = 1; j <= lim; ++j)
             sieve[j*prime-1] = 1;
     }
 
@@ -40,12 +39,12 @@ void CSieve::Prepare(uint64* primes, uint32 count) {
 
     // -- now we need to allocate that many offsets
     if(offsets != NULL)
-        free(offsets);
-    offsets = reinterpret_cast<uint32*>(malloc(offsetsize * sizeof(uint32)));
+        CMemory::Free(offsets);
+    offsets = recast_<nuint*>(CMemory::Alloc(offsetsize * sizeof(nuint)));
 
     // -- now walk through the sieve again and record all the offsets
-    uint32 curroffset = 0;
-    uint32 offsetvalue = 1;
+    nuint curroffset = 0;
+    nuint offsetvalue = 1;
     for(i = 1; i < sievesize && curroffset < offsetsize; ++i) {
         if(sieve[i] == 1)
             ++offsetvalue;
@@ -60,15 +59,15 @@ void CSieve::Prepare(uint64* primes, uint32 count) {
     offsets[offsetsize - 1] = offsetvalue;
 
     // -- free our temporary memory
-    free(sieve);
+    CMemory::Free(sieve);
 }
 
 // ================================================================================================
 // Get the initial offset you need to start using a sieve
 // ================================================================================================
-uint32 CSieve::GetInitialOffset(uint64 v, uint32& index) {
+nuint CSieve::GetInitialOffset(nuint v, nuint& index) {
     // -- reduce the value to its offset from the beginning of the sieve
-    uint32 remainder = uint32(v % sievesize);
+    nuint remainder = nuint(v % sievesize);
 
     // -- handle the 0 and 1 case specially
     if(remainder == 0 || remainder == 1) {

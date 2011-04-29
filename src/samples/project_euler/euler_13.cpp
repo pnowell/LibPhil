@@ -4,6 +4,7 @@
 // -- libs includes
 #include "core/types.h"
 #include "core/utils.h"
+#include "numerics/cbigint.h"
 
 // -- consts
 static cpointer kNumbers[] = {
@@ -109,13 +110,23 @@ static cpointer kNumbers[] = {
     "53503534226472524250874054075591789781264330331690",
 };
 static const uint32 kNumbersSize = ArraySize_(kNumbers);
-static const uint32 kNumberLen = ArraySize_(kNumbers[0]);
 
 // ================================================================================================
 // Problem 13
 // ================================================================================================
 int32 Problem13() {
     printf("Number of strings = %d\n", kNumbersSize);
-    printf("Length of each = %d\n", kNumberLen);
+
+    CBigInt sum;
+    for(nuint i = 0; i < kNumbersSize; ++i)
+        sum += kNumbers[i];
+
+    // -- iterate over the ten most significant digits
+    nuint numdigits = sum.NumDigits();
+    Assert_(numdigits >= 10, "Not enough digits : " NUintFmt_, numdigits);
+    for(nuint i = numdigits-10; i < numdigits; ++i)
+        printf("%c", sum.Digit(i) + '0');
+    printf("\n");
+
     return 0;
 }

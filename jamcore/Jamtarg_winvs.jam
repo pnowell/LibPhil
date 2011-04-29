@@ -46,17 +46,25 @@ LIB_SUFFIX = lib ;
 EXE_SUFFIX = exe ;
 
 CC = cl ;
-CCOPTS = /nologo /c /W4 /Zc:forScope /wd4100 /Od ;
+CCOPTS = /nologo /c /W4 /Zc:forScope /wd4100 ;
 CCOPTS += [ CompileOptIncludes $(LIBPHIL_INCLUDES) ] ;
 LINK = link ;
-LINKOPTS = /nologo /DEBUG ;
+LINKOPTS = /nologo ;
 LIB = lib ;
 LIBOPTS = /nologo ;
+
+if ( $(LIBPHIL_BUILDTYPE) = debug ) {
+    CCOPTS += /Od /Zi ;
+    LINKOPTS += /DEBUG ;
+}
+else if ( $(LIBPHIL_BUILDTYPE) = release ) {
+    CCOPTS += /Og /Ob1 ;
+}
 
 ## ================================================================================================
 ## Target specific actions
 ## ================================================================================================
-actions CompileObjectList {
+actions updated piecemeal CompileObjectList {
     cd $(1:D)
     $(CC) $(CCOPTS) $(EXTRACCOPTS) $(2)
 }

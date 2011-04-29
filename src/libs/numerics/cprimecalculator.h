@@ -3,6 +3,7 @@
 // -- libs includes
 #include "core/types.h"
 #include "core/utils.h"
+#include "containers/ctable.h"
 #include "numerics/csieve.h"
 
 // ================================================================================================
@@ -13,12 +14,10 @@ class CPrimeCalculator {
 protected:
 
     CSieve sieve;
-    uint32 currsieve;
-    uint64 currnum;
-    uint64 currsqrt;
-    uint32 primealloc;
-    uint64* primes;
-    uint32 primecount;
+    nuint currsieve;
+    nuint currnum;
+    nuint currsqrt;
+    CTable<nuint> primes;
 
 public:
 
@@ -30,17 +29,17 @@ public:
     void CheckNext();
 
     // -- iterate until we find all the primes less than/equal to a given max
-    void FindPrimesUpTo(uint64 max);
+    void FindPrimesUpTo(nuint max);
 
     // -- accessors
-    uint64 NumPrimes();
-    uint64 Prime(uint64 idx);
+    nuint NumPrimes();
+    nuint Prime(nuint idx);
 };
 
 // ================================================================================================
 // Calculate all the primes up to (and possibly including) the given maximum number
 // ================================================================================================
-inline void CPrimeCalculator::FindPrimesUpTo(uint64 max) {
+inline void CPrimeCalculator::FindPrimesUpTo(nuint max) {
     while(currnum < max)
         CheckNext();
 }
@@ -48,11 +47,11 @@ inline void CPrimeCalculator::FindPrimesUpTo(uint64 max) {
 // ================================================================================================
 // Accessors
 // ================================================================================================
-inline uint64 CPrimeCalculator::NumPrimes() {
-    return primecount;
+inline nuint CPrimeCalculator::NumPrimes() {
+    return primes.Count();
 }
 
-inline uint64 CPrimeCalculator::Prime(uint64 idx) {
+inline nuint CPrimeCalculator::Prime(nuint idx) {
     return primes[idx];
 }
 

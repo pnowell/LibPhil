@@ -4,6 +4,10 @@
 // -- libs includes
 #include "core/types.h"
 #include "core/utils.h"
+#include "core/assert.h"
+
+// -- constants
+static const int32 kAnswer = 31875000;
 
 // ================================================================================================
 // Find the triplet of numbers such that a^2 + b^2 = c^2 and a+b+c = 1000
@@ -28,12 +32,12 @@ int32 Problem9() {
         ++b;
     }
 
-    if(b > 1000)
-        printf("WTF\n");
-    else {
-        printf("%d^2 + %d^2 = %d^2\n", a, b, c);
-        printf("and %d * %d * %d = %d\n", a, b, c, a*b*c);
-    }
+    // -- make sure we got the right answer
+    Assert_(b <= 1000, "The loop ended without finding the answer");
+    Assert_(a*b*c == kAnswer, "The answer is incorrect");
+
+    printf(NUintFmt_ "^2 + " NUintFmt_ "^2 = " NUintFmt_ "^2\n", a, b, c);
+    printf("and " NUintFmt_ " * " NUintFmt_ " * " NUintFmt_ " = " NUintFmt_ "\n", a, b, c, a*b*c);
 
     return 0;
 }

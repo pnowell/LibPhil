@@ -10,9 +10,9 @@ class CSieve {
 
 protected:
 
-    uint32 sievesize;
-    uint32 offsetsize;
-    uint32* offsets;
+    nuint sievesize;
+    nuint offsetsize;
+    nuint* offsets;
 
 public:
 
@@ -20,15 +20,15 @@ public:
     ~CSieve();
 
     // -- set up the sieve with the given primes
-    void Prepare(uint64* primes, uint32 count);
+    void Prepare(nuint* primes, nuint count);
 
     // -- get an initial offset to move the given number onto a value we can iterate on
     // -- also return the offset index to start using when iterating
-    uint32 GetInitialOffset(uint64 v, uint32& index);
+    nuint GetInitialOffset(nuint v, nuint& index);
 
     // -- accessors
-    uint32 NumOffsets();
-    uint32 Offset(uint32 i);
+    nuint NumOffsets();
+    nuint Offset(nuint i);
 };
 
 // ================================================================================================
@@ -40,11 +40,11 @@ inline CSieve::CSieve() : sievesize(0), offsets(NULL) {
 // ================================================================================================
 // Accessors
 // ================================================================================================
-inline uint32 CSieve::NumOffsets() {
+inline nuint CSieve::NumOffsets() {
     return offsetsize;
 }
 
-inline uint32 CSieve::Offset(uint32 i) {
+inline nuint CSieve::Offset(nuint i) {
     return offsets[i];
 }
 

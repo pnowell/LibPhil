@@ -1,0 +1,103 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\title{Momentum}
+\date{}
+\begin{document}
+First we take the general equation for computing the angular momentum of a system about a
+particular origin.
+\begin{eqnarray*}
+L
+   &=& \sum \vec{r} \times \vec{p} \nonumber \\
+   &=& \int^{M} \vec{r} \times \vec{v} \; dM
+\end{eqnarray*}
+Where $L$ is the angular momentum, $\vec{r}$ is the displacement of a particle from the origin
+and $\vec{p}$ is that particle's linear momentum.  And since
+\begin{eqnarray*}
+\int^{M} dM
+   &=& \int \rho \; dy \nonumber \\
+   &=& \int \frac{M}{H} dy
+\end{eqnarray*}
+We can substitute $dM$ to get
+\begin{equation*}
+L = \frac{M}{H} \int \vec{r} \times \vec{v} \; dy
+\end{equation*}
+First we get the total angular momentum for the top line segment
+\begin{eqnarray*}
+L_{top}
+   &=& \frac{M}{H} \int_{0}^{H}
+       \begin{bmatrix}
+           0 \\
+           y
+       \end{bmatrix} \times
+       \begin{bmatrix}
+           V + \left( \frac{H}{2} - y \right) \omega \\
+           0
+       \end{bmatrix} dy \\
+   &=& \frac{M}{H} \int_{0}^{H}
+       \left( -y \right)
+       \left( V + \left( \frac{H}{2} - y \right) \omega \right) dy \\
+   &=& \frac{M}{H} \int_{0}^{H} -y V - y\frac{H \omega}{2} + y^2 \omega dy \\
+   &=& \frac{M}{H}
+       \left[
+           - V \int_{0}^{H} y dy
+           - \frac{H \omega}{2} \int_{0}^{H} y dy
+           + \omega \int_{0}^{H} y^2 dy
+       \right] \\
+   &=& \frac{M}{H}
+       \left[
+           - V \frac{H^2}{2} - \frac{H \omega}{2} \cdot \frac{H^2}{2} + \omega \frac{H^3}{3}
+       \right] \\
+   &=& \frac{M}{H}
+       \left[
+           \omega \left( \frac{H^3}{3} - \frac{H^3}{4} \right) - V \frac{H^2}{2}
+       \right] \\
+   &=& \omega \frac{M H^2}{12} - V \frac{M H}{2}
+\end{eqnarray*}
+Next we get the total angular momentum for the bottom line segment
+\begin{eqnarray*}
+L_{bottom}
+   &=& \frac{M}{H} \int_{-H}^{0}
+       \begin{bmatrix}
+           0 \\
+           y
+       \end{bmatrix} \times
+       \begin{bmatrix}
+           - V - \left( \frac{H}{2} + y \right) \omega \\
+           0
+       \end{bmatrix} dy \\
+   &=& \frac{M}{H} \int_{-H}^{0}
+       y \left( V + \left( \frac{H}{2} + y \right) \omega \right) dy \\
+   &=& \frac{M}{H} \int_{-H}^{0} y V + y\frac{H \omega}{2} + y^2 \omega dy \\
+   &=& \frac{M}{H}
+       \left[
+           V \int_{-H}^{0} y dy
+           + \frac{H \omega}{2} \int_{-H}^{0} y dy
+           + \omega \int_{-H}^{0} y^2 dy
+       \right] \\
+   &=& \frac{M}{H}
+       \left[
+           - V \frac{\left( - H \right)^2}{2}
+           - \frac{H \omega}{2} \cdot \frac{ \left( - H \right)^2}{2}
+           - \omega \frac{ \left( - H \right)^3}{3}
+       \right] \\
+   &=& \frac{M}{H}
+       \left[
+           \omega \left( \frac{H^3}{3} - \frac{H^3}{4} \right) - V \frac{H^2}{2}
+       \right] \\
+   &=& \omega \frac{M H^2}{12} - V \frac{M H}{2}
+\end{eqnarray*}
+We can now see that both line segments have the same angular momentum, and so the only way
+they could cancel each other out is if both of their angular momenta are zero.
+\begin{eqnarray*}
+   \omega \frac{M H^2}{12} - V \frac{M H}{2} &=& 0 \\
+   \omega \frac{M H^2}{12} &=& V \frac{M H}{2} \\
+   \omega &=& \frac{12 M H V}{2 M H^2} \\
+   \omega &=& \frac{6 V}{H}
+\end{eqnarray*}
+And so if the angular velocity of each line segment satisfies this equality, the angular momentum
+of each line segment is zero, and thus the total angular momentum of the system (about the origin)
+is zero.  Thus, when they collide (in an inelastic collision), both line segments would stop
+moving as well as stop spinning leaving the system with zero linear momentum and zero angular
+momentum.
+\end{document}

@@ -80,7 +80,7 @@ LIBPHIL_CWD = [ FixPath $(LIBPHIL_CWD) ] ;
 ## Give defaults to variables that might be customized on the command line
 ## ================================================================================================
 LIBPHIL_TARGETPLAT ?= winvs ;
-LIBPHIL_TARGET ?= debug ;
+LIBPHIL_BUILDTYPE ?= debug ;
 
 ## ================================================================================================
 ## Rule to set various global variables according to the current working directory
@@ -93,7 +93,8 @@ rule ChangeCWD {
     ## -- strip "src" off the beginning if neceesary
     LIBPHIL_RELTARGDIR = [ SearchReplace $(LIBPHIL_RELCWD) : "^src/?" : "" ] ;
     LIBPHIL_TARGDIR = $(LIBPHIL_BASEDIR)/_$(LIBPHIL_TARGETPLAT) ;
-    LIBPHIL_TARGDIR = $(LIBPHIL_TARGDIR)/$(LIBPHIL_TARGET)/$(LIBPHIL_RELTARGDIR) ;
+    LIBPHIL_TARGDIR = $(LIBPHIL_TARGDIR)/$(LIBPHIL_BUILDTYPE)/$(LIBPHIL_RELTARGDIR) ;
+    LIBPHIL_TARGDOCDIR = $(LIBPHIL_BASEDIR)/_docs/$(LIBPHIL_RELTARGDIR) ;
 }
 
 ## -- invoke the rule to set these global values initially
@@ -103,7 +104,7 @@ ChangeCWD ;
 ## Global variables
 ## ================================================================================================
 LIBPHIL_PLATFORM = $(OS:L) ;
-LIBPHIL_TARGETS = debug ;
+LIBPHIL_BUILDTYPES = debug release ;
 LIBPHIL_JAMCORE = $(LIBPHIL_BASEDIR)/jamcore ;
 LIBPHIL_INCLUDES = "$(LIBPHIL_BASEDIR)/src/libs" ;
 LIBPHIL_HDRSCAN = "^[\t ]*#[\t ]*include[\t ]*[\"]([^\"]*)[\"]" ;
@@ -189,6 +190,7 @@ rule ObjectList {
     ## -- name arguments
     local SOURCES = $(1) ;
     local EXTRAINCLUDES = $(2) ;
+    local EXTRADEFINES = $(3) ;
 
     ## -- get a list of object names
     local OBJECTS ;
@@ -218,6 +220,7 @@ rule ObjectList {
 
     ## -- set up the compile options
     EXTRACCOPTS on $(OBJECTS) = [ CompileOptIncludes $(EXTRAINCLUDES) ] ;
+    EXTRACCOPTS on $(OBJECTS) += [ CompileOptDefines $(EXTRADEFINES) ] ;
 
     ## -- invoke the rule to compile the list of objects
     CompileObjectList $(OBJECTS) : $(SOURCES) ;
@@ -376,6 +379,55 @@ rule SubDirectoryList {
     return $(RESULT:B) ;
 }
 
+rule TexDocumentList {
+    local RESULT = [ GLOB $(LIBPHIL_CWD) : "*.tex" ] ;
+    return $(RESULT:BS) ;
+}
+
+## ================================================================================================
+## Rule for setting up dependencies and actions for a list of tex documents
+## ================================================================================================
+rule TexDocuments {
+    ## -- name arguments
+    local SOURCES = $(1) ;
+
+    ## -- get a list of object names
+    local DOCS ;
+    local SOURCE ;
+    for SOURCE in $(SOURCES) {
+        ## -- change the suffix and reroot the file
+        local ABSSOURCE = $(LIBPHIL_CWD)/$(SOURCE) ;
+        local DOC = $(LIBPHIL_TARGDOCDIR)/$(SOURCE:S=".pdf") ;
+        Depends $(DOC) : $(ABSSOURCE) ;
+        DOCS += $(DOC) ;
+
+        ## -- set up the action to process the documents
+        CompileTexDocument $(DOC) : $(ABSSOURCE) ;
+    }
+
+    ## -- then transform the whole list of sources into absolute paths
+    SOURCES = $(LIBPHIL_CWD)/$(SOURCES) ;
+
+    ## -- all the documents that we want to create depend on the target directory existing
+    Depends $(DOCS) : $(LIBPHIL_TARGDOCDIR) ;
+
+    ## -- invoke the rule for creating the directory
+    CreateDirectory $(LIBPHIL_TARGDOCDIR) ;
+
+    ## -- make sure this gets built if you're building everything
+    Depends all : $(DOCS) ;
+
+    return $(DOCS) ;
+}
+
+## ================================================================================================
+## Action for processing a tex file into a pdf
+## ================================================================================================
+actions CompileTexDocument {
+    cd $(1:D)
+    miktex-pdftex --undump=latex -output-format=pdf $(2)
+}
+
 ## ================================================================================================
 ## Do some validation on the desired platform, target platform and build target
 ## ================================================================================================
@@ -409,9 +461,9 @@ rule VerifyEnv {
         Exit "Should be one of            : " $(TARGETPLATS) ;
     }
 
-    if ! ( $(LIBPHIL_TARGET) in $(LIBPHIL_TARGETS) ) {
-        Echo "Unsupported target : " $(LIBPHIL_TARGET) ;
-        Exit "Should be one of   : " $(LIBPHIL_TARGETS) ;
+    if ! ( $(LIBPHIL_BUILDTYPE) in $(LIBPHIL_BUILDTYPES) ) {
+        Echo "Unsupported build type : " $(LIBPHIL_BUILDTYPE) ;
+        Exit "Should be one of       : " $(LIBPHIL_BUILDTYPES) ;
     }
 }
 VerifyEnv ;
@@ -421,12 +473,27 @@ VerifyEnv ;
 ## ================================================================================================
 Echo "Building Platform        : $(LIBPHIL_PLATFORM)" ;
 Echo "         Target Platform : $(LIBPHIL_TARGETPLAT)" ;
-Echo "         Target          : $(LIBPHIL_TARGET)" ;
+Echo "         Build Type      : $(LIBPHIL_BUILDTYPE)" ;
 
 ## ================================================================================================
 ## Include the appropriate setting-specific jam files and finally include the Jamfile
 ## ================================================================================================
 include $(LIBPHIL_JAMCORE)/Jamplat_$(LIBPHIL_PLATFORM).jam ;
 include $(LIBPHIL_JAMCORE)/Jamtarg_$(LIBPHIL_TARGETPLAT).jam ;
+
+## ================================================================================================
+## Set up the build type specific defines
+## ================================================================================================
+CCOPTS ?= ;
+if ( $(LIBPHIL_BUILDTYPE) = debug ) {
+    CCOPTS += [ CompileOptDefines Debug_=1 Release_=0 ] ;
+}
+else if ( $(LIBPHIL_BUILDTYPE) = release ) {
+    CCOPTS += [ CompileOptDefines Debug_=0 Release_=1 ] ;
+}
+
+## ================================================================================================
+## Finally include the jamfile for the current directory
+## ================================================================================================
 include $(LIBPHIL_CWD)/Jamfile.jam ;
 

@@ -4,11 +4,12 @@
 // -- libs includes
 #include "core/types.h"
 #include "core/utils.h"
+#include "core/assert.h"
 
 // -- consts
-static const uint32 gridsize = 20;
-static const uint32 consec = 4;
-static const uint32 numbers[gridsize][gridsize] = {
+static const nuint kGridSize = 20;
+static const nuint kConsec = 4;
+static const nuint kNumbers[kGridSize][kGridSize] = {
     {  8,  2, 22, 97, 38, 15,  0, 40,  0, 75,  4,  5,  7, 78, 52, 12, 50, 77, 91,  8 },
     { 49, 49, 99, 40, 17, 81, 18, 57, 60, 87, 17, 40, 98, 43, 69, 48,  4, 56, 62,  0 },
     { 81, 49, 31, 73, 55, 79, 14, 29, 93, 71, 40, 67, 53, 88, 30,  3, 49, 13, 36, 65 },
@@ -30,61 +31,64 @@ static const uint32 numbers[gridsize][gridsize] = {
     { 20, 73, 35, 29, 78, 31, 90,  1, 74, 31, 49, 71, 48, 86, 81, 16, 23, 57,  5, 54 },
     {  1, 70, 54, 71, 83, 51, 54, 69, 16, 92, 33, 48, 61, 43, 52,  1, 89, 19, 67, 48 },
 };
+static const nuint kAnswer = 70600674;
 
 // ================================================================================================
-// Find the largest product of 4 numbers in a row from the given grid (horizontal, vertical
+// Find the largest product of 4 kNumbers in a row from the given grid (horizontal, vertical
 // or diagonal)
 // ================================================================================================
 int32 Problem11() {
-    uint32 maxproduct = 0;
-    uint32 product;
-    uint32 i, j, k;
+    nuint maxproduct = 0;
+    nuint product;
+    nuint i, j, k;
 
     // -- test horizontals
-    for(i = 0; i < gridsize; ++i) {
-        for(j = 0; j < gridsize - consec; ++j) {
+    for(i = 0; i < kGridSize; ++i) {
+        for(j = 0; j < kGridSize - kConsec; ++j) {
             product = 1;
-            for(k = 0; k < consec; ++k)
-                product *= numbers[i][j+k];
+            for(k = 0; k < kConsec; ++k)
+                product *= kNumbers[i][j+k];
             if(maxproduct < product)
                 maxproduct = product;
         }
     }
 
     // -- test verticals
-    for(i = 0; i < gridsize - consec; ++i) {
-        for(j = 0; j < gridsize; ++j) {
+    for(i = 0; i < kGridSize - kConsec; ++i) {
+        for(j = 0; j < kGridSize; ++j) {
             product = 1;
-            for(k = 0; k < consec; ++k)
-                product *= numbers[i+k][j];
+            for(k = 0; k < kConsec; ++k)
+                product *= kNumbers[i+k][j];
             if(maxproduct < product)
                 maxproduct = product;
         }
     }
 
     // -- test tl->br diagonals
-    for(i = 0; i < gridsize - consec; ++i) {
-        for(j = 0; j < gridsize - consec; ++j) {
+    for(i = 0; i < kGridSize - kConsec; ++i) {
+        for(j = 0; j < kGridSize - kConsec; ++j) {
             product = 1;
-            for(k = 0; k < consec; ++k)
-                product *= numbers[i+k][j+k];
+            for(k = 0; k < kConsec; ++k)
+                product *= kNumbers[i+k][j+k];
             if(maxproduct < product)
                 maxproduct = product;
         }
     }
 
     // -- test tr->bl diagonals
-    for(i = consec-1; i < gridsize; ++i) {
-        for(j = 0; j < gridsize - consec; ++j) {
+    for(i = kConsec-1; i < kGridSize; ++i) {
+        for(j = 0; j < kGridSize - kConsec; ++j) {
             product = 1;
-            for(k = 0; k < consec; ++k)
-                product *= numbers[i-k][j+k];
+            for(k = 0; k < kConsec; ++k)
+                product *= kNumbers[i-k][j+k];
             if(maxproduct < product)
                 maxproduct = product;
         }
     }
 
-    printf("max = %d\n", maxproduct);
+    printf("max = " NUintFmt_ "\n", maxproduct);
+
+    Assert_(maxproduct == kAnswer, "Incorrect answer");
 
     return 0;
 }
