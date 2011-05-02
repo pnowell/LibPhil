@@ -1,0 +1,130 @@
+## ================================================================================================
+## Global variables
+## ================================================================================================
+LIBPHIL_TEXHDRSCAN = "^[\t ]*\\\\input{([^}]*.pdf_tex)}" ;
+
+## ================================================================================================
+## Utility for automatically detecting a list of sources
+## ================================================================================================
+rule TexDocumentList {
+    local RESULT = [ GLOB $(LIBPHIL_CWD) : "*.tex" ] ;
+    return $(RESULT:BS) ;
+}
+
+rule TexDiagramList {
+    local RESULT = [ GLOB $(LIBPHIL_CWD) : "*.svg" ] ;
+    return $(RESULT:BS) ;
+}
+
+## ================================================================================================
+## Handle header includes
+## ================================================================================================
+rule TexDiagramRule {
+    ## -- name arguments
+    local INCLUDER = $(1) ;
+    local INCLUDEDS = $(2) ;
+
+    ## -- transform all the included files into absolute paths
+    local CURRINC ;
+    local RESOLVED ;
+    for CURRINC in $(INCLUDEDS) {
+        on $(INCLUDER) RESOLVED = $(TARGDIR)/$(CURRINC) ;
+
+        ## -- deal with this resolved include
+        Includes $(INCLUDER) : $(RESOLVED) ;
+    }
+}
+
+## ================================================================================================
+## Rule for setting up dependencies and actions for a list of tex documents
+## ================================================================================================
+rule TexDocuments {
+    ## -- name arguments
+    local SOURCES = $(1) ;
+
+    ## -- get a list of object names
+    local DOCS ;
+    local SOURCE ;
+    for SOURCE in $(SOURCES) {
+        ## -- change the suffix and reroot the file
+        local ABSSOURCE = $(LIBPHIL_CWD)/$(SOURCE) ;
+        local DOC = $(LIBPHIL_TARGDOCDIR)/$(SOURCE:S=".pdf") ;
+        Depends $(DOC) : $(ABSSOURCE) ;
+        DOCS += $(DOC) ;
+
+        ## -- set up the action to process the documents
+        CompileTexDocument $(DOC) : $(ABSSOURCE) ;
+    }
+
+    ## -- then transform the whole list of sources into absolute paths
+    SOURCES = $(LIBPHIL_CWD)/$(SOURCES) ;
+
+    ## -- make sure all these sources know their eventual target directory
+    TARGDIR on $(SOURCES) = $(LIBPHIL_TARGDOCDIR) ;
+
+    echo "Setting TexDiagramRule on " $(SOURCES) ;
+
+    ## -- set up scanning for diagram includes
+    HDRSCAN on $(SOURCES) = $(LIBPHIL_TEXHDRSCAN) ;
+    HDRRULE on $(SOURCES) = TexDiagramRule ;
+
+    ## -- all the documents that we want to create depend on the target directory existing
+    Depends $(DOCS) : $(LIBPHIL_TARGDOCDIR) ;
+
+    ## -- invoke the rule for creating the directory
+    CreateDirectory $(LIBPHIL_TARGDOCDIR) ;
+
+    ## -- make sure this gets built if you're building everything
+    Depends all : $(DOCS) ;
+
+    return $(DOCS) ;
+}
+
+## ================================================================================================
+## Rule for setting up dependencies and actions for a list of tex documents
+## ================================================================================================
+rule TexDiagrams {
+    ## -- name arguments
+    local SOURCES = $(1) ;
+
+    ## -- get a list of object names
+    local DIAGRAMS ;
+    local SOURCE ;
+    for SOURCE in $(SOURCES) {
+        ## -- change the suffix and reroot the file
+        local ABSSOURCE = $(LIBPHIL_CWD)/$(SOURCE) ;
+        local DIAGRAM = $(LIBPHIL_TARGDOCDIR)/$(SOURCE:S=".pdf_tex") ;
+        Depends $(DIAGRAM) : $(ABSSOURCE) ;
+        DIAGRAMS += $(DIAGRAM) ;
+
+        ## -- set up the action to process the documents
+        CompileTexDiagram $(DIAGRAM) : $(ABSSOURCE) ;
+    }
+
+    ## -- then transform the whole list of sources into absolute paths
+    SOURCES = $(LIBPHIL_CWD)/$(SOURCES) ;
+
+    ## -- all the documents that we want to create depend on the target directory existing
+    Depends $(DIAGRAMS) : $(LIBPHIL_TARGDOCDIR) ;
+
+    ## -- invoke the rule for creating the directory
+    CreateDirectory $(LIBPHIL_TARGDOCDIR) ;
+
+    return $(DIAGRAMS) ;
+}
+
+## ================================================================================================
+## Action for processing a tex file into a pdf
+## ================================================================================================
+actions updated CompileTexDocument {
+    echo $(2:BS)
+    cd $(1:D)
+    miktex-pdftex -undump=latex -c-style-errors -interaction=nonstopmode -output-format=pdf -include-directory=$(2:D) $(2)
+}
+
+actions updated CompileTexDiagram {
+    echo $(2:BS)
+    cd $(1:D)
+    inkscape -D -z --file=$(2) --export-pdf=$(1:BS=".pdf") --export-latex
+}
+

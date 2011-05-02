@@ -113,7 +113,6 @@ LIBPHIL_HDRSCAN = "^[\t ]*#[\t ]*include[\t ]*[\"]([^\"]*)[\"]" ;
 ## Built in jam globals
 ## ================================================================================================
 SEARCH = $(LIBPHIL_INCLUDES) ;
-HDRRULE = HeaderRule ;
 
 ## ================================================================================================
 ## Rules for actual dependency graph creation
@@ -180,6 +179,7 @@ rule HeaderRule {
 
         ## -- and recurse into this header
         HDRSCAN on $(RESOLVED) = $(LIBPHIL_HDRSCAN) ;
+        HDRRULE on $(RESOLVED) = HeaderRule ;
     }
 }
 
@@ -208,6 +208,7 @@ rule ObjectList {
 
     ## -- set up scanning for header includes on our sources
     HDRSCAN on $(SOURCES) = $(LIBPHIL_HDRSCAN) ;
+    HDRRULE on $(SOURCES) = HeaderRule ;
 
     ## -- all the objects that we want to create depend on the target directory existing
     Depends $(OBJECTS) : $(LIBPHIL_TARGDIR) ;
@@ -379,55 +380,6 @@ rule SubDirectoryList {
     return $(RESULT:B) ;
 }
 
-rule TexDocumentList {
-    local RESULT = [ GLOB $(LIBPHIL_CWD) : "*.tex" ] ;
-    return $(RESULT:BS) ;
-}
-
-## ================================================================================================
-## Rule for setting up dependencies and actions for a list of tex documents
-## ================================================================================================
-rule TexDocuments {
-    ## -- name arguments
-    local SOURCES = $(1) ;
-
-    ## -- get a list of object names
-    local DOCS ;
-    local SOURCE ;
-    for SOURCE in $(SOURCES) {
-        ## -- change the suffix and reroot the file
-        local ABSSOURCE = $(LIBPHIL_CWD)/$(SOURCE) ;
-        local DOC = $(LIBPHIL_TARGDOCDIR)/$(SOURCE:S=".pdf") ;
-        Depends $(DOC) : $(ABSSOURCE) ;
-        DOCS += $(DOC) ;
-
-        ## -- set up the action to process the documents
-        CompileTexDocument $(DOC) : $(ABSSOURCE) ;
-    }
-
-    ## -- then transform the whole list of sources into absolute paths
-    SOURCES = $(LIBPHIL_CWD)/$(SOURCES) ;
-
-    ## -- all the documents that we want to create depend on the target directory existing
-    Depends $(DOCS) : $(LIBPHIL_TARGDOCDIR) ;
-
-    ## -- invoke the rule for creating the directory
-    CreateDirectory $(LIBPHIL_TARGDOCDIR) ;
-
-    ## -- make sure this gets built if you're building everything
-    Depends all : $(DOCS) ;
-
-    return $(DOCS) ;
-}
-
-## ================================================================================================
-## Action for processing a tex file into a pdf
-## ================================================================================================
-actions CompileTexDocument {
-    cd $(1:D)
-    miktex-pdftex --undump=latex -output-format=pdf $(2)
-}
-
 ## ================================================================================================
 ## Do some validation on the desired platform, target platform and build target
 ## ================================================================================================
@@ -478,6 +430,7 @@ Echo "         Build Type      : $(LIBPHIL_BUILDTYPE)" ;
 ## ================================================================================================
 ## Include the appropriate setting-specific jam files and finally include the Jamfile
 ## ================================================================================================
+include $(LIBPHIL_JAMCORE)/Jambase_tex.jam ;
 include $(LIBPHIL_JAMCORE)/Jamplat_$(LIBPHIL_PLATFORM).jam ;
 include $(LIBPHIL_JAMCORE)/Jamtarg_$(LIBPHIL_TARGETPLAT).jam ;
 

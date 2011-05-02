@@ -1,0 +1,38 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{color}
+\title{Stereo Separation}
+\date{}
+\begin{document}
+
+When rendering a stereo pair of images, the normal camera frustum is offset slightly for each image to give the user one view per eye that should give them as much of a believable 3D effect and keep their brain from struggling to process the information.  There are a few considerations to keep in mind in order to keep the brain from feeling like something is strange.  One is that the brain gets its information about depth not just from the angular offset of the eyes, but also from the current focal depth of the eyes lenses, and so its good to try to keep those two measures from diverging too much.  Another is that the brain gets a basic sense of depth from the perceived overlap of various objects, which becomes a concern when something is being displayed at a depth that is closer to the user than the screen and gets cut off by the edge of the screen, which can be referred to as a window violation.  The concern we will focus on here, however, is that when looking at real objects, there is never a reason for a person's eyes to diverge more than parallel from one another.  When a detail is close the eyes converge, and when a detail is distant they diverge, but at the limit of the detail being taken to an infinite distance, the eyes approach being completely parallel.  So its important to make sure that the stereo pair of cameras are offset such that the final pair of images don't have details displaced with more divergance than the distance between the users eyes.
+
+Consider a 3D camera setup, where the camera has a position and orientation, and symmetric frustum that ends at a near distance to the camera.  When the scene is rendered, all the details of the scene are projected toward the position of the camera and recorded on that near plane of the frustum.  Let us introduce a new plane that well call the focal plane where we expect the user to have their attention focused.  When we offset our stereo cameras from this central point of view, we want to maintain visibility of all the things on that plane.  To accomplish this we skew the frustums of the stereo cameras symmetrically to fully contain the same portion of the focal plane that the original camera did.  Another effect this has on the resultant stereo pair of images is that all the details on this plane appear in the exact same position on both stereo images, which gives the appearance of that detail lying on the plane of the display.
+
+Once we have decided on a focal distance, we can solve for a displacement of the stereo cameras that will result in details at infinity having maximum divergence.  In order to do this, let's assume that we know the distance between the users eyes and the size of their display.  Consider figure~\ref{full_diagram} where we have the stereo pair of cameras with their frustums aligned with the given focal plane.  The detail at infinity is depicted by a star, and the line of sight from each camera toward the star is straight forward and perpendicular to the near projection plane.
+
+\begin{figure}
+    \centering
+    \def\svgwidth{\columnwidth}
+    \input{separation_diagram_1.pdf_tex}
+    \caption{
+        Stereo pair of cameras looking at an infinitely distant detail
+        \label{full_diagram}
+    }
+\end{figure}
+
+The highlighted regions of the near plane are the resulting images are are displayed on top of each other on the user's display, and we're interested in the distance between the details on the near plane if they were to be overlayed on each other.  Referring to figure~\ref{detail_diagram}, we need to find the distance $A_{Left}$ and $C_{Left}$, which is the distance of the image of the star from the center of the image, where the star would be visible by the normal non-stereo camera.
+
+\begin{figure}
+    \centering
+    \def\svgwidth{\columnwidth}
+    \input{separation_diagram_2.pdf_tex}
+    \caption{
+        An infinitely distant detail is offset to the left for the left eye
+        \label{detail_diagram}
+    }
+\end{figure}
+
+\end{document}
