@@ -17,23 +17,25 @@ extern int32 Problem10();
 extern int32 Problem11();
 extern int32 Problem12();
 extern int32 Problem13();
+extern int32 Problem14();
+extern int32 Problem15();
+extern int32 Problem16();
+extern int32 Problem17();
+extern int32 Problem18();
+extern int32 Problem67();
 
-static const ProblemCB kDefault = Problem12;
+static const ProblemCB kDefault = Problem18;
 
 static const ProblemCB kProblems[] = {
-    NULL,
-    NULL,
-    NULL,
-    Problem4,
-    NULL,
-    NULL,
-    Problem7,
-    Problem8,
-    Problem9,
-    Problem10,
-    Problem11,
-    Problem12,
-    Problem13,
+    NULL,       NULL,       NULL,       Problem4,   NULL,       NULL,       Problem7,   Problem8,
+    Problem9,   Problem10,  Problem11,  Problem12,  Problem13,  NULL,       Problem15,  Problem16,
+    Problem17,  Problem18,  NULL,       NULL,       NULL,       NULL,       NULL,       NULL, // 24
+    NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL, // 32
+    NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL, // 40
+    NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL, // 48
+    NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL, // 56
+    NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL, // 64
+    NULL,       NULL,       Problem67,
 };
 static const nuint kNumProblems = ArraySize_(kProblems);
 

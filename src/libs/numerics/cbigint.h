@@ -11,33 +11,33 @@ class CBigInt {
 
 protected:
 
-    nflag negative;
     CTable<uint8> digits;
-    nuint numdigits;
 
 public:
 
-    CBigInt(int64 v = 0);
+    CBigInt(nuint val = 0);
     CBigInt(cpointer v);
 
+    // -- swap memory with the given big int
+    void Swap(CBigInt& other);
+
     // -- accessors
-    nuint NumDigits();
-    nuint Digit(nuint idx);
+    nuint NumDigits() const;
+    nuint Digit(nuint idx) const;
 
     // -- operators
-    CBigInt& operator+=(const CBigInt& other);
-    CBigInt& operator-=(const CBigInt& other);
-    CBigInt& operator*=(const CBigInt& other);
+    const CBigInt& operator+=(const CBigInt& other);
+    const CBigInt& operator*=(const nuint& other);
 };
 
 // ================================================================================================
 // Accessors
 // ================================================================================================
-inline nuint CBigInt::NumDigits() {
+inline nuint CBigInt::NumDigits() const {
     return digits.Count();
 }
 
-inline nuint CBigInt::Digit(nuint idx) {
+inline nuint CBigInt::Digit(nuint idx) const {
     return digits[idx];
 }
 

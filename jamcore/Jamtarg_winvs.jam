@@ -64,7 +64,7 @@ else if ( $(LIBPHIL_BUILDTYPE) = release ) {
 ## ================================================================================================
 ## Target specific actions
 ## ================================================================================================
-actions updated piecemeal CompileObjectList {
+actions CompileObjectList {
     cd $(1:D)
     $(CC) $(CCOPTS) $(EXTRACCOPTS) $(2)
 }
@@ -76,7 +76,6 @@ actions LinkLibrary {
 
 actions LinkExecutable {
     echo "Linking executable $(1:BS)"
-    echo $(LINK) $(LINKOPTS) $(EXTRALINKOPTS) /out:$(1) $(2)
     $(LINK) /out:$(1) $(2) $(LINKOPTS) $(EXTRALINKOPTS)
 }
 

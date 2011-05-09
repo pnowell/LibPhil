@@ -72,8 +72,9 @@ map <C-z> :call ReloadErrors()<CR>:copen<CR>;G
 map t :tn<CR>
 map T :tp<CR>
 
+map f :call SplitToAssociatedFile()<CR>
 map F :call SplitToFileDirectory()<CR>;
-map <C-S-f> :call TabSplitToFileDirectory()<CR>
+map <C-F> :call TabSplitToFileDirectory()<CR>
 
 map <F4> :call OpenErrorAndPreview()<CR>
 map g<F7> :call CompileResults()<CR>
@@ -152,6 +153,26 @@ function! TabSplitToFileDirectory()
         let dir = "."
     endif
     silent execute 'tabe ' . dir
+endfunction
+
+function! SplitToAssociatedFile()
+    let ext = expand("%:e")
+    if(ext == "cpp")
+        sp
+        execute "normal! \<C-w>w"
+        silent execute 'e ' . expand("%:p:r") . ".h"
+        execute "normal! \<C-w>W"
+        execute "normal! \<C-w>_"
+    elseif(ext == "h")
+        silent execute 'sp ' . expand("%:p:r") . ".cpp"
+        execute "normal! \<C-w>_"
+    else
+        call SplitToFileDirectory()
+    endif
+endfunction
+
+function! TabSplitToAssociatedFile()
+    call TabSplitToFileDirectory()
 endfunction
 
 "" ================================================================================================

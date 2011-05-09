@@ -110,23 +110,27 @@ static cpointer kNumbers[] = {
     "53503534226472524250874054075591789781264330331690",
 };
 static const uint32 kNumbersSize = ArraySize_(kNumbers);
+static cpointer kAnswer = "5537376230390876637302048746832985971773659831892672";
 
 // ================================================================================================
 // Problem 13
 // ================================================================================================
 int32 Problem13() {
-    printf("Number of strings = %d\n", kNumbersSize);
-
     CBigInt sum;
     for(nuint i = 0; i < kNumbersSize; ++i)
-        sum += kNumbers[i];
+        sum += CBigInt(kNumbers[i]);
 
     // -- iterate over the ten most significant digits
     nuint numdigits = sum.NumDigits();
     Assert_(numdigits >= 10, "Not enough digits : " NUintFmt_, numdigits);
-    for(nuint i = numdigits-10; i < numdigits; ++i)
-        printf("%c", sum.Digit(i) + '0');
+    nflag correct = true;
+    for(nuint i = numdigits; i > 0; --i) {
+        printf("%c", sum.Digit(i-1) + '0');
+        correct = correct && (kAnswer[numdigits - i] - '0' == sum.Digit(i-1));
+    }
     printf("\n");
+
+    Assert_(correct, "Sum should have been \n%s", kAnswer);
 
     return 0;
 }

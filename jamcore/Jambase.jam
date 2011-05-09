@@ -200,6 +200,10 @@ rule ObjectList {
         local ABSSOURCE = $(LIBPHIL_CWD)/$(SOURCE) ;
         local OBJECT = $(LIBPHIL_TARGDIR)/$(SOURCE:S=".$(OBJ_SUFFIX)") ;
         Depends $(OBJECT) : $(ABSSOURCE) ;
+
+        ## -- invoke the rule to compile the list of objects
+        CompileObjectList $(OBJECT) : $(ABSSOURCE) ;
+
         OBJECTS += $(OBJECT) ;
     }
 
@@ -222,9 +226,6 @@ rule ObjectList {
     ## -- set up the compile options
     EXTRACCOPTS on $(OBJECTS) = [ CompileOptIncludes $(EXTRAINCLUDES) ] ;
     EXTRACCOPTS on $(OBJECTS) += [ CompileOptDefines $(EXTRADEFINES) ] ;
-
-    ## -- invoke the rule to compile the list of objects
-    CompileObjectList $(OBJECTS) : $(SOURCES) ;
 
     return $(OBJECTS) ;
 }

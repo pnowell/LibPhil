@@ -62,8 +62,6 @@ rule TexDocuments {
     ## -- make sure all these sources know their eventual target directory
     TARGDIR on $(SOURCES) = $(LIBPHIL_TARGDOCDIR) ;
 
-    echo "Setting TexDiagramRule on " $(SOURCES) ;
-
     ## -- set up scanning for diagram includes
     HDRSCAN on $(SOURCES) = $(LIBPHIL_TEXHDRSCAN) ;
     HDRRULE on $(SOURCES) = TexDiagramRule ;

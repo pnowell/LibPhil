@@ -3,7 +3,6 @@
 
 // -- libs includes
 #include "core/types.h"
-#include "core/utils.h"
 #include "numerics/cprimecalculator.h"
 
 static const nuint kNumDivisors = 500;

@@ -7,7 +7,9 @@
 
 #if Debug_
 
-// -- a globally scoped function for handling the failed assertions
+// ================================================================================================
+// A globally scoped function for handling the failed assertions
+// ================================================================================================
 void AssertHandler(cpointer file, nuint line, cpointer errorfmt, ...) {
     printf("\n+===================+\n");
     printf("| Assertion failure |\n");

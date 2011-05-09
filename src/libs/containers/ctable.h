@@ -44,9 +44,14 @@ public:
     // -- add an entry to the table
     void Grow(const T& val);
     void Grow();
+    void GrowMultiple(const T& val, nuint n);
+    void GrowMultiple(nuint n);
 
     // -- remove a specific entry from the table
     void Remove(nuint idx);
+
+    // -- swap memory with the given table
+    void Swap(CTable<T>& other);
 
     // -- reset the table
     void Clear();
@@ -86,12 +91,12 @@ template<typename T> inline nuint CTable<T>::Count() const {
 }
 
 template<typename T> inline const T* CTable<T>::GetElem(nuint idx) const {
-    Assert_(idx < count, "Index %d is out of range %d", idx, count);
+    Assert_(idx < count, "Index " NUintFmt_ " is out of range " NUintFmt_, idx, count);
     return recast_<const T*>(GetPointer(idx));
 }
 
 template<typename T> inline T* CTable<T>::GetElem(nuint idx) {
-    Assert_(idx < count, "Index %d is out of range %d", idx, count);
+    Assert_(idx < count, "Index " NUintFmt_ " is out of range " NUintFmt_, idx, count);
     return recast_<T*>(GetPointer(idx));
 }
 
@@ -104,37 +109,57 @@ template<typename T> inline T& CTable<T>::operator[](nuint idx) {
 }
 
 // ================================================================================================
-// Add an entry to the table
+// Add entries to the table
 // ================================================================================================
 template<typename T> inline void CTable<T>::Grow(const T& val) {
+    GrowMultiple(val, 1);
+}
+
+template<typename T> inline void CTable<T>::Grow() {
+    GrowMultiple(1);
+}
+
+template<typename T> inline void CTable<T>::GrowMultiple(const T& val, nuint n) {
     // -- first allocate some new memory, if necessary
-    if(count == alloc) {
-        alloc += expand;
+    nuint newcount = count + n;
+    if(newcount > alloc) {
+        // -- get the multiple of expand to allocate that will give us just enough memory
+        // -- divide by expand, rounding up, and then multiply by expand again
+        nuint newmem = ((newcount - alloc - 1) / expand + 1) * expand;
+        alloc += newmem;
         mem = recast_<pointer>(CMemory::ReAlloc(mem, alloc * sizeof(T)));
     }
 
     // -- then construct the memory as a copy of val
-    new (mem + sizeof(T) * count) T(val);
-    ++count;
+    for(nuint i = count; i < newcount; ++i)
+        new (mem + sizeof(T) * i) T(val);
+
+    count = newcount;
 }
 
-template<typename T> inline void CTable<T>::Grow() {
+template<typename T> inline void CTable<T>::GrowMultiple(nuint n) {
     // -- first allocate some new memory, if necessary
-    if(count == alloc) {
-        alloc += expand;
+    nuint newcount = count + n;
+    if(newcount > alloc) {
+        // -- get the multiple of expand to allocate that will give us just enough memory
+        // -- divide by expand, rounding up, and then multiply by expand again
+        nuint newmem = ((newcount - alloc - 1) / expand + 1) * expand;
+        alloc += newmem;
         mem = recast_<pointer>(CMemory::ReAlloc(mem, alloc * sizeof(T)));
     }
 
-    // -- then construct the memory with its default constructor
-    new (mem + sizeof(T) * count) T();
-    ++count;
+    // -- then construct the memory as a copy of val
+    for(nuint i = count; i < newcount; ++i)
+        new (mem + sizeof(T) * count) T();
+
+    count = newcount;
 }
 
 // ================================================================================================
 // Remove an entry from the table
 // ================================================================================================
 template<typename T> void CTable<T>::Remove(nuint idx) {
-    Assert_(idx < count, "Index %d is out of range %d", idx, count);
+    Assert_(idx < count, "Index " NUintFmt_ " is out of range " NUintFmt_, idx, count);
 
     // -- destroy the element to be removed
     CMemory::Destroy<T>(GetElem(i));
@@ -144,6 +169,23 @@ template<typename T> void CTable<T>::Remove(nuint idx) {
         nuint tomove = (count - idx - 1) * sizeof(T);
         CMemory::Move(GetPointer(i), GetPointer(i+1), tomove);
     }
+}
+
+// ================================================================================================
+// Swap memory with the given table
+// ================================================================================================
+template<typename T> void CTable<T>::Swap(CTable<T>& other) {
+    pointer tempmem = mem;
+    nuint tempcount = count;
+    nuint tempalloc = alloc;
+
+    mem = other.mem;
+    count = other.count;
+    alloc = other.alloc;
+
+    other.mem = tempmem;
+    other.count = tempcount;
+    other.alloc = tempalloc;
 }
 
 // ================================================================================================

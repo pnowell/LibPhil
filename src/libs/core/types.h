@@ -2,9 +2,9 @@
 
 // -- types
 typedef char* pointer;
-typedef const pointer cpointer;
+typedef char const * cpointer;
 typedef void* vpointer;
-typedef const vpointer cvpointer;
+typedef void const * cvpointer;
 
 // -- integer types
 typedef char int8;
