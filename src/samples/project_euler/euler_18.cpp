@@ -35,8 +35,6 @@ static const nuint kAnswer = 1074;
 // Do all the work for problem 18 and 67
 // ================================================================================================
 nuint Problem18And67(const nuint* tri, const nuint size) {
-    nuint sqrt = CMath::ISqrt(1 + 8*size);
-    Assert_(sqrt*sqrt == 1 + 8*size, "hmmm");
     nuint height = (CMath::ISqrt(1 + 8*size) - 1) / 2;
     Assert_(height * (height + 1) / 2 == size, "Are you sure the size you passed in is correct?");
     Assert_(height > 1, "Really?  Why bother with such a small triangle size");
