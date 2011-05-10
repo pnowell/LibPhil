@@ -4,6 +4,7 @@
 // -- libs includes
 #include "core/types.h"
 #include "numerics/cprimecalculator.h"
+#include "numerics/cmath.h"
 
 static const nuint kNumDivisors = 500;
 static const nuint kAnswer = 76576500;
@@ -13,10 +14,9 @@ static const nuint kAnswer = 76576500;
 // ================================================================================================
 int32 Problem12() {
     // -- start at the triangle closest to (and not greater than) numdivisors to save a little time
-    //nuint triidx = (IntSqrt(1 + 8 * numdivisors) - 1) >> 1;
-    // -- start off at the triangle number just less than 500
-    nuint triidx = 31;
+    nuint triidx = (CMath::ISqrt(1 + 8 * kNumDivisors) - 1) >> 1;
     nuint trinum = (triidx * (triidx + 1)) >> 1;
+    printf("We start triidx off at " NUintFmt_ " which is " NUintFmt_ "\n", triidx, trinum);
     nuint trisqrt = 1;
 
     // -- initialize our prime list

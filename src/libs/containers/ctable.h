@@ -49,6 +49,7 @@ public:
 
     // -- remove a specific entry from the table
     void Remove(nuint idx);
+    void RemoveMultiple(nuint idx, nuint n);
 
     // -- swap memory with the given table
     void Swap(CTable<T>& other);
@@ -159,15 +160,24 @@ template<typename T> inline void CTable<T>::GrowMultiple(nuint n) {
 // Remove an entry from the table
 // ================================================================================================
 template<typename T> void CTable<T>::Remove(nuint idx) {
-    Assert_(idx < count, "Index " NUintFmt_ " is out of range " NUintFmt_, idx, count);
+    RemoveMultiple(idx, 1);
+}
 
-    // -- destroy the element to be removed
-    CMemory::Destroy<T>(GetElem(i));
+template<typename T> void CTable<T>::RemoveMultiple(nuint idx, nuint n) {
+    if(n == 0)
+        return;
 
-    // -- move the remaining elements down by one index
-    if(idx < count - 1) {
-        nuint tomove = (count - idx - 1) * sizeof(T);
-        CMemory::Move(GetPointer(i), GetPointer(i+1), tomove);
+    Assert_(idx + n <= count, "Indices [" NUintFmt_ ".." NUintFmt_ ") is out of range " NUintFmt_,
+            idx, idx + n, count);
+
+    // -- destroy the elements to be removed
+    for(nuint i = idx; i < idx + n; ++i)
+        CMemory::Destroy<T>(GetElem(i));
+
+    // -- move the remaining elements down
+    if(idx + n < count) {
+        nuint tomove = (count - idx - n) * sizeof(T);
+        CMemory::Move(GetPointer(idx), GetPointer(idx+n), tomove);
     }
 }
 

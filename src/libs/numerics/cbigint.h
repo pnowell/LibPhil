@@ -12,11 +12,16 @@ class CBigInt {
 protected:
 
     CTable<uint8> digits;
+    nuint limit;
 
 public:
 
     CBigInt(nuint val = 0);
     CBigInt(cpointer v);
+
+    // -- limit the number of digits
+    void SetDigitLimit(nuint lim);
+    void ClearDigitLimit();
 
     // -- swap memory with the given big int
     void Swap(CBigInt& other);
@@ -26,8 +31,10 @@ public:
     nuint Digit(nuint idx) const;
 
     // -- operators
+    const CBigInt& operator=(const CBigInt& other);
+    const CBigInt& operator=(nuint other);
     const CBigInt& operator+=(const CBigInt& other);
-    const CBigInt& operator*=(const nuint& other);
+    const CBigInt& operator*=(nuint other);
 };
 
 // ================================================================================================
