@@ -6,49 +6,51 @@
 #include "containers/ctable.h"
 
 // -- consts
-static const nuint kMax = 1000000;
+static const nuint kMaxResult = 1000000;
+static const nuint kMaxConsidered = 100000000;
+static const nuint kAnswer = 910107;
 
 // ------------------------------------------------------------------------------------------------
-// Recursive function to walk until we find an existing calculated chain length
+// Explore a particular branch
 // ------------------------------------------------------------------------------------------------
-void CalcChainLength(nuint i, CTable<nuint>& chains) {
-    // -- first make sure we have that much memory allocated
-    if(i >= chains.Count())
-        chains.GrowMultiple(0, i + 1 - chains.Count());
+static void FollowChain(nuint val, nuint len, nuint& bestval, nuint& bestlen) {
+    while(val < kMaxConsidered) {
+        // -- check to see if this qualifies as a new record
+        if(val < kMaxResult && bestlen < len) {
+            bestlen = len;
+            bestval = val;
+        }
 
-    // -- if we already have a value, return
-    if(chains[i] != 0)
-        return;
+        // -- add one to the current length
+        ++len;
 
-    // -- figure out the next number in the chain
-    nuint next = (i & 1) ? 3*i + 1 : i >> 1;
-    CalcChainLength(next, chains);
+        // -- check to see if we can decrease
+        nuint decrease = (val-1) / 3;
+        // -- we can only decrease if val-1 is divisible by 3, and if the resulting value is odd
+        if((val-1) % 3 == 0 && (decrease & 1) == 1)
+            FollowChain(decrease, len, bestval, bestlen);
 
-    chains[i] = chains[next] + 1;
+        val = 2*val;
+    }
 }
 
 // ================================================================================================
 // Problem 14
 // ================================================================================================
 int32 Problem14() {
-    CTable<nuint> chains;
-    // -- we know we're going to need at least kMax entries
-    chains.GrowMultiple(0, kMax);
-    chains[1] = 1;
+    // -- we start off at 8 (in the sequence 1, 2, 4, 8, ...)
+    nuint bestval = 1;
+    nuint bestlen = 1;
+    nuint val = 8;
+    nuint len = 4;
 
-    for(nuint i = 2; i < kMax; ++i)
-        CalcChainLength(i, chains);
+    FollowChain(val, len, bestval, bestlen);
 
-    nuint maxlen = 0;
-    nuint maxnum = 0;
-    for(nuint i = 1; i < kMax; ++i) {
-        if(chains[i] > maxlen) {
-            maxlen = chains[i];
-            maxnum = i;
-        }
-    }
+    // -- print our results
+    printf("The longest chain starts at " NUintFmt_ " and has a length of " NUintFmt_ "\n",
+           bestval, bestlen);
 
-    printf("The longest chain of length " NUintFmt_ " is " NUintFmt_ "\n", maxlen, maxnum);
-
+    Assert_(bestval == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    
     return 0;
 }
