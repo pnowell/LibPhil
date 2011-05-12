@@ -40,7 +40,7 @@ public:
 // Calculate all the primes up to (and possibly including) the given maximum number
 // ================================================================================================
 inline void CPrimeCalculator::FindPrimesUpTo(nuint max) {
-    while(currnum < max)
+    while(currnum <= max)
         CheckNext();
 }
 
