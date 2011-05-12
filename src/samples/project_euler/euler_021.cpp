@@ -89,7 +89,6 @@ int32 Problem21() {
 
         nuint factorsum = SumOfDivisors(i, primecalc);
         if(factorsum != i && factorsum != 1 && SumOfDivisors(factorsum, primecalc) == i) {
-            printf("Sum of divisors of " NUintFmt_ " is " NUintFmt_ "\n", i, factorsum);
             sum += i;
             if(factorsum < kLimit) {
                 sum += factorsum;

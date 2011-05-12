@@ -4,7 +4,7 @@
 #include "core/types.h"
 
 // ================================================================================================
-// Class for managing a sieve for more quickly searching for prime numbers
+// Class with various static utility math functions
 // ================================================================================================
 class CMath {
 
