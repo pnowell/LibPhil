@@ -17,7 +17,7 @@ void CFactorizer::CollectFactorCombinations(const CTable<nuint>& factors, nuint 
     while(end < numfactors && factors[end] == f)
         ++end;
 
-    // -- figure out if we're the end of the line and so we should be adding into the sum
+    // -- figure out if we're the end of the line and so we should be adding into the table
     nflag record = end == numfactors;
 
     // -- loop over the number of times this factor is repeated and deal with all of them

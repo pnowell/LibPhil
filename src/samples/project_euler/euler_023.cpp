@@ -9,7 +9,7 @@
 
 // -- constants
 static const nuint kLimit = 28123;
-static const nuint kAnswer = 0;
+static const nuint kAnswer = 4179871;
 
 // ================================================================================================
 // Problem 23
