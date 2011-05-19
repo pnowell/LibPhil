@@ -167,7 +167,7 @@ template<typename T> void CTable<T>::RemoveMultiple(nuint idx, nuint n) {
     if(n == 0)
         return;
 
-    Assert_(idx + n <= count, "Indices [" NUintFmt_ ".." NUintFmt_ ") is out of range " NUintFmt_,
+    Assert_(idx + n <= count, "Indices [" NUintFmt_ ".." NUintFmt_ ") are out of range " NUintFmt_,
             idx, idx + n, count);
 
     // -- destroy the elements to be removed
@@ -179,6 +179,8 @@ template<typename T> void CTable<T>::RemoveMultiple(nuint idx, nuint n) {
         nuint tomove = (count - idx - n) * sizeof(T);
         CMemory::Move(GetPointer(idx), GetPointer(idx+n), tomove);
     }
+
+    count -= n;
 }
 
 // ================================================================================================
