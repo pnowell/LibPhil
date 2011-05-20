@@ -34,16 +34,17 @@ extern int32 Problem28();
 extern int32 Problem29();
 extern int32 Problem30();
 extern int32 Problem31();
+extern int32 Problem32();
 extern int32 Problem48();
 extern int32 Problem67();
 
-static const ProblemCB kDefault = Problem31;
+static const ProblemCB kDefault = Problem32;
 
 static const ProblemCB kProblems[] = {
     NULL,       NULL,       NULL,       Problem4,   NULL,       NULL,       Problem7,   Problem8,
     Problem9,   Problem10,  Problem11,  Problem12,  Problem13,  Problem14,  Problem15,  Problem16,
     Problem17,  Problem18,  Problem19,  Problem20,  Problem21,  NULL,       Problem23,  Problem24,
-    Problem25,  Problem26,  Problem27,  Problem28,  Problem29,  Problem30,  Problem31,  NULL, // 32
+    Problem25,  Problem26,  Problem27,  Problem28,  Problem29,  Problem30,  Problem31,  Problem32,
     NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL, // 40
     NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       Problem48,
     NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL, // 56
