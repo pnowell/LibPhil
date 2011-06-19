@@ -1,10 +1,8 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/utils.h"
 #include "core/assert.h"
+#include "io/clog.h"
 
 // -- consts
 static const char number[] =
@@ -49,9 +47,9 @@ int32 Problem8() {
         }
     }
 
-    printf("Largest product comes from [" NUintFmt_ "] %c * %c * %c * %c * %c = " NUintFmt_ "\n",
-           largestidx, number[largestidx], number[largestidx+1], number[largestidx+2],
-           number[largestidx+3], number[largestidx+4], largest);
+    CLog::Write("Largest product is from [" NUintFmt_ "] %c * %c * %c * %c * %c = " NUintFmt_ "\n",
+                largestidx, number[largestidx], number[largestidx+1], number[largestidx+2],
+                number[largestidx+3], number[largestidx+4], largest);
 
     Assert_(largest == kAnswer, "Incorrect answer");
 

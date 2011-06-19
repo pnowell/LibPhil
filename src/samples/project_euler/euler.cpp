@@ -1,12 +1,10 @@
-// -- system includes
-#include <stdio.h>
-#include <stdlib.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/utils.h"
 #include "core/ctimer.h"
 #include "numerics/csieve.h"
+#include "numerics/cmath.h"
+#include "io/clog.h"
 
 // -- extern the current problem to run
 typedef int32 (*ProblemCB)(void);
@@ -55,6 +53,7 @@ static const ProblemCB kProblems[] = {
 };
 static const nuint kNumProblems = ArraySize_(kProblems);
 
+// ================================================================================================
 static void TimeCall(ProblemCB cb) {
     // -- time the execution of each solution
     CTimer timer;
@@ -64,24 +63,24 @@ static void TimeCall(ProblemCB cb) {
     timer.Stop();
 
     // -- print the number of seconds / milliseconds it took to run
-    printf(" -- %.5f secs (" NUintFmt_ " usecs)\n", timer.GetSeconds(), timer.GetMicro());
+    CLog::Write(" -- %.5f secs (" NUintFmt_ " usecs)\n", timer.GetSeconds(), timer.GetMicro());
 }
 
 // ================================================================================================
-int32 main(int32 argc, pointer argv[]) {
+int main(int32 argc, pointer argv[]) {
     CTimer timer;
     timer.Start();
 
     if(argc > 1) {
-        nuint idx = atoi(argv[1]);
+        nuint idx = CMath::AToI(argv[1]);
 
         // -- we use zero as a special index which means to iterate over all of the problems
         if(idx == 0) {
             for(nuint i = 0; i < kNumProblems; ++i) {
                 if(kProblems[i] != NULL) {
-                    printf("\n\n====================\n");
-                    printf("Problem " NUintFmt_ "\n", i + 1);
-                    printf("====================\n");
+                    CLog::Write("\n\n====================\n");
+                    CLog::Write("Problem " NUintFmt_ "\n", i + 1);
+                    CLog::Write("====================\n");
                     TimeCall(kProblems[i]);
                 }
             }
@@ -89,7 +88,7 @@ int32 main(int32 argc, pointer argv[]) {
         else {
             --idx;
             if(idx >= kNumProblems || kProblems[idx] == NULL) {
-                printf("Problem " NUintFmt_ " isn't solved yet\n", idx+1);
+                CLog::Write("Problem " NUintFmt_ " isn't solved yet\n", idx+1);
             }
             else
                 TimeCall(kProblems[idx]);
@@ -99,7 +98,7 @@ int32 main(int32 argc, pointer argv[]) {
         TimeCall(kDefault);
 
     timer.Stop();
-    printf(" ---- Total time %.5f secs (" NUintFmt_ " usecs)\n",
+    CLog::Write(" ---- Total time %.5f secs (" NUintFmt_ " usecs)\n",
            timer.GetSeconds(), timer.GetMicro());
 
     return 0;

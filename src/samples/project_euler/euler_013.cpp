@@ -1,10 +1,8 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/utils.h"
 #include "numerics/cbigint.h"
+#include "io/clog.h"
 
 // -- consts
 static cpointer kNumbers[] = {
@@ -125,10 +123,10 @@ int32 Problem13() {
     Assert_(numdigits >= 10, "Not enough digits : " NUintFmt_, numdigits);
     nflag correct = true;
     for(nuint i = numdigits; i > 0; --i) {
-        printf("%c", sum.Digit(i-1) + '0');
-        correct = correct && (kAnswer[numdigits - i] - '0' == sum.Digit(i-1));
+        CLog::Write("%c", int8(sum.Digit(i-1) + '0'));
+        correct = correct && (kAnswer[numdigits - i] - '0' == int8(sum.Digit(i-1)));
     }
-    printf("\n");
+    CLog::Write("\n");
 
     Assert_(correct, "Sum should have been \n%s", kAnswer);
 

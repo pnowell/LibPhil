@@ -45,10 +45,10 @@ OBJ_SUFFIX = o ;
 LIB_SUFFIX = a ;
 EXE_SUFFIX = exe ;
 
-CC = gcc-3 ;
+CC = g++-3 ;
 CCOPTS = -c -Wall ;
 CCOPTS += [ CompileOptIncludes $(LIBPHIL_INCLUDES) ] ;
-LINK = gcc-3 ;
+LINK = g++-3 ;
 LINKOPTS = ;
 LIB = ar ;
 LIBOPTS = cr ;
@@ -63,7 +63,7 @@ else if ( $(LIBPHIL_BUILDTYPE) = release ) {
 ## ================================================================================================
 ## Target specific actions
 ## ================================================================================================
-actions updated piecemeal CompileObjectList {
+actions CompileObjectList {
     echo $(2:BS)
     cd $(1:D)
     $(CC) $(CCOPTS) $(EXTRACCOPTS) $(2)
@@ -76,7 +76,7 @@ actions LinkLibrary {
 
 actions LinkExecutable {
     echo "Linking executable $(1:BS)"
-    echo $(LINK) -o $(1) $(2) $(LINKOPTS) $(EXTRALINKOPTS)
+    #echo $(LINK) -o $(1) $(2) $(LINKOPTS) $(EXTRALINKOPTS)
     $(LINK) -o $(1) $(2) $(LINKOPTS) $(EXTRALINKOPTS) -mno-cygwin
 }
 

@@ -1,9 +1,7 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
+#include "io/clog.h"
 
 // -- constants
 static const nuint kSize = 1001;
@@ -28,8 +26,8 @@ int32 Problem28() {
         last += level * 8;
     }
 
-    printf("The sum of the diagonals of the " NUintFmt_ "x" NUintFmt_ " square is " NUintFmt_ "\n",
-           kSize, kSize, sum);
+    CLog::Write("The sum of the diagonals of the " NUintFmt_ "x" NUintFmt_ " square is "
+                NUintFmt_ "\n", kSize, kSize, sum);
     Assert_(sum == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
     
     return 0;

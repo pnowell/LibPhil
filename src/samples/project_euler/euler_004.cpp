@@ -1,9 +1,7 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
+#include "io/clog.h"
 
 // -- consts
 static const nuint kMaxDigits = 8;
@@ -37,8 +35,8 @@ int32 Problem4() {
         }
 
         if(j >= i) {
-            printf("Found the palindrome " NUintFmt_ " = " NUintFmt_ " * " NUintFmt_ "\n",
-                   f1 * f2, f1, f2);
+            CLog::Write("Found the palindrome " NUintFmt_ " = " NUintFmt_ " * " NUintFmt_ "\n",
+                        f1 * f2, f1, f2);
             if(f1 * f2 > largest)
                 largest = f1 * f2;
 
@@ -46,7 +44,7 @@ int32 Problem4() {
             f2 -= 1;
             f1 = 999;
 
-            printf("f2 * 999 = " NUintFmt_ " * 999 = " NUintFmt_ "\n", f2, f2 * f2);
+            CLog::Write("f2 * 999 = " NUintFmt_ " * 999 = " NUintFmt_ "\n", f2, f2 * f2);
         }
         else {
             f1 -= 1;
@@ -57,7 +55,7 @@ int32 Problem4() {
         }
     }
 
-    printf("Found the largest is " NUintFmt_ "\n", largest);
+    CLog::Write("Found the largest is " NUintFmt_ "\n", largest);
 
     Assert_(largest == kAnswer, "Incorrect answer");
 

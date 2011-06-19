@@ -1,9 +1,7 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "containers/ctable.h"
+#include "io/clog.h"
 
 // -- consts
 static const nuint kMaxResult = 1000000;
@@ -64,10 +62,10 @@ int32 Problem14() {
     }
 
     // -- now show all the results with that length
-    printf("Values got up to " NUintFmt_ "\n", maxval);
+    CLog::Write("Values got up to " NUintFmt_ "\n", maxval);
     for(nuint i = 0; i < kMaxResult; ++i) {
         if(lengths[i] == longest) {
-            printf(NUintFmt_ " starts a chain of length " NUintFmt_ "\n", i+1, longest);
+            CLog::Write(NUintFmt_ " starts a chain of length " NUintFmt_ "\n", i+1, longest);
             Assert_(i+1 == kAnswer, "Answer should have been " NUintFmt_, kAnswer);
         }
     }

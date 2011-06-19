@@ -10,7 +10,11 @@ class CMath {
 
 public:
 
+    // -- integer square root, yields the floor of the real valued sqrt(n)
     static nuint ISqrt(nuint n);
+
+    // -- convert a string representation of a number to a number
+    static nint AToI(cpointer a);
 };
 
 // ================================================================================================

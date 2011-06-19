@@ -1,10 +1,8 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
 #include "numerics/cbigint.h"
+#include "io/clog.h"
 
 // -- constants
 static const nuint kFactorial = 100;
@@ -23,7 +21,7 @@ int32 Problem20() {
     for(nuint i = 0; i < numdigits; ++i)
         sum += product.Digit(i);
 
-    printf("The sum of the digits of " NUintFmt_ "! are " NUintFmt_ "\n", kFactorial, sum);
+    CLog::Write("The sum of the digits of " NUintFmt_ "! are " NUintFmt_ "\n", kFactorial, sum);
 
     Assert_(sum == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
 

@@ -1,9 +1,7 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
+#include "io/clog.h"
 
 // -- constants
 static const nuint kAnswer = 443839;
@@ -43,12 +41,12 @@ int32 Problem30() {
             sum += digit * digit * digit * digit * digit;
         }
         if(sum == i) {
-            printf(NUintFmt_ " ", sum);
+            CLog::Write(NUintFmt_ " ", sum);
             result += sum;
         }
     }
 
-    printf("\nThe sum of those is " NUintFmt_ "\n", result);
+    CLog::Write("\nThe sum of those is " NUintFmt_ "\n", result);
     Assert_(result == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
 
     return 0;

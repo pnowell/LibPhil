@@ -1,7 +1,7 @@
 #pragma once
 
 // -- system includes
-#include <new.h>
+#include <new>
 
 // -- libs includes
 #include "core/cmemory.h"

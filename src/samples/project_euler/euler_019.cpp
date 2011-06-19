@@ -1,9 +1,7 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
+#include "io/clog.h"
 
 // -- constants
 static const nuint kNumMonths = 12;
@@ -38,32 +36,6 @@ static const nuint kLeapMonths[kNumMonths] = {
 };
 
 static const nuint kNumDays = 7;
-
-static cpointer kMonthNames[kNumMonths] = {
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-};
-
-static cpointer kDayNames[kNumDays] = {
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-};
-
 static const nuint kAnswer = 171;
 
 // ================================================================================================
@@ -86,7 +58,7 @@ int32 Problem19() {
         }
     }
 
-    printf("Num sundays = " NUintFmt_ "\n", numsundays);
+    CLog::Write("Num sundays = " NUintFmt_ "\n", numsundays);
 
     Assert_(numsundays == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
 

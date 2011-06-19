@@ -1,9 +1,7 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
+#include "io/clog.h"
 
 // -- constants
 static const nuint kCoin[7] = {
@@ -51,7 +49,7 @@ int32 Problem31() {
         }
     }
 
-    printf("The number of combinations is " NUintFmt_ "\n", result);
+    CLog::Write("The number of combinations is " NUintFmt_ "\n", result);
     Assert_(result == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
 
     return 0;

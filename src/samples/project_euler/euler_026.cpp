@@ -1,10 +1,8 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
 #include "containers/ctable.h"
+#include "io/clog.h"
 
 // -- constants
 static const nuint kMax = 1000;
@@ -50,8 +48,8 @@ int32 Problem26() {
         }
     }
 
-    printf("The number with the longest cycle length of " NUintFmt_ " is " NUintFmt_ "\n",
-           longestlen, longest);
+    CLog::Write("The number with the longest cycle length of " NUintFmt_ " is " NUintFmt_ "\n",
+                longestlen, longest);
 
     Assert_(longest == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
 

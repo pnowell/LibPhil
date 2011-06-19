@@ -1,11 +1,9 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
 #include "containers/ctable.h"
 #include "numerics/cprimecalculator.h"
+#include "io/clog.h"
 
 // -- constants
 static const nuint kMax = 1000;
@@ -16,12 +14,12 @@ static const nint kAnswer = -59231;
 // ================================================================================================
 int32 Problem27() {
     // -- find more primes than we'll need
-    printf("Calculating primes ... ");
+    CLog::Write("Calculating primes ... ");
     CPrimeCalculator calc;
     calc.FindPrimesUpTo(2*kMax*kMax + kMax);
-    printf("Done\n");
+    CLog::Write("Done\n");
 
-    printf("Making table of is-prime flags ... ");
+    CLog::Write("Making table of is-prime flags ... ");
     // -- make a table of flags to say if each number is prime
     CTable<uint64> isprime;
     nuint numprimes = calc.NumPrimes();
@@ -37,7 +35,7 @@ int32 Problem27() {
         // -- set the appropriate bit
         isprime[idx] |= uint64(1) << bit;
     }
-    printf("Done\n");
+    CLog::Write("Done\n");
 
     nint besta = 0;
     nint bestb = 0;
@@ -92,11 +90,11 @@ int32 Problem27() {
     }
 
     if(besta < 0)
-        printf("The best quadratic is n^2 - " NIntFmt_ "*n + " NUintFmt_ "\n", -besta, bestb);
+        CLog::Write("The best quadratic is n^2 - " NIntFmt_ "*n + " NUintFmt_ "\n", -besta, bestb);
     else
-        printf("The best quadratic is n^2 + " NIntFmt_ "*n + " NUintFmt_ "\n", besta, bestb);
-    printf("It yields primes in the range n=0 to " NUintFmt_ "\n", bestlen-1);
-    printf("So the product a*b=" NIntFmt_ "\n", besta*bestb);
+        CLog::Write("The best quadratic is n^2 + " NIntFmt_ "*n + " NUintFmt_ "\n", besta, bestb);
+    CLog::Write("It yields primes in the range n=0 to " NUintFmt_ "\n", bestlen-1);
+    CLog::Write("So the product a*b=" NIntFmt_ "\n", besta*bestb);
 
     Assert_(besta * bestb == kAnswer, "The answer should have been " NIntFmt_, kAnswer);
 

@@ -1,11 +1,9 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
 #include "numerics/cprimecalculator.h"
 #include "numerics/cfactorizer.h"
+#include "io/clog.h"
 
 // -- constants
 static const nuint kLimit = 10000;
@@ -57,7 +55,8 @@ int32 Problem21() {
         }
     }
 
-    printf("The sum of amicable numbers less than " NUintFmt_ " is " NUintFmt_ "\n", kLimit, sum);
+    CLog::Write("The sum of amicable numbers less than " NUintFmt_ " is " NUintFmt_ "\n",
+                kLimit, sum);
 
     Assert_(sum == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
 

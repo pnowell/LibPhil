@@ -1,12 +1,10 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
 #include "core/utils.h"
 #include "containers/ctable.h"
 #include "numerics/cmath.h"
+#include "io/clog.h"
 
 static const nuint kTri[] = {
                                 75,
@@ -60,7 +58,7 @@ nuint Problem18And67(const nuint* tri, const nuint size) {
         }
     }
 
-    printf("The maximum total is " NUintFmt_ "\n", maxpaths[0]);
+    CLog::Write("The maximum total is " NUintFmt_ "\n", maxpaths[0]);
 
     return maxpaths[0];
 }

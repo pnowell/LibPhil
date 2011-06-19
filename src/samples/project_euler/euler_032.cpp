@@ -1,10 +1,8 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
 #include "containers/ctable.h"
+#include "io/clog.h"
 
 // -- constants
 static const nuint kAllNine = 0x3fe;
@@ -134,9 +132,9 @@ static void FindProducts(nuint a, nuint digitbits, CTable<nuint>& products) {
             if(i == count)
                 products.Grow(product);
             else
-                printf("-repeat- ");
+                CLog::Write("-repeat- ");
 
-            printf(NUintFmt_ " x " NUintFmt_ " = " NUintFmt_ "\n", a, curr, product);
+            CLog::Write(NUintFmt_ " x " NUintFmt_ " = " NUintFmt_ "\n", a, curr, product);
         }
     }
 }
@@ -168,7 +166,7 @@ int32 Problem32() {
     for(nuint i = 0; i < count; ++i)
         result += products[i];
 
-    printf("The sum of the products is " NUintFmt_ "\n", result);
+    CLog::Write("The sum of the products is " NUintFmt_ "\n", result);
     Assert_(result == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
 
     return 0;

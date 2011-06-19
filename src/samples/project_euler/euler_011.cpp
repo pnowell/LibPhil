@@ -1,9 +1,7 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
+#include "io/clog.h"
 
 // -- consts
 static const nuint kGridSize = 20;
@@ -85,7 +83,7 @@ int32 Problem11() {
         }
     }
 
-    printf("max = " NUintFmt_ "\n", maxproduct);
+    CLog::Write("max = " NUintFmt_ "\n", maxproduct);
 
     Assert_(maxproduct == kAnswer, "Incorrect answer");
 

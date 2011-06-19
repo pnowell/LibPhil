@@ -1,10 +1,8 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "numerics/cprimecalculator.h"
 #include "numerics/cmath.h"
+#include "io/clog.h"
 
 static const nuint kNumDivisors = 500;
 static const nuint kAnswer = 76576500;
@@ -16,7 +14,7 @@ int32 Problem12() {
     // -- start at the triangle closest to (and not greater than) numdivisors to save a little time
     nuint triidx = (CMath::ISqrt(1 + 8 * kNumDivisors) - 1) >> 1;
     nuint trinum = (triidx * (triidx + 1)) >> 1;
-    printf("We start triidx off at " NUintFmt_ " which is " NUintFmt_ "\n", triidx, trinum);
+    CLog::Write("We start triidx off at " NUintFmt_ " which is " NUintFmt_ "\n", triidx, trinum);
     nuint trisqrt = 1;
 
     // -- initialize our prime list
@@ -52,10 +50,10 @@ int32 Problem12() {
         // -- if we've found a number with more than the required number of divisors, we can stop
     } while(product <= kNumDivisors);
 
-    printf(NUintFmt_ " (the " NUintFmt_ " triangle number) has " NUintFmt_ " divisors\n",
-           trinum, triidx, product);
+    CLog::Write(NUintFmt_ " (the " NUintFmt_ " triangle number) has " NUintFmt_ " divisors\n",
+                trinum, triidx, product);
 
-    printf(NUintFmt_ " = ", trinum);
+    CLog::Write(NUintFmt_ " = ", trinum);
     nuint temp = trinum;
     nuint numprimes = primecalc.NumPrimes();
     for(nuint i = 0; i < numprimes && temp > 1; ++i) {
@@ -66,9 +64,9 @@ int32 Problem12() {
             temp = temp / currprime;
         }
         if(factorpow > 0)
-            printf(NUintFmt_ "^" NUintFmt_ " ", currprime, factorpow);
+            CLog::Write(NUintFmt_ "^" NUintFmt_ " ", currprime, factorpow);
     }
-    printf("\n");
+    CLog::Write("\n");
 
     /*                        pow     count   factors
      1  :  1 :              : 0     : 1     : 1

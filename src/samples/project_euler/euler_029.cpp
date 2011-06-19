@@ -1,12 +1,10 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
 #include "containers/ctable.h"
 #include "numerics/cprimecalculator.h"
 #include "numerics/cfactorizer.h"
+#include "io/clog.h"
 
 // -- constants
 static const nuint kMaxBase = 100;
@@ -92,7 +90,7 @@ int32 Problem29() {
         }
     }
 
-    printf("The number of unique numbers is " NUintFmt_ "\n", unique);
+    CLog::Write("The number of unique numbers is " NUintFmt_ "\n", unique);
     Assert_(unique == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
 
     return 0;

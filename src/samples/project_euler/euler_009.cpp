@@ -1,10 +1,8 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/utils.h"
 #include "core/assert.h"
+#include "io/clog.h"
 
 // -- constants
 static const int32 kAnswer = 31875000;
@@ -36,8 +34,8 @@ int32 Problem9() {
     Assert_(b <= 1000, "The loop ended without finding the answer");
     Assert_(a*b*c == kAnswer, "The answer is incorrect");
 
-    printf(NUintFmt_ "^2 + " NUintFmt_ "^2 = " NUintFmt_ "^2\n", a, b, c);
-    printf("and " NUintFmt_ " * " NUintFmt_ " * " NUintFmt_ " = " NUintFmt_ "\n", a, b, c, a*b*c);
+    CLog::Write("%ld^2 + %ld^2 = %ld^2\n", a, b, c);
+    CLog::Write("and %ld * %ld * %ld = %ld\n", a, b, c, a*b*c);
 
     return 0;
 }

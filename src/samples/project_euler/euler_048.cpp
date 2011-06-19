@@ -1,10 +1,8 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
 #include "numerics/cbigint.h"
+#include "io/clog.h"
 
 // -- constants
 static const nuint kLastNumber = 1000;
@@ -35,15 +33,15 @@ int32 Problem48() {
         result += temp;
     }
 
-    printf("The last " NUintFmt_ " digits of the sum are \"", kNumDigits);
+    CLog::Write("The last " NUintFmt_ " digits of the sum are \"", kNumDigits);
     nflag correct = true;
     for(nuint i = kNumDigits; i > 0;) {
         --i;
-        printf(NUintFmt_, result.Digit(i));
-        if(result.Digit(i) + '0' != kAnswer[kNumDigits-i-1])
+        CLog::Write(NUintFmt_, result.Digit(i));
+        if(int8(result.Digit(i) + '0') != kAnswer[kNumDigits-i-1])
             correct = false;
     }
-    printf("\"\n");
+    CLog::Write("\"\n");
 
     Assert_(correct, "The answer should have been \"%s\"", kAnswer);
 

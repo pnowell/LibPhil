@@ -1,10 +1,8 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
 #include "numerics/cbigint.h"
+#include "io/clog.h"
 
 // -- constants
 static const nuint kNumDigits = 1000;
@@ -27,8 +25,8 @@ int32 Problem25() {
     }
 
     nuint result = f0.NumDigits() >= kNumDigits ? i0 : i1;
-    printf("The first fibonacci number to have at least " NUintFmt_ " digits is f" NUintFmt_ "\n",
-           kNumDigits, result);
+    CLog::Write("The first fibonacci number to have at least " NUintFmt_ " digits is f"
+                NUintFmt_ "\n", kNumDigits, result);
 
     Assert_(result == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
 

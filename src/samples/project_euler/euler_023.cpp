@@ -1,11 +1,9 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
 #include "numerics/cprimecalculator.h"
 #include "numerics/cfactorizer.h"
+#include "io/clog.h"
 
 // -- constants
 static const nuint kLimit = 28123;
@@ -57,8 +55,8 @@ int32 Problem23() {
             result += i;
     }
 
-    printf("The sum of all numbers that can't be written\n"
-           "as a sum of two abundant numbers is " NUintFmt_ "\n", result);
+    CLog::Write("The sum of all numbers that can't be written\n"
+                "as a sum of two abundant numbers is " NUintFmt_ "\n", result);
 
     Assert_(result == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
 

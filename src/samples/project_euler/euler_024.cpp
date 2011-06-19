@@ -1,19 +1,17 @@
-// -- system includes
-#include <stdio.h>
-
 // -- libs includes
 #include "core/types.h"
 #include "core/assert.h"
 #include "containers/ctable.h"
+#include "io/clog.h"
 
 // -- constants
 static const nuint kNumPermutation = 1000000;
-static const nuint kAnswer = 2783915460;
+static const uint64 kAnswer = 2783915460LL;
 
 // ------------------------------------------------------------------------------------------------
 // Get the nth permutation of n digits
 // ------------------------------------------------------------------------------------------------
-static nuint Permutation(nuint n) {
+static uint64 Permutation(nuint n) {
     // -- make a sorted table of the available digits while calculating 10!
     CTable<nuint> digits;
     nuint limit = 1;
@@ -28,8 +26,8 @@ static nuint Permutation(nuint n) {
     --n;
 
     // -- we start by putting a digit that's as small as possible into the highest digits
-    nuint mult = 1000000000;
-    nuint result = 0;
+    uint64 mult = 1000000000LL;
+    uint64 result = 0;
 
     // -- for each digit that we need to generate
     for(nuint i = 10; i > 0; --i) {
@@ -61,10 +59,10 @@ static nuint Permutation(nuint n) {
 // Problem 24
 // ================================================================================================
 int32 Problem24() {
-    nuint perm = Permutation(kNumPermutation);
-    printf("The " NUintFmt_ " permutation is " NUintFmt_ "\n", kNumPermutation, perm);
+    uint64 perm = Permutation(kNumPermutation);
+    CLog::Write("The " NUintFmt_ " permutation is %lld \n", kNumPermutation, perm);
 
-    Assert_(perm == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    Assert_(perm == kAnswer, "The answer should have been %lld", kAnswer);
 
     return 0;
 }
