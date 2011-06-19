@@ -5,6 +5,7 @@
 // -- libs includes
 #include "core/types.h"
 #include "core/utils.h"
+#include "core/ctimer.h"
 #include "numerics/csieve.h"
 
 // -- extern the current problem to run
@@ -35,17 +36,18 @@ extern int32 Problem29();
 extern int32 Problem30();
 extern int32 Problem31();
 extern int32 Problem32();
+extern int32 Problem33();
 extern int32 Problem48();
 extern int32 Problem67();
 
-static const ProblemCB kDefault = Problem32;
+static const ProblemCB kDefault = Problem33;
 
 static const ProblemCB kProblems[] = {
     NULL,       NULL,       NULL,       Problem4,   NULL,       NULL,       Problem7,   Problem8,
     Problem9,   Problem10,  Problem11,  Problem12,  Problem13,  Problem14,  Problem15,  Problem16,
     Problem17,  Problem18,  Problem19,  Problem20,  Problem21,  NULL,       Problem23,  Problem24,
     Problem25,  Problem26,  Problem27,  Problem28,  Problem29,  Problem30,  Problem31,  Problem32,
-    NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL, // 40
+    Problem33,  NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL, // 40
     NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       Problem48,
     NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL, // 56
     NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL, // 64
@@ -53,8 +55,23 @@ static const ProblemCB kProblems[] = {
 };
 static const nuint kNumProblems = ArraySize_(kProblems);
 
+static void TimeCall(ProblemCB cb) {
+    // -- time the execution of each solution
+    CTimer timer;
+
+    timer.Start();
+    cb();
+    timer.Stop();
+
+    // -- print the number of seconds / milliseconds it took to run
+    printf(" -- %.5f secs (" NUintFmt_ " usecs)\n", timer.GetSeconds(), timer.GetMicro());
+}
+
 // ================================================================================================
 int32 main(int32 argc, pointer argv[]) {
+    CTimer timer;
+    timer.Start();
+
     if(argc > 1) {
         nuint idx = atoi(argv[1]);
 
@@ -65,7 +82,7 @@ int32 main(int32 argc, pointer argv[]) {
                     printf("\n\n====================\n");
                     printf("Problem " NUintFmt_ "\n", i + 1);
                     printf("====================\n");
-                    kProblems[i]();
+                    TimeCall(kProblems[i]);
                 }
             }
         }
@@ -75,11 +92,15 @@ int32 main(int32 argc, pointer argv[]) {
                 printf("Problem " NUintFmt_ " isn't solved yet\n", idx+1);
             }
             else
-                kProblems[idx]();
+                TimeCall(kProblems[idx]);
         }
     }
     else
-        kDefault();
+        TimeCall(kDefault);
+
+    timer.Stop();
+    printf(" ---- Total time %.5f secs (" NUintFmt_ " usecs)\n",
+           timer.GetSeconds(), timer.GetMicro());
 
     return 0;
 }

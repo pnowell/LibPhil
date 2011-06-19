@@ -8,6 +8,7 @@
 #include "core/types.h"
 #include "core/utils.h"
 #include "core/assert.h"
+#include "containers/cdataptr.h"
 
 // ================================================================================================
 // Class to simplify keeping tables of things
@@ -16,7 +17,7 @@ template<typename T> class CTable {
 
 protected:
 
-    pointer mem;
+    CDataPtr<char> mem;
     nuint count;
     nuint alloc;
     nuint expand;
@@ -63,11 +64,11 @@ public:
 // Get a pointer to the memory for the given index
 // ------------------------------------------------------------------------------------------------
 template<typename T> inline cpointer CTable<T>::GetPointer(nuint idx) const {
-    return mem + sizeof(T) * idx;
+    return pointer(mem) + sizeof(T) * idx;
 }
 
 template<typename T> inline pointer CTable<T>::GetPointer(nuint idx) {
-    return mem + sizeof(T) * idx;
+    return pointer(mem) + sizeof(T) * idx;
 }
 
 // ================================================================================================
@@ -128,12 +129,12 @@ template<typename T> inline void CTable<T>::GrowMultiple(const T& val, nuint n) 
         // -- divide by expand, rounding up, and then multiply by expand again
         nuint newmem = ((newcount - alloc - 1) / expand + 1) * expand;
         alloc += newmem;
-        mem = recast_<pointer>(CMemory::ReAlloc(mem, alloc * sizeof(T)));
+        mem = recast_<pointer>(CMemory::ReAlloc(pointer(mem), alloc * sizeof(T)));
     }
 
     // -- then construct the memory as a copy of val
     for(nuint i = count; i < newcount; ++i)
-        new (mem + sizeof(T) * i) T(val);
+        new (pointer(mem) + sizeof(T) * i) T(val);
 
     count = newcount;
 }
@@ -146,12 +147,12 @@ template<typename T> inline void CTable<T>::GrowMultiple(nuint n) {
         // -- divide by expand, rounding up, and then multiply by expand again
         nuint newmem = ((newcount - alloc - 1) / expand + 1) * expand;
         alloc += newmem;
-        mem = recast_<pointer>(CMemory::ReAlloc(mem, alloc * sizeof(T)));
+        mem = recast_<pointer>(CMemory::ReAlloc(pointer(mem), alloc * sizeof(T)));
     }
 
     // -- then construct the memory as a copy of val
     for(nuint i = count; i < newcount; ++i)
-        new (mem + sizeof(T) * count) T();
+        new (pointer(mem) + sizeof(T) * count) T();
 
     count = newcount;
 }
@@ -187,7 +188,7 @@ template<typename T> void CTable<T>::RemoveMultiple(nuint idx, nuint n) {
 // Swap memory with the given table
 // ================================================================================================
 template<typename T> void CTable<T>::Swap(CTable<T>& other) {
-    pointer tempmem = mem;
+    pointer tempmem = pointer(mem);
     nuint tempcount = count;
     nuint tempalloc = alloc;
 
@@ -218,8 +219,8 @@ template<typename T> inline void CTable<T>::Clear() {
 template<typename T> inline void CTable<T>::Reset() {
     Clear();
     alloc = 0;
-    if(mem != NULL) {
-        CMemory::Free(mem);
+    if(pointer(mem) != NULL) {
+        CMemory::Free(pointer(mem));
         mem = NULL;
     }
 }

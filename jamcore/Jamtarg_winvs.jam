@@ -58,7 +58,7 @@ if ( $(LIBPHIL_BUILDTYPE) = debug ) {
     LINKOPTS += /DEBUG ;
 }
 else if ( $(LIBPHIL_BUILDTYPE) = release ) {
-    CCOPTS += /Og /Ob1 ;
+    CCOPTS += /O2 ;
 }
 
 ## ================================================================================================

@@ -82,7 +82,8 @@ map gc :call LastCompileResults()<CR>
 map gC :call NextCompileResults()<CR>
 map g<S-F7> :call ResetCompile()<CR>
 
-map <F7> :call Compile("", "-s LIBPHIL_TARGETPLAT=\"winvs\"")<CR>
+map <F7> :call Compile("", "-s LIBPHIL_TARGETPLAT=\"winvs\" -s LIBPHIL_BUILDTYPE=\"debug\"")<CR>
+map <S-F7> :call Compile("", "-s LIBPHIL_TARGETPLAT=\"winvs\" -s LIBPHIL_BUILDTYPE=\"release\"")<CR>
 map <M-F7> :call Compile("", "-s LIBPHIL_TARGETPLAT=\"wingcc\"")<CR>
 
 "" ================================================================================================
