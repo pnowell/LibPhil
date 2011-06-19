@@ -17,7 +17,7 @@ template<typename T> class CTable {
 
 protected:
 
-    CDataPtr<char> mem;
+    CDataPtr<int8> mem;
     nuint count;
     nuint alloc;
     nuint expand;
