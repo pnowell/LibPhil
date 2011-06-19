@@ -9,13 +9,6 @@
 // ================================================================================================
 template<typename T> class CDataPtr {
 
-public:
-
-    enum EMode {
-        eAbsolute   = 0,
-        eRelative   = 1
-    };
-
 protected:
 
     uint64 data;
