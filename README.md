@@ -28,6 +28,8 @@ This is repository of all the utility classes I've written for my own purposes
 
 ## Future Plans
 
+* Look into auto generating library dependencies based on header scan results
+* Figure out how to sync this git commit done directly on GitHub back down to my local repository
 * Begin work on integrating the Android NDK
     * Try to get the NDK working as a stand-alone tool chain
 * Begin working toward a graphical sandbox to work both in windows and Android
