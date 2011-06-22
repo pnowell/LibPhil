@@ -28,6 +28,8 @@ This is repository of all the utility classes I've written for my own purposes
 
 ## Future Plans
 
+* Get a list of words associated with popular trends and write an app to randomly combine them
+    * Use this to brainstorm ideas for a game
 * Look into auto generating library dependencies based on header scan results
 * Figure out how to sync this git commit done directly on GitHub back down to my local repository
 * Begin work on integrating the Android NDK
