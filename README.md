@@ -20,7 +20,7 @@ This is repository of all the utility classes I've written for my own purposes
 ## Configuration
 
 * Environment variables
-    * LIBPHIL_BASEDIR - The path to parent directory of the libphil directory structure.  This is the only requred environment variable
+    * LIBPHIL_BASEDIR - The path to parent directory of the libphil directory structure.  This is the only required environment variable
 * Jam variables (settable with the -s command line argument)
     * LIBPHIL_CWD - What part of the code tree you want to build
     * LIBPHIL_TARGETPLAT - 'winvs' or 'wingcc'
