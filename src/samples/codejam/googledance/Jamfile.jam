@@ -1,8 +1,4 @@
 ## ================================================================================================
 ## Jamfile
 ## ================================================================================================
-local SUBDIRS = [ SubDirectoryList ] ;
-SUBDIRS = [ ListSubtract $(SUBDIRS) : "testgl" ] ;
-SUBDIRS = [ ListSubtract $(SUBDIRS) : "datatest" ] ;
-
-SubDirectories $(SUBDIRS) ;
+Executable [ SourceList ] : core numerics io ;

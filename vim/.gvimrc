@@ -1,8 +1,9 @@
 winpos 530 0
-set lines=41 columns=100
+set lines=43 columns=100
 
-set guifont=Fixedsys:h9:cANSI
-set guifontwide=MS_Mincho:h9:cANSI
+set guifont=Fixedsys:h12:cANSI
+"set guifont=MS_Mincho:h12:cANSI
+set guifontwide=MS_Gothic:h12:cSHIFTJIS
 set encoding=utf-8
 set fileencodings=ucs-bom,utf-8,shift-jis,default,latin1
 

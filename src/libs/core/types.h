@@ -25,6 +25,10 @@ typedef int64 pint;
 typedef int64 nint;
 typedef uint64 nuint;
 
+// -- system int types
+typedef int sint;
+typedef unsigned int suint;
+
 // -- boolean types
 typedef bool nflag;
 
@@ -39,3 +43,12 @@ typedef real32 nreal;
 #ifndef NULL
 #define NULL 0
 #endif
+
+// -- maximum values for unsigned ints
+const uint8 kNeverIndex8 = uint8(-1);
+const uint16 kNeverIndex16 = uint16(-1);
+const uint32 kNeverIndex32 = uint32(-1);
+const uint64 kNeverIndex64 = uint64(-1);
+const puint kNeverIndexP = puint(-1);
+const suint kNeverIndexS = suint(-1);
+const nuint kNeverIndex = nuint(-1);
