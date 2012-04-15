@@ -17,7 +17,9 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set autoindent
-
+set noerrorbells
+set visualbell
+set t_vb=
 set ruler
 set showcmd
 set incsearch
