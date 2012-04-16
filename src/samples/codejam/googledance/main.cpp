@@ -1,8 +1,10 @@
+// -- system includes
+#include <stdio.h>
+
 // -- libs includes
 #include "core/types.h"
 #include "io/clog.h"
 #include "containers/ctable.h"
-#include <stdio.h>
 
 // ------------------------------------------------------------------------------------------------
 // Struct to describe a single dancer

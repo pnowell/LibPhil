@@ -76,6 +76,6 @@ actions LinkLibrary {
 
 actions LinkExecutable {
     echo "Linking executable $(1:BS)"
-    $(LINK) /out:$(1) $(2) $(LINKOPTS) $(EXTRALINKOPTS)
+    $(LINK) /out:$(1) $(2) $(NEEDEDLIBS) $(LINKOPTS) $(EXTRALINKOPTS)
 }
 

@@ -77,6 +77,6 @@ actions LinkLibrary {
 actions LinkExecutable {
     echo "Linking executable $(1:BS)"
     #echo $(LINK) -o $(1) $(2) $(LINKOPTS) $(EXTRALINKOPTS)
-    $(LINK) -o $(1) $(2) $(LINKOPTS) $(EXTRALINKOPTS) -mno-cygwin
+    $(LINK) -o $(1) $(2) $(NEEDEDLIBS) $(LINKOPTS) $(EXTRALINKOPTS) -mno-cygwin
 }
 

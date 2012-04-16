@@ -70,6 +70,19 @@ rule ListSubtract {
 }
 
 ## ================================================================================================
+## Merge the two lists making sure to avoid repeat elements
+## ================================================================================================
+rule ListMerge {
+    local RESULTS = $(1) ;
+    for CURR in $(2) {
+        if ! ( $(CURR) in $(1) ) {
+            RESULTS += $(CURR) ;
+        }
+    }
+    return $(RESULTS) ;
+}
+
+## ================================================================================================
 ## Fix up some environment variables
 ## ================================================================================================
 LIBPHIL_BASEDIR = [ FixPath $(LIBPHIL_BASEDIR) ] ;
@@ -89,11 +102,11 @@ rule ChangeCWD {
     LIBPHIL_RELCWD = [ MakeRelative $(LIBPHIL_CWD) : $(LIBPHIL_BASEDIR) ] ;
     LIBPHIL_DIRNAME = $(LIBPHIL_CWD:B) ;
 
-    ## -- set up the target directory for any sources we're currently dealingg with
+    ## -- set up the target directory for any sources we're currently dealing with
     ## -- strip "src" off the beginning if neceesary
     LIBPHIL_RELTARGDIR = [ SearchReplace $(LIBPHIL_RELCWD) : "^src/?" : "" ] ;
-    LIBPHIL_TARGDIR = $(LIBPHIL_BASEDIR)/_$(LIBPHIL_TARGETPLAT) ;
-    LIBPHIL_TARGDIR = $(LIBPHIL_TARGDIR)/$(LIBPHIL_BUILDTYPE)/$(LIBPHIL_RELTARGDIR) ;
+    LIBPHIL_TARGDIR = $(LIBPHIL_BASEDIR)/_$(LIBPHIL_TARGETPLAT)/$(LIBPHIL_BUILDTYPE) ;
+    LIBPHIL_TARGDIR = $(LIBPHIL_TARGDIR)/$(LIBPHIL_RELTARGDIR) ;
     LIBPHIL_TARGDOCDIR = $(LIBPHIL_BASEDIR)/_docs/$(LIBPHIL_RELTARGDIR) ;
 }
 
@@ -162,6 +175,12 @@ rule HeaderRule {
     local INCLUDER = $(1) ;
     local INCLUDEDS = $(2) ;
 
+    local NOTIFY = ;
+    on $(INCLUDER) NOTIFY += $(LIBNOTIFYTARG) ;
+
+    ## -- first make sure the given library has been processed
+    LibraryList $(INCLUDEDS:D) ;
+
     ## -- transform all the included files into absolute paths
     local CURRINC ;
     local RESOLVED ;
@@ -173,6 +192,31 @@ rule HeaderRule {
         if ! $(RESOLVED) {
             return ;
         }
+
+        ## -- figure out what library this included file is part of
+        local LIBDIR = $(RESOLVED:D) ;
+        local LIBFILE ;
+        on $(LIBDIR) LIBFILE = $(TARGET_LIBFILE) ;
+        if $(LIBFILE) {
+            ## -- at this point we know that RESOLVED is a file that is part of the lib LIBFILE
+            ## -- files that are just part of an executable won't show up (because they never
+            ## -- had a TARGET_LIBFILE associated with them)
+            for CURRNTFY in $(NOTIFY) {
+                on $(CURRNTFY) if ! ( $(LIBFILE) in $(NEEDEDLIBS) ) {
+                    NEEDEDLIBS on $(CURRNTFY) += $(LIBFILE) ;
+                    on $(CURRNTFY) if $(SHOULDDEPENDLIBS) {
+                        # echo "Making " $(CURRNTFY:BS) " depend on " $(LIBFILE:BS) ;
+                        Depends $(CURRNTFY) : $(LIBFILE) ;
+                    }
+                }
+            }
+        }
+
+        ## -- make sure this included file knows to notify all the things I wanted to notify
+        ## -- about needed libs
+        local NOTIFYCOPY ;
+        on $(RESOLVED) NOTIFYCOPY = [ ListMerge $(LIBNOTIFYTARG) : $(NOTIFY) ] ;
+        LIBNOTIFYTARG on $(RESOLVED) = $(NOTIFYCOPY) ;
 
         ## -- deal with this resolved include
         Includes $(INCLUDER) : $(RESOLVED) ;
@@ -189,8 +233,9 @@ rule HeaderRule {
 rule ObjectList {
     ## -- name arguments
     local SOURCES = $(1) ;
-    local EXTRAINCLUDES = $(2) ;
-    local EXTRADEFINES = $(3) ;
+    local LIBNOTIFY = $(2) ;
+    local EXTRAINCLUDES = $(3) ;
+    local EXTRADEFINES = $(4) ;
 
     ## -- get a list of object names
     local OBJECTS ;
@@ -209,6 +254,9 @@ rule ObjectList {
 
     ## -- then transform the whole list of sources into absolute paths
     SOURCES = $(LIBPHIL_CWD)/$(SOURCES) ;
+
+    ## -- let these sources know who to report to as they find out libraries that they need
+    LIBNOTIFYTARG on $(SOURCES) = $(LIBNOTIFY) ;
 
     ## -- set up scanning for header includes on our sources
     HDRSCAN on $(SOURCES) = $(LIBPHIL_HDRSCAN) ;
@@ -242,6 +290,12 @@ rule RecurseInto {
         return ;
     }
 
+    ## -- we should only recurse into directories that have jamfiles
+    EXISTS = [ GLOB $(DIR) : "Jamfile.jam" ] ;
+    if ! $(EXISTS) {
+        return ;
+    }
+
     ## -- mark this directory as processed
     PROCESSED on $(DIR) = true ;
 
@@ -265,12 +319,12 @@ rule RecurseInto {
 ## ================================================================================================
 rule LibraryList {
     ## -- name arguments
-    local LIBNAMES = $(1) ;
+    local SHORTLIBS = $(1) ;
 
     local CURR ;
     local RESOLVED ;
     local RESULTS ;
-    for CURR in $(LIBNAMES) {
+    for CURR in $(SHORTLIBS) {
         ## -- resolve each library to an absolute path
         RESOLVED = [ ResolveAbsolute $(CURR) : $(SEARCH) ] ;
 
@@ -281,8 +335,8 @@ rule LibraryList {
         ## -- recurse into that library
         RecurseInto $(RESOLVED) ;
 
-        ## -- get the resulting library from that recursion
-        on $(RESOLVED) RESULTS += $(TARGET_LIB) ;
+        ## -- collect the resolved names of libraries
+        RESULTS += $(RESOLVED) ;
     }
 
     return $(RESULTS) ;
@@ -296,22 +350,22 @@ rule Library {
     local SOURCES = $(1) ;
 
     ## -- build a library name
-    LIB_NAME = $(LIBPHIL_TARGDIR).$(LIB_SUFFIX) ;
+    LIB_FILE = $(LIBPHIL_TARGDIR).$(LIB_SUFFIX) ;
 
     ## -- set up the objects for our list of sources
-    local OBJECTS = [ ObjectList $(SOURCES) ] ;
+    local OBJECTS = [ ObjectList $(SOURCES) : $(LIBPHIL_CWD) ] ;
 
     ## -- let jam know that this library is dependant on these objects
-    Depends $(LIB_NAME) : $(OBJECTS) ;
+    Depends $(LIB_FILE) : $(OBJECTS) ;
 
     ## -- also add this library to the list of things to build
-    Depends all : $(LIB_NAME) ;
+    Depends all : $(LIB_FILE) ;
 
     ## -- invoke the rule to link the library
-    LinkLibrary $(LIB_NAME) : $(OBJECTS) ;
+    LinkLibrary $(LIB_FILE) : $(OBJECTS) ;
 
     ## -- mark this directory with the resulting library
-    TARGET_LIB on $(LIBPHIL_CWD) = $(LIB_NAME) ;
+    TARGET_LIBFILE on $(LIBPHIL_CWD) = $(LIB_FILE) ;
 }
 
 ## ================================================================================================
@@ -320,11 +374,10 @@ rule Library {
 rule Executable {
     ## -- name all the arguments
     local SOURCES = $(1) ;
-    local LIBNAMES = $(2) ;
-    local EXTERNINCLUDES = $(3) ;
-    local EXTRADEFINES = $(4) ;
-    local EXTERNLIBDIRS = $(5) ;
-    local EXTERNLIBS = $(6) ;
+    local EXTERNINCLUDES = $(2) ;
+    local EXTRADEFINES = $(3) ;
+    local EXTERNLIBDIRS = $(4) ;
+    local EXTERNLIBS = $(5) ;
 
     ## -- build an executable name from the current directory name
     EXE_NAME = $(LIBPHIL_TARGDIR)/$(LIBPHIL_DIRNAME) ;
@@ -332,14 +385,15 @@ rule Executable {
         EXE_NAME = $(EXE_NAME).$(EXE_SUFFIX) ;
     }
 
-    ## -- set up the objects for our list of sources
-    local OBJECTS = [ ObjectList $(SOURCES) : $(EXTERNINCLUDES) : $(EXTRADEFINES) ] ;
+    ## -- make it so that we, as a lib notification target, get set up to depend on the
+    ## -- libraries that trace back to us
+    SHOULDDEPENDLIBS on $(EXE_NAME) = True ;
 
-    ## -- set up the libraries that we depend on
-    local LIBRARIES = [ LibraryList $(LIBNAMES) ] ;
+    ## -- set up the objects for our list of sources
+    local OBJECTS = [ ObjectList $(SOURCES) : $(EXE_NAME) : $(EXTERNINCLUDES) : $(EXTRADEFINES) ] ;
 
     ## -- let jam know that this executable depends on all the given sources and libraries
-    Depends $(EXE_NAME) : $(OBJECTS) $(LIBRARIES) ;
+    Depends $(EXE_NAME) : $(OBJECTS) ;
 
     ## -- also let jam know that this executable is one of the things to build
     Depends all : $(EXE_NAME) ;
@@ -349,7 +403,7 @@ rule Executable {
     EXTRALINKOPTS on $(EXE_NAME) += [ LinkOptLibs $(EXTERNLIBS) ] ;
 
     ## -- invoke the rule to link the executable
-    LinkExecutable $(EXE_NAME) : $(OBJECTS) $(LIBRARIES) ;
+    LinkExecutable $(EXE_NAME) : $(OBJECTS) ;
 }
 
 ## ================================================================================================
