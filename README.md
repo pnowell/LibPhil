@@ -28,12 +28,12 @@ This is repository of all the utility classes I've written for my own purposes
 
 ## Future Plans
 
-* Get a list of words and randomly combine them to brainstorm ideas for a game
-* Look into auto generating library dependencies based on header scan results
-* Begin work on integrating the Android NDK
-    * Try to get the NDK working as a stand-alone tool chain
-* Begin working toward a graphical sandbox to work both in windows and Android
-* Possibly set up some unit tests to try to ensure some basic level of functionality in the libs that I'm writing
-* Add support for platforms beyond cygwin (need to figure out how to rebuild Jam not under cygwin first)
+* Work on some file i/o utilities to facilitate parsing the codejam input files
+* Try to optimize my codejam submission process to keep from timing out
+    * Particularly, maybe it would be good to have kjam be able to zip up all the files that are needed to build a particular executable
+* Extend the library auto-detect functionality to
+    * Let libraries specify any extra parameters to pass to the linker when linking them into executables
+* Work more on 2D/3D math functionality
+* Set up some unit tests to try to ensure some basic level of functionality in the libs that I'm writing
 
 [jam-link]: http://www.perforce.com/jam/jam.html  "Jam build tool"
