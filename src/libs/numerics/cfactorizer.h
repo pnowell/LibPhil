@@ -21,7 +21,8 @@ protected:
 public:
 
     // -- find all the prime factors of the given number
-    static void CollectFactors(nuint num, CPrimeCalculator& primecalc, CTable<nuint>& factors);
+    static void CollectFactors(nuint num, CPrimeCalculator& primecalc, CTable<nuint>& factors,
+                               nflag cleartable = true);
 
     // -- make all the combinations of factors to build a table of divisors
     static void CollectDivisors(const CTable<nuint>& factors, CTable<nuint>& divisors);

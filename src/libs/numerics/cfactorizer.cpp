@@ -34,12 +34,14 @@ void CFactorizer::CollectFactorCombinations(const CTable<nuint>& factors, nuint 
 // ================================================================================================
 // Collect all the prime factors of a number
 // ================================================================================================
-void CFactorizer::CollectFactors(nuint num, CPrimeCalculator& primecalc, CTable<nuint>& factors) {
+void CFactorizer::CollectFactors(nuint num, CPrimeCalculator& primecalc, CTable<nuint>& factors,
+                                 nflag cleartable) {
     // -- make sure the prime calculator has enough primes
     primecalc.FindPrimesUpTo(num >> 1);
 
     // -- clear the factors table in case it has anything left in it
-    factors.Clear();
+    if(cleartable)
+        factors.Clear();
 
     // -- get the prime factorization of the number
     nuint leftover = num;
