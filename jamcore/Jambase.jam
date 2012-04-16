@@ -175,11 +175,11 @@ rule HeaderRule {
     local INCLUDER = $(1) ;
     local INCLUDEDS = $(2) ;
 
+    ## -- first make sure the given library has been processed, with empty entries removed
+    LibraryList [ ListSubtract $(INCLUDEDS:D) : "" ] ;
+
     local NOTIFY = ;
     on $(INCLUDER) NOTIFY += $(LIBNOTIFYTARG) ;
-
-    ## -- first make sure the given library has been processed
-    LibraryList $(INCLUDEDS:D) ;
 
     ## -- transform all the included files into absolute paths
     local CURRINC ;
@@ -329,7 +329,7 @@ rule LibraryList {
         RESOLVED = [ ResolveAbsolute $(CURR) : $(SEARCH) ] ;
 
         if ! $(RESOLVED) {
-            Exit "LibraryList: Unable to resolve " $(CURR) " in " $(SEARCH) ;
+            Exit "LibraryList: Unable to resolve " $(CURR) " from " $(SHORTLIBS) " in " $(SEARCH) ;
         }
 
         ## -- recurse into that library
