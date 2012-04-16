@@ -25,7 +25,7 @@ public:
     CPrimeCalculator();
     ~CPrimeCalculator();
 
-    // -- do one more interation of the sieve
+    // -- do one more iteration of the sieve
     void CheckNext();
 
     // -- iterate until we find all the primes less than/equal to a given max
