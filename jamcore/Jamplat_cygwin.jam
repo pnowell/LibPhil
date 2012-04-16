@@ -5,3 +5,7 @@ actions CreateDirectory {
     mkdir --parents $(1)
 }
 
+actions CopyFile {
+    cp $(2) $(1)
+}
+

@@ -94,6 +94,7 @@ LIBPHIL_CWD = [ FixPath $(LIBPHIL_CWD) ] ;
 ## ================================================================================================
 LIBPHIL_TARGETPLAT ?= winvs ;
 LIBPHIL_BUILDTYPE ?= debug ;
+LIBPHIL_INSTALL ?= true ;
 
 ## ================================================================================================
 ## Rule to set various global variables according to the current working directory
@@ -121,6 +122,7 @@ LIBPHIL_BUILDTYPES = debug release ;
 LIBPHIL_JAMCORE = $(LIBPHIL_BASEDIR)/jamcore ;
 LIBPHIL_INCLUDES = "$(LIBPHIL_BASEDIR)/src/libs" ;
 LIBPHIL_HDRSCAN = "^[\t ]*#[\t ]*include[\t ]*[\"]([^\"]*)[\"]" ;
+LIBPHIL_INSTALLDIR = "$(LIBPHIL_BASEDIR)/bin/installed" ;
 
 ## ================================================================================================
 ## Built in jam globals
@@ -204,7 +206,7 @@ rule HeaderRule {
             for CURRNTFY in $(NOTIFY) {
                 on $(CURRNTFY) if ! ( $(LIBFILE) in $(NEEDEDLIBS) ) {
                     NEEDEDLIBS on $(CURRNTFY) += $(LIBFILE) ;
-                    on $(CURRNTFY) if $(SHOULDDEPENDLIBS) {
+                    on $(CURRNTFY) if ( $(SHOULDDEPENDLIBS) = true ) {
                         # echo "Making " $(CURRNTFY:BS) " depend on " $(LIBFILE:BS) ;
                         Depends $(CURRNTFY) : $(LIBFILE) ;
                     }
@@ -387,7 +389,7 @@ rule Executable {
 
     ## -- make it so that we, as a lib notification target, get set up to depend on the
     ## -- libraries that trace back to us
-    SHOULDDEPENDLIBS on $(EXE_NAME) = True ;
+    SHOULDDEPENDLIBS on $(EXE_NAME) = true ;
 
     ## -- set up the objects for our list of sources
     local OBJECTS = [ ObjectList $(SOURCES) : $(EXE_NAME) : $(EXTERNINCLUDES) : $(EXTRADEFINES) ] ;
@@ -404,6 +406,24 @@ rule Executable {
 
     ## -- invoke the rule to link the executable
     LinkExecutable $(EXE_NAME) : $(OBJECTS) ;
+
+    ## -- if we want to install this executable, take care of that here
+    if ( $(LIBPHIL_INSTALL) = true ) {
+        local INSTALLED_LOCATION = "$(LIBPHIL_INSTALLDIR)/$(EXE_NAME:BS)" ;
+        if ( $(LIBPHIL_BUILDTYPE) = debug ) {
+            INSTALLED_LOCATION = "$(INSTALLED_LOCATION:DB)_debug$(INSTALLED_LOCATION:S)" ;
+        }
+
+        Depends $(INSTALLED_LOCATION) : $(LIBPHIL_INSTALLDIR) ;
+        Depends $(INSTALLED_LOCATION) : $(EXE_NAME) ;
+        Depends all : $(INSTALLED_LOCATION) ;
+
+        ## -- make sure the directory is created
+        CreateDirectory $(LIBPHIL_INSTALLDIR) ;
+
+        ## -- build the installed executable location
+        CopyFile $(INSTALLED_LOCATION) : $(EXE_NAME) ;
+    }
 }
 
 ## ================================================================================================
