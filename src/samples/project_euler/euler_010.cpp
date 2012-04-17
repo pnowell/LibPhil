@@ -5,6 +5,9 @@
 #include "numerics/cprimecalculator.h"
 #include "io/clog.h"
 
+// -- local includes
+#include "euler.h"
+
 // -- consts
 static const nuint kMaxPrime = 2000000;
 static const uint64 kAnswer = 142913828922LL;
@@ -16,7 +19,7 @@ int32 Problem10() {
     nuint i;
 
     // -- set up the prime calculator and calculate all the primes up to the limit
-    CPrimeCalculator primecalc;
+    CPrimeCalculator& primecalc = PrimeCalculator();
     primecalc.FindPrimesUpTo(kMaxPrime);
     nuint numprimes = primecalc.NumPrimes();
     uint64 sum = 0;

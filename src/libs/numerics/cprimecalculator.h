@@ -34,6 +34,7 @@ public:
     // -- accessors
     nuint NumPrimes();
     nuint Prime(nuint idx);
+    nflag IsPrime(nuint p);
 };
 
 // ================================================================================================

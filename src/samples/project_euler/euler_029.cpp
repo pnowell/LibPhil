@@ -6,6 +6,9 @@
 #include "numerics/cfactorizer.h"
 #include "io/clog.h"
 
+// -- local includes
+#include "euler.h"
+
 // -- constants
 static const nuint kMaxBase = 100;
 static const nuint kMaxPower = 100;
@@ -16,7 +19,7 @@ static const nuint kAnswer = 9183;
 // ================================================================================================
 int32 Problem29() {
     // -- first we need all the primes up to 100
-    CPrimeCalculator calc;
+    CPrimeCalculator& calc = PrimeCalculator();
     calc.FindPrimesUpTo(kMaxBase);
 
     CTable<nuint> factor;

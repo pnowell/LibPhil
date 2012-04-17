@@ -4,6 +4,9 @@
 #include "numerics/cmath.h"
 #include "io/clog.h"
 
+// -- local includes
+#include "euler.h"
+
 static const nuint kNumDivisors = 500;
 static const nuint kAnswer = 76576500;
 
@@ -18,7 +21,7 @@ int32 Problem12() {
     nuint trisqrt = 1;
 
     // -- initialize our prime list
-    CPrimeCalculator primecalc;
+    CPrimeCalculator& primecalc = PrimeCalculator();
 
     nuint product = 0;
     do {

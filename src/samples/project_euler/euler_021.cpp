@@ -5,6 +5,9 @@
 #include "numerics/cfactorizer.h"
 #include "io/clog.h"
 
+// -- local includes
+#include "euler.h"
+
 // -- constants
 static const nuint kLimit = 10000;
 static const nuint kAnswer = 31626;
@@ -31,7 +34,8 @@ static nuint SumOfDivisors(nuint num, CPrimeCalculator& primecalc) {
 // ================================================================================================
 int32 Problem21() {
     // -- first set up a prime calculator and get all the primes up to half the limit
-    CPrimeCalculator primecalc;
+    CPrimeCalculator& primecalc = PrimeCalculator();
+
     primecalc.FindPrimesUpTo(kLimit);
 
     CTable<nflag> shouldskip;

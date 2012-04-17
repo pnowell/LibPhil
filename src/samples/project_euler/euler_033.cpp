@@ -5,6 +5,9 @@
 #include "numerics/cfactorizer.h"
 #include "numerics/cprimecalculator.h"
 
+// -- local includes
+#include "euler.h"
+
 // -- constants
 static const nuint kAnswer = 100;
 
@@ -62,7 +65,7 @@ int32 Problem33() {
     // -- as we go along
     CTable<nuint> numfactors;
     CTable<nuint> denfactors;
-    CPrimeCalculator primecalc;
+    CPrimeCalculator& primecalc = PrimeCalculator();
     nuint count = fractions.Count();
     SFrac result(1, 1);
     for(nuint i = 0; i < count; ++i) {

@@ -3,6 +3,7 @@
 
 // -- libs includes
 #include "core/cmemory.h"
+#include "io/clog.h"
 #include "numerics/cprimecalculator.h"
 
 // -- constants
@@ -64,5 +65,14 @@ void CPrimeCalculator::CheckNext() {
     ++currsieve;
     if(currsieve == sieve.NumOffsets())
         currsieve = 0;
+}
+
+// ================================================================================================
+// Do a binary search to see if the given number is prime
+// ================================================================================================
+nflag CPrimeCalculator::IsPrime(nuint p) {
+    FindPrimesUpTo(p);
+    nuint idx;
+    return primes.Search<CompareBasicTypes<nuint> >(p, idx);
 }
 

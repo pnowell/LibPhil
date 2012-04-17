@@ -5,6 +5,9 @@
 #include "numerics/cprimecalculator.h"
 #include "io/clog.h"
 
+// -- local includes
+#include "euler.h"
+
 // -- constants
 static const nuint kMax = 1000;
 static const nint kAnswer = -59231;
@@ -15,7 +18,7 @@ static const nint kAnswer = -59231;
 int32 Problem27() {
     // -- find more primes than we'll need
     CLog::Write("Calculating primes ... ");
-    CPrimeCalculator calc;
+    CPrimeCalculator& calc = PrimeCalculator();
     calc.FindPrimesUpTo(2*kMax*kMax + kMax);
     CLog::Write("Done\n");
 

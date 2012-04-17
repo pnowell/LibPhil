@@ -5,6 +5,9 @@
 #include "numerics/cfactorizer.h"
 #include "io/clog.h"
 
+// -- local includes
+#include "euler.h"
+
 // -- constants
 static const nuint kLimit = 28123;
 static const nuint kAnswer = 4179871;
@@ -19,7 +22,7 @@ int32 Problem23() {
 
     // -- first build a table of abundant numbers
     CTable<nuint> abundant;
-    CPrimeCalculator primecalc;
+    CPrimeCalculator& primecalc = PrimeCalculator();
     CTable<nuint> factors;
     CTable<nuint> divisors;
     for(nuint i = 2; i < kLimit; ++i) {
