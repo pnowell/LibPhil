@@ -26,14 +26,6 @@ This is repository of all the utility classes I've written for my own purposes
     * LIBPHIL_TARGETPLAT - 'winvs' or 'wingcc'
     * LIBPHIL_BUILDTYPE - 'debug' or 'release'
 
-## Future Plans
+## Links
 
-* Work on some file i/o utilities to facilitate parsing the codejam input files
-* Try to optimize my codejam submission process to keep from timing out
-    * Particularly, maybe it would be good to have kjam be able to zip up all the files that are needed to build a particular executable
-* Extend the library auto-detect functionality to
-    * Let libraries specify any extra parameters to pass to the linker when linking them into executables
-* Work more on 2D/3D math functionality
-* Set up some unit tests to try to ensure some basic level of functionality in the libs that I'm writing
-
-[jam-link]: http://www.perforce.com/jam/jam.html  "Jam build tool"
+* Long term plans / ideas I have for libPhil can be found [here](https://github.com/pnowell/LibPhil/wiki/Plans)
