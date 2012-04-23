@@ -9,3 +9,7 @@ actions CopyFile {
     cp $(2) $(1)
 }
 
+actions ZipSources {
+    echo "Zipping sources for $(1:BS)"
+    zip $(1) $(NEEDEDSRC)
+}

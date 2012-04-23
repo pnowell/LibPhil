@@ -95,6 +95,7 @@ LIBPHIL_CWD = [ FixPath $(LIBPHIL_CWD) ] ;
 LIBPHIL_TARGETPLAT ?= winvs ;
 LIBPHIL_BUILDTYPE ?= debug ;
 LIBPHIL_INSTALL ?= true ;
+LIBPHIL_ZIPSRC ?= false ;
 
 ## ================================================================================================
 ## Rule to set various global variables according to the current working directory
@@ -177,11 +178,11 @@ rule HeaderRule {
     local INCLUDER = $(1) ;
     local INCLUDEDS = $(2) ;
 
-    ## -- first make sure the given library has been processed, with empty entries removed
-    LibraryList [ ListSubtract $(INCLUDEDS:D) : "" ] ;
-
     local NOTIFY = ;
-    on $(INCLUDER) NOTIFY += $(LIBNOTIFYTARG) ;
+    on $(INCLUDER) NOTIFY += $(NOTIFYTARG) ;
+
+    ## -- first make sure the given library has been processed, with empty entries removed
+    LibraryList [ ListSubtract $(INCLUDEDS:D) : "" ] : $(NOTIFY) ;
 
     ## -- transform all the included files into absolute paths
     local CURRINC ;
@@ -192,33 +193,52 @@ rule HeaderRule {
         ## -- just in case this header was included in a comment, we can't assert
         ## -- that the header actually exists.  We'll let the compiler worry about that
         if ! $(RESOLVED) {
-            return ;
+            continue ;
         }
 
         ## -- figure out what library this included file is part of
         local LIBDIR = $(RESOLVED:D) ;
         local LIBFILE ;
+        local LIBNEEDEDSRC ;
         on $(LIBDIR) LIBFILE = $(TARGET_LIBFILE) ;
-        if $(LIBFILE) {
-            ## -- at this point we know that RESOLVED is a file that is part of the lib LIBFILE
-            ## -- files that are just part of an executable won't show up (because they never
-            ## -- had a TARGET_LIBFILE associated with them)
-            for CURRNTFY in $(NOTIFY) {
+        on $(LIBDIR) LIBNEEDEDSRC = $(NEEDEDSRC) ;
+
+        ## -- at this point we know that RESOLVED is a file that is part of the lib LIBFILE
+        ## -- files that are just part of an executable won't show up (because they never
+        ## -- had a TARGET_LIBFILE associated with them)
+        for CURRNTFY in $(NOTIFY) {
+            if $(LIBFILE) {
                 on $(CURRNTFY) if ! ( $(LIBFILE) in $(NEEDEDLIBS) ) {
+                    ## -- add this lib to the neededlibs of the current notify target
                     NEEDEDLIBS on $(CURRNTFY) += $(LIBFILE) ;
+                    ## -- if this target wants to actually depend on it's needed libs
+                    ## -- (for example, an executable), do that here
                     on $(CURRNTFY) if ( $(SHOULDDEPENDLIBS) = true ) {
-                        # echo "Making " $(CURRNTFY:BS) " depend on " $(LIBFILE:BS) ;
                         Depends $(CURRNTFY) : $(LIBFILE) ;
                     }
                 }
+            }
+
+            ## -- notify everything that this source is needed
+            local NEEDEDSRCCOPY = [ ListMerge $(RESOLVED) : $(LIBNEEDEDSRC) ] ;
+            on $(CURRNTFY) NEEDEDSRCCOPY = [ ListMerge $(NEEDEDSRC) : $(NEEDEDSRCCOPY) ] ;
+            NEEDEDSRC on $(CURRNTFY) = $(NEEDEDSRCCOPY) ;
+
+            ## -- if the given notify target has a zip target, then set that up
+            on $(CURRNTFY) if ( $(ZIPTARGET) ) {
+                on $(CURRNTFY) Depends $(ZIPTARGET) : $(RESOLVED) ;
+
+                ## -- we also need to make sure zip targets stay up to date with the list of
+                ## -- sources that are being put on their notify target
+                NEEDEDSRC on $(ZIPTARGET) = $(NEEDEDSRCCOPY) ;
             }
         }
 
         ## -- make sure this included file knows to notify all the things I wanted to notify
         ## -- about needed libs
         local NOTIFYCOPY ;
-        on $(RESOLVED) NOTIFYCOPY = [ ListMerge $(LIBNOTIFYTARG) : $(NOTIFY) ] ;
-        LIBNOTIFYTARG on $(RESOLVED) = $(NOTIFYCOPY) ;
+        on $(RESOLVED) NOTIFYCOPY = [ ListMerge $(NOTIFYTARG) : $(NOTIFY) ] ;
+        NOTIFYTARG on $(RESOLVED) = $(NOTIFYCOPY) ;
 
         ## -- deal with this resolved include
         Includes $(INCLUDER) : $(RESOLVED) ;
@@ -235,7 +255,7 @@ rule HeaderRule {
 rule ObjectList {
     ## -- name arguments
     local SOURCES = $(1) ;
-    local LIBNOTIFY = $(2) ;
+    local NOTIFY = $(2) ;
     local EXTRAINCLUDES = $(3) ;
     local EXTRADEFINES = $(4) ;
 
@@ -258,7 +278,22 @@ rule ObjectList {
     SOURCES = $(LIBPHIL_CWD)/$(SOURCES) ;
 
     ## -- let these sources know who to report to as they find out libraries that they need
-    LIBNOTIFYTARG on $(SOURCES) = $(LIBNOTIFY) ;
+    NOTIFYTARG on $(SOURCES) = $(NOTIFY) ;
+
+    ## -- also, go ahead and let that notify target know that it needs all of these sources
+    for CURRNTFY in $(NOTIFY) {
+        local NEEDEDSRCCOPY ;
+        on $(CURRNTFY) NEEDEDSRCCOPY = [ ListMerge $(NEEDEDSRC) : $(SOURCES) ] ;
+        NEEDEDSRC on $(CURRNTFY) = $(NEEDEDSRCCOPY) ;
+
+        on $(CURRNTFY) if ( $(ZIPTARGET) ) {
+            on $(CURRNTFY) Depends $(ZIPTARGET) : $(SOURCES) ;
+
+            ## -- we also need to make sure zip targets stay up to date with the list of
+            ## -- sources that are being put on their notify target
+            NEEDEDSRC on $(ZIPTARGET) = $(NEEDEDSRCCOPY) ;
+        }
+    }
 
     ## -- set up scanning for header includes on our sources
     HDRSCAN on $(SOURCES) = $(LIBPHIL_HDRSCAN) ;
@@ -322,6 +357,7 @@ rule RecurseInto {
 rule LibraryList {
     ## -- name arguments
     local SHORTLIBS = $(1) ;
+    local NOTIFY = $(2) ;
 
     local CURR ;
     local RESOLVED ;
@@ -331,8 +367,13 @@ rule LibraryList {
         RESOLVED = [ ResolveAbsolute $(CURR) : $(SEARCH) ] ;
 
         if ! $(RESOLVED) {
-            Exit "LibraryList: Unable to resolve " $(CURR) " from " $(SHORTLIBS) " in " $(SEARCH) ;
+            ## -- just in case this header was included in a comment, we can't assert
+            ## -- that the library actually exists.  We'll let the compiler worry about that
+            continue ;
         }
+
+        ## -- before we process the library, let it know about all the things it needs to notify
+        NOTIFYTARG on $(RESOLVED) = $(NOTIFY) ;
 
         ## -- recurse into that library
         RecurseInto $(RESOLVED) ;
@@ -355,7 +396,9 @@ rule Library {
     LIB_FILE = $(LIBPHIL_TARGDIR).$(LIB_SUFFIX) ;
 
     ## -- set up the objects for our list of sources
-    local OBJECTS = [ ObjectList $(SOURCES) : $(LIBPHIL_CWD) ] ;
+    local NOTIFY ;
+    on $(LIBPHIL_CWD) NOTIFY = [ ListMerge $(LIBPHIL_CWD) : $(NOTIFYTARG) ] ;
+    local OBJECTS = [ ObjectList $(SOURCES) : $(NOTIFY) ] ;
 
     ## -- let jam know that this library is dependant on these objects
     Depends $(LIB_FILE) : $(OBJECTS) ;
@@ -382,7 +425,7 @@ rule Executable {
     local EXTERNLIBS = $(5) ;
 
     ## -- build an executable name from the current directory name
-    EXE_NAME = $(LIBPHIL_TARGDIR)/$(LIBPHIL_DIRNAME) ;
+    local EXE_NAME = $(LIBPHIL_TARGDIR)/$(LIBPHIL_DIRNAME) ;
     if $(EXE_SUFFIX) {
         EXE_NAME = $(EXE_NAME).$(EXE_SUFFIX) ;
     }
@@ -390,6 +433,19 @@ rule Executable {
     ## -- make it so that we, as a lib notification target, get set up to depend on the
     ## -- libraries that trace back to us
     SHOULDDEPENDLIBS on $(EXE_NAME) = true ;
+
+    ## -- if we should be zipping up source, set up a zip target for this executable
+    if ( $(LIBPHIL_ZIPSRC) = true ) {
+        local ZIP_DIR = $(LIBPHIL_BASEDIR)/_zip/$(LIBPHIL_RELTARGDIR) ;
+        local ZIP_NAME = $(ZIP_DIR)/$(LIBPHIL_DIRNAME).zip ;
+        ZIPTARGET on $(EXE_NAME) = $(ZIP_NAME) ;
+
+        Depends all : $(ZIP_NAME) ;
+        Depends $(ZIP_NAME) : $(ZIP_DIR) ;
+
+        CreateDirectory $(ZIP_DIR) ;
+        ZipSources $(ZIP_NAME) ;
+    }
 
     ## -- set up the objects for our list of sources
     local OBJECTS = [ ObjectList $(SOURCES) : $(EXE_NAME) : $(EXTERNINCLUDES) : $(EXTRADEFINES) ] ;
