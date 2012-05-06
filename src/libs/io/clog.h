@@ -13,3 +13,5 @@ public:
     // -- stand in for printf
     static void Write(cpointer fmt, ...);
 };
+
+#define Log_(fmt, ...) CLog::Write(fmt, ##__VA_ARGS__)

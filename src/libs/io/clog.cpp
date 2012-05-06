@@ -13,4 +13,5 @@ void CLog::Write(cpointer fmt, ...) {
     va_start(args, fmt);
     vprintf(fmt, args);
     va_end(args);
+    fflush(stdout);
 }

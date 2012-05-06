@@ -87,10 +87,21 @@ map gC :call LastCompileResults()<CR>
 map g<S-F7> :call ResetCompile()<CR>
 
 "" -- maps for starting compiles
-map <F7> :call Compile("", "-s LIBPHIL_TARGETPLAT=\"winvs\" -s LIBPHIL_BUILDTYPE=\"debug\"")<CR>
-map <S-F7> :call Compile("", "-s LIBPHIL_TARGETPLAT=\"winvs\" -s LIBPHIL_BUILDTYPE=\"release\"")<CR>
+map <F7> :call CompileCWD("winvs", "debug")<CR>
+map <S-F7> :call CompileCWD("winvs", "release")<CR>
 map <M-F7> :call Compile("", "-s LIBPHIL_TARGETPLAT=\"wingcc\" -s LIBPHIL_BUILDTYPE=\"debug\"")<CR>
 map <M-S-F7> :call Compile("", "-s LIBPHIL_TARGETPLAT=\"wingcc\" -s LIBPHIL_BUILDTYPE=\"release\"")<CR>
+
+map b :cd %:h<CR>
+map z<F7> :call ZipCWD()<CR>
+
+function! ZipCWD()
+    call Compile("", "-s LIBPHIL_TARGETPLAT=\"winvs\" -s LIBPHIL_BUILDTYPE=\"debug\" -s LIBPHIL_ZIPSRC=\"true\" -s LIBPHIL_CWD=\"" . getcwd() . "\"")
+endfunction
+
+function! CompileCWD(plat, build)
+    call Compile("", "-s LIBPHIL_TARGETPLAT=\"" . a:plat . "\" -s LIBPHIL_BUILDTYPE=\"" . a:build . "\" -s LIBPHIL_CWD=\"" . getcwd() . "\"")
+endfunction
 
 "" -- maps for dealing with search results
 map g/ :call SearchResults()<CR>

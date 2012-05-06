@@ -20,6 +20,8 @@ typedef int64 pint;
 
 #define NIntFmt_ "%lld"
 #define NUintFmt_ "%llu"
+#define NIntIs32_ 0
+#define NIntIs64_ 1
 
 // -- natural int types
 typedef int64 nint;
@@ -38,6 +40,10 @@ typedef double real64;
 
 // -- natural float type
 typedef real32 nreal;
+
+#define NRealIs32_ 1
+#define NRealIs64_ 0
+#define NRealFmt_ "%lf"
 
 // -- constants
 #ifndef NULL

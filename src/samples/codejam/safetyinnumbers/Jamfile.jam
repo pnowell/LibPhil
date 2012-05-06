@@ -1,8 +1,4 @@
 ## ================================================================================================
 ## Jamfile
 ## ================================================================================================
-local SUBDIRS = [ SubDirectoryList ] ;
-SUBDIRS = [ ListSubtract $(SUBDIRS) : "_template" ] ;
-SUBDIRS = [ ListSubtract $(SUBDIRS) : "_cruisecontrol" ] ;
-
-SubDirectories $(SUBDIRS) ;
+Executable [ SourceList ] ;

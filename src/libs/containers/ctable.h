@@ -26,6 +26,15 @@ template<typename T> class CTable {
 
 protected:
 
+    // -- struct used to sort things
+    struct SSortRange {
+        nuint low, high;
+
+        // -- constructor
+        SSortRange(nuint l, nuint h) : low(l), high(h) {
+        }
+    };
+
     CDataPtr<int8> mem;
     nuint count;
     nuint alloc;
@@ -33,9 +42,6 @@ protected:
 
     cpointer GetPointer(nuint idx) const;
     pointer GetPointer(nuint idx);
-
-    // -- protected sort with indices
-    template<typename C> void SortRecurse(nuint low, nuint high);
 
 public:
 
@@ -93,39 +99,6 @@ template<typename T> inline cpointer CTable<T>::GetPointer(nuint idx) const {
 
 template<typename T> inline pointer CTable<T>::GetPointer(nuint idx) {
     return pointer(mem) + sizeof(T) * idx;
-}
-
-// ------------------------------------------------------------------------------------------------
-// Sort the elements in [low, high)
-// ------------------------------------------------------------------------------------------------
-template<typename T> template<typename C>
-void CTable<T>::SortRecurse(nuint low, nuint high) {
-    T& pivot = *GetElem(high);
-    nuint store = C::Compare(*GetElem(low), pivot) > 0 ? low : low + 1;
-    for(nuint i = low; i < high; ++i) {
-        T& left = *GetElem(i);
-        if(C::Compare(left, pivot) < 0) {
-            T& swap = *GetElem(store);
-            T temp = swap;
-            swap = left;
-            left = temp;
-            ++store;
-        }
-    }
-
-    // -- if the store spot is less than the pivot, swap them as well
-    if(store < high) {
-        T& swap = *GetElem(store);
-        T temp = swap;
-        swap = pivot;
-        pivot = temp;
-    }
-    
-    // -- recurse where necessary
-    if(store+1 < high)
-        SortRecurse<C>(store+1, high);
-    if(low+1 < store)
-        SortRecurse<C>(low, store-1);
 }
 
 // ================================================================================================
@@ -301,8 +274,44 @@ template<typename T> void CTable<T>::Swap(CTable<T>& other) {
 // A quick sort using the provided static comparison function
 // ================================================================================================
 template<typename T> template<typename C> inline void CTable<T>::Sort() {
-    if(count > 1)
-        SortRecurse<C>(0, count-1);
+    if(count <= 1)
+        return;
+
+    CTable<SSortRange> ranges;
+    ranges.Grow(SSortRange(0, count-1));
+
+    while(ranges.Count() > 0) {
+        nuint idx = ranges.Count() - 1;
+        SSortRange r = ranges[idx];
+        ranges.Remove(idx);
+
+        T& pivot = *GetElem(r.high);
+        nuint store = C::Compare(*GetElem(r.low), pivot) > 0 ? r.low : r.low + 1;
+        for(nuint i = r.low; i < r.high; ++i) {
+            T& left = *GetElem(i);
+            if(C::Compare(left, pivot) < 0) {
+                T& swap = *GetElem(store);
+                T temp = swap;
+                swap = left;
+                left = temp;
+                ++store;
+            }
+        }
+
+        // -- if the store spot is less than the pivot, swap them as well
+        if(store < r.high) {
+            T& swap = *GetElem(store);
+            T temp = swap;
+            swap = pivot;
+            pivot = temp;
+        }
+        
+        // -- recurse where necessary
+        if(store+1 < r.high)
+            ranges.Grow(SSortRange(store+1, r.high));
+        if(r.low+1 < store)
+            ranges.Grow(SSortRange(r.low, store-1));
+    }
 }
 
 // ================================================================================================
