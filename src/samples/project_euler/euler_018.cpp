@@ -6,7 +6,7 @@
 #include "numerics/cmath.h"
 #include "io/clog.h"
 
-static const nuint kTri[] = {
+static const uintn kTri[] = {
                                 75,
                               95, 64,
                             17, 47, 82,
@@ -23,8 +23,8 @@ static const nuint kTri[] = {
       63, 66,  4, 68, 89, 53, 67, 30, 73, 16, 69, 87, 40, 31,
      4, 62, 98, 27, 23,  9, 70, 98, 73, 93, 38, 53, 60,  4, 23,
 };
-static const nuint kSize = ArraySize_(kTri);
-static const nuint kAnswer = 1074;
+static const uintn kSize = ArraySize_(kTri);
+static const uintn kAnswer = 1074;
 
 // -- macro to turn row,col into a single index
 #define Idx_(r, c) (((r) * ((r) + 1)) / 2 + (c))
@@ -32,25 +32,25 @@ static const nuint kAnswer = 1074;
 // ================================================================================================
 // Do all the work for problem 18 and 67
 // ================================================================================================
-nuint Problem18And67(const nuint* tri, const nuint size) {
-    nuint height = (CMath::ISqrt(1 + 8*size) - 1) / 2;
+uintn Problem18And67(const uintn* tri, const uintn size) {
+    uintn height = (CMath::ISqrt(1 + 8*size) - 1) / 2;
     Assert_(height * (height + 1) / 2 == size, "Are you sure the size you passed in is correct?");
     Assert_(height > 1, "Really?  Why bother with such a small triangle size");
 
     // -- make a temporary table with a copy of the triangle
-    CTable<nuint> maxpaths;
-    for(nuint i = 0; i < size; ++i)
+    CTable<uintn> maxpaths;
+    for(uintn i = 0; i < size; ++i)
         maxpaths.Grow(tri[i]);
 
     // -- start from the second to last row
-    for(nuint i = height-1; i > 0;) {
+    for(uintn i = height-1; i > 0;) {
         --i;
 
         // -- for every element, choose from the two below it which will make a bigger
         // -- total, and add that into the current spot
-        for(nuint j = 0; j <= i; ++j) {
-            nuint left = maxpaths[Idx_(i+1, j)];
-            nuint right = maxpaths[Idx_(i+1, j+1)];
+        for(uintn j = 0; j <= i; ++j) {
+            uintn left = maxpaths[Idx_(i+1, j)];
+            uintn right = maxpaths[Idx_(i+1, j+1)];
             if(left > right)
                 maxpaths[Idx_(i, j)] += left;
             else
@@ -67,7 +67,7 @@ nuint Problem18And67(const nuint* tri, const nuint size) {
 // Problem 18
 // ================================================================================================
 int32 Problem18() {
-    nuint max = Problem18And67(kTri, kSize);
+    uintn max = Problem18And67(kTri, kSize);
     Assert_(max == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
     return 0;
 }

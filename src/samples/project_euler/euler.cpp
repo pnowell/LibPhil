@@ -58,7 +58,7 @@ static const ProblemCB kProblems[] = {
     NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL,       NULL, // 64
     NULL,       NULL,       Problem67,
 };
-static const nuint kNumProblems = ArraySize_(kProblems);
+static const uintn kNumProblems = ArraySize_(kProblems);
 
 // ================================================================================================
 // One common prime calculator to share amongst the various problems
@@ -91,11 +91,11 @@ int main(int32 argc, pointer argv[]) {
     timer.Start();
 
     if(argc > 1) {
-        nuint idx = CMath::AToI(argv[1]);
+        uintn idx = CMath::AToI(argv[1]);
 
         // -- we use zero as a special index which means to iterate over all of the problems
         if(idx == 0) {
-            for(nuint i = 0; i < kNumProblems; ++i) {
+            for(uintn i = 0; i < kNumProblems; ++i) {
                 if(kProblems[i] != NULL) {
                     CLog::Write("\n\n====================\n");
                     CLog::Write("Problem " NUintFmt_ "\n", i + 1);

@@ -11,13 +11,13 @@ CTable<real64> prob;
 
 // ================================================================================================
 // ================================================================================================
-real64 GetBest(real64 probsofar, nuint pos, real64 bestsofar) {
+real64 GetBest(real64 probsofar, uintn pos, real64 bestsofar) {
     real64 best = bestsofar;
     while(pos <= typed) {
         // -- first consider if we erased all the characters to this position and typed it out
-        nuint bs = typed - pos;
-        nuint keysright = bs + len - pos + 1;
-        nuint keyswrong = keysright + len + 1;
+        uintn bs = typed - pos;
+        uintn keysright = bs + len - pos + 1;
+        uintn keyswrong = keysright + len + 1;
         real64 finish = probsofar * real64(keysright);
         finish += (1.0f - probsofar) * real64(keyswrong);
 
@@ -56,11 +56,11 @@ int main(int32 argc, int8* argv[]) {
     uint32 numtests;
     fscanf_s(fp, "%d", &numtests);
 
-    for(nuint i = 0; i < numtests; ++i) {
+    for(uintn i = 0; i < numtests; ++i) {
         fscanf_s(fp, "%d %d", &typed, &len);
         prob.Clear();
         prob.GrowMultiple(len);
-        for(nuint j = 0; j < typed; ++j)
+        for(uintn j = 0; j < typed; ++j)
             fscanf_s(fp, "%Lf", &prob[j]);
 
         // -- what if we just press enter and start over

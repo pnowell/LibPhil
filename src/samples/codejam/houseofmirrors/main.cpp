@@ -10,23 +10,23 @@
 // Struct for storing the layout of the room .. for the "short" version of the problem only =(
 // ------------------------------------------------------------------------------------------------
 struct SLayout {
-    nuint h;
-    nuint w;
-    nuint d;
-    nint x;
-    nint y;
+    uintn h;
+    uintn w;
+    uintn d;
+    intn x;
+    intn y;
 };
 
 // ------------------------------------------------------------------------------------------------
 // Struct for storing a slope as 2 integers (keep out of floating point land)
 // ------------------------------------------------------------------------------------------------
 struct SSlope {
-    nint neg;
-    nint dx;
-    nint dy;
+    intn neg;
+    intn dx;
+    intn dy;
 
     // -- constructor
-    SSlope(nint x, nint y) {
+    SSlope(intn x, intn y) {
         if((y == 0 && x < 0) || y < 0) {
             dx = -x;
             dy = -y;
@@ -40,8 +40,8 @@ struct SSlope {
     }
 
     // -- comparison
-    static nint Compare(SSlope left, SSlope right) {
-        nint det = left.dy * right.dx - left.dx * right.dy;
+    static intn Compare(SSlope left, SSlope right) {
+        intn det = left.dy * right.dx - left.dx * right.dy;
         // -- if the determinant isn't zero, we already know we have different slopes
         if(det != 0)
             return det;
@@ -53,9 +53,9 @@ struct SSlope {
 // ------------------------------------------------------------------------------------------------
 // Read a line and get rid of the newline characters at the end
 // ------------------------------------------------------------------------------------------------
-void GetLine(FILE* fp, pointer line, nuint size) {
+void GetLine(FILE* fp, pointer line, uintn size) {
     fgets(line, int(size), fp);
-    for(nuint i = 0; i < size; ++i) {
+    for(uintn i = 0; i < size; ++i) {
         if(line[i] == 0)
             return;
         if(line[i] == '\n' || line[i] == '\r') {
@@ -71,7 +71,7 @@ void GetLine(FILE* fp, pointer line, nuint size) {
 void ParseLayout(FILE* fp, SLayout& layout) {
     fscanf_s(fp, "%lld %lld %lld", &layout.h, &layout.w, &layout.d);
 
-    const nuint linesize = 64;
+    const uintn linesize = 64;
     int8 line[linesize];
 
     // -- finish the previous line
@@ -82,11 +82,11 @@ void ParseLayout(FILE* fp, SLayout& layout) {
 
     // -- read the middle rows
     nflag found = false;
-    for(nuint i = 1; i < layout.h-1; ++i) {
+    for(uintn i = 1; i < layout.h-1; ++i) {
         GetLine(fp, line, linesize);
 
         // -- read the middle
-        for(nuint j = 1; found == false && j < layout.w-1; ++j) {
+        for(uintn j = 1; found == false && j < layout.w-1; ++j) {
             if(line[j] == 'X') {
                 // -- the position is understood to be at a ?.5 position on the x and y
                 // -- but we store the floor of that number (just to keep things in integers)
@@ -108,19 +108,19 @@ void ParseLayout(FILE* fp, SLayout& layout) {
 // ------------------------------------------------------------------------------------------------
 // Utility for getting the nth reflected position in a particular dimension
 // ------------------------------------------------------------------------------------------------
-nint ReflectedCoord(nint n, nint original, nuint len) {
+intn ReflectedCoord(intn n, intn original, uintn len) {
     if((n & 1) == 0)
         return len * n + original;
 
-    nint k = (n + 1) / 2;
+    intn k = (n + 1) / 2;
     return 2 * len * k - 1 - original;
 }
 
 // ------------------------------------------------------------------------------------------------
 // Compute the number of reflections for the given layout
 // ------------------------------------------------------------------------------------------------
-nuint NumReflections(SLayout& layout) {
-    nuint result = 0;
+uintn NumReflections(SLayout& layout) {
+    uintn result = 0;
 
     // -- we'll keep a sorted table of slopes
     CTable<SSlope> slopes;
@@ -131,24 +131,24 @@ nuint NumReflections(SLayout& layout) {
     // -- d / dim rounded up to the nearest even number
     // $$$ Something is wrong here, so I added more checks
     // $$$ Not sure how wrong it is, probably off by 1
-    nint refx = (2 * layout.d / layout.w + 1) / 2 + 3;
-    nint refy = (2 * layout.d / layout.h + 1) / 2 + 3;
-    nint dsqr = layout.d * layout.d;
+    intn refx = (2 * layout.d / layout.w + 1) / 2 + 3;
+    intn refy = (2 * layout.d / layout.h + 1) / 2 + 3;
+    intn dsqr = layout.d * layout.d;
     #if DebugOutput_
         CLog::Write("pos x=%lld, pos y=%lld, Max dsqr=%lld\n", layout.x, layout.y, dsqr);
     #endif
-    for(nint nx = -refx; nx <= refx; ++nx) {
-        nint x = ReflectedCoord(nx, layout.x, layout.w);
-        nint dispx = layout.x - x;
-        nint dispxsqr = dispx * dispx;
-        for(nint ny = -refy; ny <= refy; ++ny) {
+    for(intn nx = -refx; nx <= refx; ++nx) {
+        intn x = ReflectedCoord(nx, layout.x, layout.w);
+        intn dispx = layout.x - x;
+        intn dispxsqr = dispx * dispx;
+        for(intn ny = -refy; ny <= refy; ++ny) {
             // -- we don't count our real self
             if(nx == 0 && ny == 0)
                 continue;
 
-            nint y = ReflectedCoord(ny, layout.y, layout.h);
-            nint dispy = layout.y - y;
-            nint dispysqr = dispy * dispy;
+            intn y = ReflectedCoord(ny, layout.y, layout.h);
+            intn dispy = layout.y - y;
+            intn dispysqr = dispy * dispy;
 
             #if DebugOutput_
                 CLog::Write("nx=%lld, ny=%lld, x=%lld, y=%lld", nx, ny, x, y);
@@ -161,7 +161,7 @@ nuint NumReflections(SLayout& layout) {
             if(dispxsqr + dispysqr <= dsqr) {
                 // -- now check to see if this is in the table of slopes
                 SSlope newslope(dispx, dispy);
-                nuint index;
+                uintn index;
                 if(!slopes.Search<SSlope>(newslope, index)) {
                     // -- insert it into the table of slopes
                     slopes.Insert(index, newslope);
@@ -186,9 +186,9 @@ nuint NumReflections(SLayout& layout) {
     }
 
     #if DebugOutput_
-        nuint count = slopes.Count();
+        uintn count = slopes.Count();
         CLog::Write("##################\n");
-        for(nuint i = 0; i < count; ++i) {
+        for(uintn i = 0; i < count; ++i) {
             SSlope& s = slopes[i];
             CLog::Write("    dx=%lld dy=%lld neg=%lld\n", s.dx, s.dy, s.neg);
         }
@@ -222,10 +222,10 @@ int main(int32 argc, int8* argv[]) {
     fscanf_s(fp, "%d", &numtests);
 
     // -- iterate over all the tests
-    for(nuint i = 0; i < numtests; ++i) {
+    for(uintn i = 0; i < numtests; ++i) {
         SLayout layout;
         ParseLayout(fp, layout);
-        nuint result = NumReflections(layout);
+        uintn result = NumReflections(layout);
         CLog::Write("Case #%lld: %lld\n", i+1, result);
     }
 

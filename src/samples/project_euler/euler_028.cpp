@@ -4,16 +4,16 @@
 #include "io/clog.h"
 
 // -- constants
-static const nuint kSize = 1001;
-static const nuint kAnswer = 669171001;
+static const uintn kSize = 1001;
+static const uintn kAnswer = 669171001;
 
 // ================================================================================================
 // Problem 28
 // ================================================================================================
 int32 Problem28() {
-    nuint sum = 1;
-    nuint last = 1;
-    for(nuint level = 1; level*2 + 1 <= kSize; ++level) {
+    uintn sum = 1;
+    uintn last = 1;
+    for(uintn level = 1; level*2 + 1 <= kSize; ++level) {
         // -- add in the lower right corner
         sum += last + level * 2;
         // -- add in the lower left corner

@@ -12,31 +12,31 @@
 #endif
 
 struct SItem {
-    nuint count;
-    nuint type;
+    uintn count;
+    uintn type;
 
-    SItem(nuint c, nuint t) : count(c), type(t) {}
+    SItem(uintn c, uintn t) : count(c), type(t) {}
 };
 
 struct SState {
-    nuint boxseq;
-    nuint boxdone;
-    nuint toyseq;
-    nuint toydone;
-    nuint completed;
+    uintn boxseq;
+    uintn boxdone;
+    uintn toyseq;
+    uintn toydone;
+    uintn completed;
 
-    SState(nuint a, nuint b, nuint c, nuint d, nuint e)
+    SState(uintn a, uintn b, uintn c, uintn d, uintn e)
         : boxseq(a), boxdone(b), toyseq(c), toydone(d), completed(e) {}
 };
 
-nuint Compute(CTable<SItem>& boxes, CTable<SItem>& toys) {
-    nuint best = 0;
+uintn Compute(CTable<SItem>& boxes, CTable<SItem>& toys) {
+    uintn best = 0;
 
     CTable<SState> stack;
     stack.Grow(SState(0, 0, 0, 0, 0));
 
     while(stack.Count() > 0) {
-        nuint stateidx = stack.Count() - 1;
+        uintn stateidx = stack.Count() - 1;
         SState state = stack[stateidx];
         stack.Remove(stateidx);
 
@@ -51,9 +51,9 @@ nuint Compute(CTable<SItem>& boxes, CTable<SItem>& toys) {
         SItem& box = boxes[state.boxseq];
         SItem& toy = toys[state.toyseq];
         if(box.type == toy.type) {
-            nuint boxremain = box.count - state.boxdone;
-            nuint toyremain = toy.count - state.toydone;
-            nuint min = boxremain < toyremain ? boxremain : toyremain;
+            uintn boxremain = box.count - state.boxdone;
+            uintn toyremain = toy.count - state.toydone;
+            uintn min = boxremain < toyremain ? boxremain : toyremain;
             state.completed += min;
 
             if(boxremain == min) {
@@ -70,7 +70,7 @@ nuint Compute(CTable<SItem>& boxes, CTable<SItem>& toys) {
             else
                 state.toydone += min;
 
-            // -- push this state back on to conintue
+            // -- push this state back on to cointnue
             stack.Grow(state);
         }
         else {
@@ -117,26 +117,26 @@ int main(int32 argc, int8* argv[]) {
 
     CTable<SItem> boxes;
     CTable<SItem> toys;
-    for(nuint i = 0; i < numtests; ++i) {
-        nuint n, m;
+    for(uintn i = 0; i < numtests; ++i) {
+        uintn n, m;
         fscanf_s(fp, "%lld %lld", &n, &m);
 
         boxes.Clear();
         toys.Clear();
 
-        for(nuint j = 0; j < n; ++j) {
-            nuint num, type;
+        for(uintn j = 0; j < n; ++j) {
+            uintn num, type;
             fscanf_s(fp, "%lld %lld", &num, &type);
             boxes.Grow(SItem(num, type));
         }
 
-        for(nuint j = 0; j < m; ++j) {
-            nuint num, type;
+        for(uintn j = 0; j < m; ++j) {
+            uintn num, type;
             fscanf_s(fp, "%lld %lld", &num, &type);
             toys.Grow(SItem(num, type));
         }
 
-        nuint completed = Compute(boxes, toys);
+        uintn completed = Compute(boxes, toys);
         Log_("Case #%d: %lld\n", i+1, completed);
     }
 

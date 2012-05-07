@@ -9,7 +9,7 @@
 #include "euler.h"
 
 // -- constants
-static const nuint kAnswer = 55;
+static const uintn kAnswer = 55;
 
 // ================================================================================================
 // Problem 35
@@ -20,20 +20,20 @@ int32 Problem35() {
     primecalc.FindPrimesUpTo(1000000);
     CLog::Write("Done\n");
 
-    const nuint place[6] = {
+    const uintn place[6] = {
         1, 10, 100, 1000, 10000, 100000
     };
 
-    nuint count = 0;
-    nuint maxdigits = 6;
+    uintn count = 0;
+    uintn maxdigits = 6;
 
-    nuint numprimes = primecalc.NumPrimes();
-    for(nuint i = 0; i < numprimes; ++i) {
-        nuint curr = primecalc.Prime(i);
+    uintn numprimes = primecalc.NumPrimes();
+    for(uintn i = 0; i < numprimes; ++i) {
+        uintn curr = primecalc.Prime(i);
 
         // -- count the number of digits
-        nuint digits = 0;
-        nuint decomp = curr;
+        uintn digits = 0;
+        uintn decomp = curr;
         while(decomp > 0) {
             ++digits;
             decomp /= 10;
@@ -59,7 +59,7 @@ int32 Problem35() {
             continue;
 
         decomp = curr;
-        nuint toadd = 0;
+        uintn toadd = 0;
         nflag allprime = true;
         do {
             decomp = decomp % 10 * place[digits - 1] + decomp / 10;

@@ -11,21 +11,21 @@
 // ================================================================================================
 // Make a new allocation of the give size
 // ================================================================================================
-vpointer CMemory::Alloc(nuint size) {
+vpointer CMemory::Alloc(uintn size) {
     return malloc(size);
 }
 
 // ================================================================================================
 // Adjust the given allocation (or make a new one if NULL is passed in) to be the new size
 // ================================================================================================
-vpointer CMemory::ReAlloc(vpointer mem, nuint size) {
+vpointer CMemory::ReAlloc(vpointer mem, uintn size) {
     return realloc(mem, size);
 }
 
 // ================================================================================================
 // Allocate memory and clear it with all zeros
 // ================================================================================================
-vpointer CMemory::CAlloc(nuint size) {
+vpointer CMemory::CAlloc(uintn size) {
     return calloc(size, 1);
 }
 
@@ -39,7 +39,7 @@ void CMemory::Free(vpointer mem) {
 // ================================================================================================
 // Move memory from one place to another
 // ================================================================================================
-void CMemory::Move(vpointer to, vpointer from, nuint size) {
+void CMemory::Move(vpointer to, vpointer from, uintn size) {
     memmove(to, from, size);
 }
 

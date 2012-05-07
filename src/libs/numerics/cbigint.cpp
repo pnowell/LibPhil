@@ -4,7 +4,7 @@
 // ================================================================================================
 // Constructors
 // ================================================================================================
-CBigInt::CBigInt(nuint val) : limit(0) {
+CBigInt::CBigInt(uintn val) : limit(0) {
     while(val > 0) {
         digits.Grow(uint8(val % 10));
         val /= 10;
@@ -13,14 +13,14 @@ CBigInt::CBigInt(nuint val) : limit(0) {
 
 CBigInt::CBigInt(cpointer v) : limit(0) {
     // -- find the length of the number
-    nuint len = 0;
+    uintn len = 0;
     while(v[len] != 0)
         ++len;
 
     if(len > 0) {
         digits.GrowMultiple(len);
 
-        for(nuint i = 0; i < len; ++i) {
+        for(uintn i = 0; i < len; ++i) {
             uint8 curr = v[len - 1 - i];
             Assert_('0' <= curr && curr <= '9', "'%c' is not a numeric digit", curr);
             digits[i] = curr - '0';
@@ -31,10 +31,10 @@ CBigInt::CBigInt(cpointer v) : limit(0) {
 // ================================================================================================
 // Allow the user to only care about a certain number of least significant digits
 // ================================================================================================
-void CBigInt::SetDigitLimit(nuint lim) {
+void CBigInt::SetDigitLimit(uintn lim) {
     limit = lim;
 
-    nuint numdigits = digits.Count();
+    uintn numdigits = digits.Count();
     if(numdigits > limit)
         digits.RemoveMultiple(limit, numdigits - limit);
 }
@@ -54,19 +54,19 @@ const CBigInt& CBigInt::operator=(const CBigInt& other) {
     digits.Clear();
 
     // -- get the other number's digit count and limit it if necessary
-    nuint numdigits = other.NumDigits();
+    uintn numdigits = other.NumDigits();
     if(limit > 0 && numdigits > limit)
         numdigits = limit;
 
     // -- give ourselves the right number of digits, and copy everything
     digits.GrowMultiple(numdigits);
-    for(nuint i = 0; i < numdigits; ++i)
+    for(uintn i = 0; i < numdigits; ++i)
         digits[i] = other.digits[i];
 
     return *this;
 }
 
-const CBigInt& CBigInt::operator=(nuint other) {
+const CBigInt& CBigInt::operator=(uintn other) {
     digits.Clear();
 
     while(other > 0) {
@@ -87,19 +87,19 @@ const CBigInt& CBigInt::operator=(nuint other) {
 // ================================================================================================
 const CBigInt& CBigInt::operator+=(const CBigInt& other) {
     // -- if we have less digits than the other number, pad out ours with zeros to the same size
-    nuint othernum = other.NumDigits();
+    uintn othernum = other.NumDigits();
 
     // -- apply the digit limit, if necessary
     if(limit > 0 && othernum > limit)
         othernum = limit;
 
-    nuint selfnum = NumDigits();
+    uintn selfnum = NumDigits();
     if(othernum > selfnum)
         digits.GrowMultiple(0, othernum - selfnum);
 
     // -- handle all the digits that need to be added together
     uint8 carry = 0;
-    nuint i = 0;
+    uintn i = 0;
     for(; i < othernum; ++i) {
         digits[i] += carry + other.digits[i];
         carry = digits[i] / 10;
@@ -124,15 +124,15 @@ const CBigInt& CBigInt::operator+=(const CBigInt& other) {
 // ================================================================================================
 // Accumulate multiply
 // ================================================================================================
-const CBigInt& CBigInt::operator*=(nuint other) {
+const CBigInt& CBigInt::operator*=(uintn other) {
     // -- multiply each digit, starting with the most significant
-    for(nuint i = digits.Count(); i > 0;) {
+    for(uintn i = digits.Count(); i > 0;) {
         --i;
 
-        nuint product = digits[i] * other;
+        uintn product = digits[i] * other;
         digits[i] = 0;
 
-        nuint j = i;
+        uintn j = i;
         uint8 carry = 0;
         while(product > 0) {
             if(j < digits.Count()) {

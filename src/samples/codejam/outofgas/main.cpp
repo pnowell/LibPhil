@@ -49,13 +49,13 @@ int main(int32 argc, int8* argv[]) {
     fscanf_s(fp, "%d", &numtests);
 
     CTable<SPos> car;
-    for(nuint i = 0; i < numtests; ++i) {
+    for(uintn i = 0; i < numtests; ++i) {
         real64 dist;
-        nuint n, a;
+        uintn n, a;
         fscanf_s(fp, "%Lf %lld %lld", &dist, &n, &a);
 
         car.Clear();
-        for(nuint j = 0; j < n; ++j) {
+        for(uintn j = 0; j < n; ++j) {
             real64 t, x;
             fscanf_s(fp, "%Lf %Lf", &t, &x);
 
@@ -79,7 +79,7 @@ int main(int32 argc, int8* argv[]) {
         nflag founddip = true;
         while(founddip) {
             founddip = false;
-            for(nuint j = 1; j < car.Count()-1;) {
+            for(uintn j = 1; j < car.Count()-1;) {
                 // -- check to see if this point is a dip
                 SPos& last = car[j-1];
                 SPos& curr = car[j];
@@ -98,14 +98,14 @@ int main(int32 argc, int8* argv[]) {
 
         Log_("Case #%d:\n", i+1);
 
-        for(nuint j = 0; j < a; ++j) {
+        for(uintn j = 0; j < a; ++j) {
             real64 accel;
             fscanf_s(fp, "%Lf", &accel);
 
             // -- go through the car positions and find the one that offsets our curve the most
             real64 falltime = CMath::Sqrt(2 * dist / accel);
             real64 offset = 0.0;
-            for(nuint k = 0; k < n; ++k) {
+            for(uintn k = 0; k < n; ++k) {
                 SPos& curr = car[k];
                 // -- get how long it would take to fall to this point
                 real64 colltime = CMath::Sqrt(2 * curr.x / accel);

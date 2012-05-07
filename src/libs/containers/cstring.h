@@ -27,17 +27,17 @@ public:
     pointer ModifyString();
 
     // -- current length of the string
-    nuint Length() const;
+    uintn Length() const;
 
     // -- static utilities
     static int8 ToLower(int8 c);
     static int8 ToUpper(int8 c);
-    static nuint Length(cpointer s);
+    static uintn Length(cpointer s);
 
     // -- static comparison of two strings
-    static nint Compare(const CString& left, const CString& right, nflag ignorecase = false);
-    static nint Compare(const CString* left, const CString* right, nflag ignorecase = false);
-    static nint Compare(cpointer left, cpointer right, nflag ignorecase = false);
+    static intn Compare(const CString& left, const CString& right, nflag ignorecase = false);
+    static intn Compare(const CString* left, const CString* right, nflag ignorecase = false);
+    static intn Compare(cpointer left, cpointer right, nflag ignorecase = false);
 };
 
 // ================================================================================================
@@ -57,9 +57,9 @@ inline pointer CString::ModifyString() {
     return str.Count() > 0 ? str.GetElem(0) : NULL;
 }
 
-inline nuint CString::Length() const {
-    nuint result = 0;
-    nuint count = str.Count();
+inline uintn CString::Length() const {
+    uintn result = 0;
+    uintn count = str.Count();
     if(count == 0)
         return 0;
     cpointer s = str.GetElem(0);
@@ -71,11 +71,11 @@ inline nuint CString::Length() const {
 // ================================================================================================
 // Static comparison methods
 // ================================================================================================
-inline nint CString::Compare(const CString& left, const CString& right, nflag ignorecase) {
+inline intn CString::Compare(const CString& left, const CString& right, nflag ignorecase) {
     return Compare(left.GetString(), right.GetString(), ignorecase);
 }
 
-inline nint CString::Compare(const CString* left, const CString* right, nflag ignorecase) {
+inline intn CString::Compare(const CString* left, const CString* right, nflag ignorecase) {
     return Compare(left->GetString(), right->GetString(), ignorecase);
 }
 

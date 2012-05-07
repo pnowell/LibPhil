@@ -11,15 +11,15 @@ class CMemory {
 public:
 
     // -- allocation
-    static vpointer Alloc(nuint size);
-    static vpointer ReAlloc(vpointer m, nuint size);
-    static vpointer CAlloc(nuint size);
+    static vpointer Alloc(uintn size);
+    static vpointer ReAlloc(vpointer m, uintn size);
+    static vpointer CAlloc(uintn size);
 
     // -- free
     static void Free(vpointer m);
 
     // -- move
-    static void Move(vpointer from, vpointer to, nuint size);
+    static void Move(vpointer from, vpointer to, uintn size);
 
     // -- destruction
     template<typename T> static void Destroy(T* t);

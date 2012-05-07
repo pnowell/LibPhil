@@ -7,7 +7,7 @@
 #include "numerics/cprimecalculator.h"
 
 // -- constants
-static const nuint kPrimeAlloc = 1024;
+static const uintn kPrimeAlloc = 1024;
 
 // ================================================================================================
 // Constructor
@@ -49,7 +49,7 @@ void CPrimeCalculator::CheckNext() {
         ++currsqrt;
 
     nflag isprime = true;
-    for(nuint i = 0; primes[i] <= currsqrt; ++i) {
+    for(uintn i = 0; primes[i] <= currsqrt; ++i) {
         if((currnum % primes[i]) == 0) {
             isprime = false;
             break;
@@ -70,9 +70,9 @@ void CPrimeCalculator::CheckNext() {
 // ================================================================================================
 // Do a binary search to see if the given number is prime
 // ================================================================================================
-nflag CPrimeCalculator::IsPrime(nuint p) {
+nflag CPrimeCalculator::IsPrime(uintn p) {
     FindPrimesUpTo(p);
-    nuint idx;
-    return primes.Search<CompareBasicTypes<nuint> >(p, idx);
+    uintn idx;
+    return primes.Search<CompareBasicTypes<uintn> >(p, idx);
 }
 

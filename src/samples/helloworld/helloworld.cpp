@@ -10,8 +10,8 @@
 // Main
 // ================================================================================================
 int main(int32 argc, int8* argv[]) {
-    ShowSize_(nint);
-    ShowSize_(nuint);
+    ShowSize_(intn);
+    ShowSize_(uintn);
     ShowSize_(int8);
     ShowSize_(uint8);
     ShowSize_(int16);
@@ -23,14 +23,14 @@ int main(int32 argc, int8* argv[]) {
 
     ShowSize_(nflag);
 
-    ShowSize_(nreal);
+    ShowSize_(realn);
     ShowSize_(real32);
     ShowSize_(real64);
 
     // -- try doing some allocations
     #define numallocs 5
     vpointer allocs[numallocs];
-    nuint allocsize[numallocs] = {
+    uintn allocsize[numallocs] = {
         128,
         256,
         512,
@@ -38,22 +38,22 @@ int main(int32 argc, int8* argv[]) {
         100,
     };
     CLog::Write("Making initial allocations\n");
-    for(nuint i = 0; i < numallocs; i++)
+    for(uintn i = 0; i < numallocs; i++)
         allocs[i] = CMemory::Alloc(allocsize[i]);
 
     // -- now resize those
     CLog::Write("ReAlloc bigger\n");
-    for(nuint i = 0; i < numallocs; i++)
+    for(uintn i = 0; i < numallocs; i++)
         allocs[i] = CMemory::ReAlloc(allocs[i], allocsize[i] * 2);
 
     // -- and resize them back down
     CLog::Write("ReAlloc smaller\n");
-    for(nuint i = 0; i < numallocs; i++)
+    for(uintn i = 0; i < numallocs; i++)
         allocs[i] = CMemory::ReAlloc(allocs[i], allocsize[i] / 2);
 
     // -- clean up
     CLog::Write("Cleaning up\n");
-    for(nuint i = 0; i < numallocs; i++) {
+    for(uintn i = 0; i < numallocs; i++) {
         CMemory::Free(allocs[i]);
         allocs[i] = NULL;
     }

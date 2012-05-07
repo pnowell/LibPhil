@@ -11,7 +11,7 @@
 // ================================================================================================
 // A globally scoped function for handling the failed assertions
 // ================================================================================================
-void AssertHandler(cpointer file, nuint line, cpointer errorfmt, ...) {
+void AssertHandler(cpointer file, uintn line, cpointer errorfmt, ...) {
     CLog::Write("\n+===================+\n");
     CLog::Write("| Assertion failure |\n");
     CLog::Write("+===================+\n");

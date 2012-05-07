@@ -7,13 +7,13 @@
 // ------------------------------------------------------------------------------------------------
 // Recursive function to collect all the combinations of factors
 // ------------------------------------------------------------------------------------------------
-void CFactorizer::CollectFactorCombinations(const CTable<nuint>& factors, nuint curr, nuint prod,
-                                            CTable<nuint>& divisors) {
-    nuint numfactors = factors.Count();
-    nuint f = factors[curr];
+void CFactorizer::CollectFactorCombinations(const CTable<uintn>& factors, uintn curr, uintn prod,
+                                            CTable<uintn>& divisors) {
+    uintn numfactors = factors.Count();
+    uintn f = factors[curr];
 
     // -- look for the upper bound of the same factor
-    nuint end = curr;
+    uintn end = curr;
     while(end < numfactors && factors[end] == f)
         ++end;
 
@@ -21,7 +21,7 @@ void CFactorizer::CollectFactorCombinations(const CTable<nuint>& factors, nuint 
     nflag record = end == numfactors;
 
     // -- loop over the number of times this factor is repeated and deal with all of them
-    for(nuint i = curr; i <= end; ++i) {
+    for(uintn i = curr; i <= end; ++i) {
         if(record)
             divisors.Grow(prod);
         else
@@ -34,7 +34,7 @@ void CFactorizer::CollectFactorCombinations(const CTable<nuint>& factors, nuint 
 // ================================================================================================
 // Collect all the prime factors of a number
 // ================================================================================================
-void CFactorizer::CollectFactors(nuint num, CPrimeCalculator& primecalc, CTable<nuint>& factors,
+void CFactorizer::CollectFactors(uintn num, CPrimeCalculator& primecalc, CTable<uintn>& factors,
                                  nflag cleartable) {
     // -- make sure the prime calculator has enough primes
     primecalc.FindPrimesUpTo(num >> 1);
@@ -44,10 +44,10 @@ void CFactorizer::CollectFactors(nuint num, CPrimeCalculator& primecalc, CTable<
         factors.Clear();
 
     // -- get the prime factorization of the number
-    nuint leftover = num;
-    nuint numprimes = primecalc.NumPrimes();
-    for(nuint i = 0; i < numprimes && leftover > 1; ++i) {
-        nuint currprime = primecalc.Prime(i);
+    uintn leftover = num;
+    uintn numprimes = primecalc.NumPrimes();
+    for(uintn i = 0; i < numprimes && leftover > 1; ++i) {
+        uintn currprime = primecalc.Prime(i);
         while((leftover % currprime) == 0) {
             leftover /= currprime;
             factors.Grow(currprime);
@@ -66,7 +66,7 @@ void CFactorizer::CollectFactors(nuint num, CPrimeCalculator& primecalc, CTable<
 // ================================================================================================
 // Collect all divisors given the table of prime factors
 // ================================================================================================
-void CFactorizer::CollectDivisors(const CTable<nuint>& factors, CTable<nuint>& divisors) {
+void CFactorizer::CollectDivisors(const CTable<uintn>& factors, CTable<uintn>& divisors) {
     // -- clear the divisors table in case it has anything left in it
     divisors.Clear();
 

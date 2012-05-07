@@ -5,17 +5,17 @@
 #include "io/clog.h"
 
 // -- constants
-static const nuint kNumPermutation = 1000000;
+static const uintn kNumPermutation = 1000000;
 static const uint64 kAnswer = 2783915460LL;
 
 // ------------------------------------------------------------------------------------------------
 // Get the nth permutation of n digits
 // ------------------------------------------------------------------------------------------------
-static uint64 Permutation(nuint n) {
+static uint64 Permutation(uintn n) {
     // -- make a sorted table of the available digits while calculating 10!
-    CTable<nuint> digits;
-    nuint limit = 1;
-    for(nuint i = 0; i < 10; ++i) {
+    CTable<uintn> digits;
+    uintn limit = 1;
+    for(uintn i = 0; i < 10; ++i) {
         digits.Grow(i);
         limit *= i + 1;
     }
@@ -30,7 +30,7 @@ static uint64 Permutation(nuint n) {
     uint64 result = 0;
 
     // -- for each digit that we need to generate
-    for(nuint i = 10; i > 0; --i) {
+    for(uintn i = 10; i > 0; --i) {
         // -- reduce our limit to count the number of possible permutations of the digits past
         // -- the current one
         limit /= i;
@@ -38,7 +38,7 @@ static uint64 Permutation(nuint n) {
         // -- pick which remaining digit to add in next, this is done by seeing how many full
         // -- sets of permutations of the remaining digits we'd need to go through before reaching
         // -- the desired index
-        nuint which = n / limit;
+        uintn which = n / limit;
         result += mult * digits[which];
 
         // -- remove the digit to make sure we don't use it again

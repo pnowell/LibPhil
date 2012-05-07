@@ -5,8 +5,8 @@
 #include "io/clog.h"
 
 // -- constants
-static const nuint kNumDigits = 1000;
-static const nuint kAnswer = 4782;
+static const uintn kNumDigits = 1000;
+static const uintn kAnswer = 4782;
 
 // ================================================================================================
 // Problem 25
@@ -14,8 +14,8 @@ static const nuint kAnswer = 4782;
 int32 Problem25() {
     CBigInt f0(1);
     CBigInt f1(1);
-    nuint i0 = 1;
-    nuint i1 = 2;
+    uintn i0 = 1;
+    uintn i1 = 2;
 
     while(f0.NumDigits() < kNumDigits && f1.NumDigits() < kNumDigits) {
         f0 += f1;
@@ -24,7 +24,7 @@ int32 Problem25() {
         i1 += 2;
     }
 
-    nuint result = f0.NumDigits() >= kNumDigits ? i0 : i1;
+    uintn result = f0.NumDigits() >= kNumDigits ? i0 : i1;
     CLog::Write("The first fibonacci number to have at least " NUintFmt_ " digits is f"
                 NUintFmt_ "\n", kNumDigits, result);
 

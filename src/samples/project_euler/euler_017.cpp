@@ -4,7 +4,7 @@
 #include "io/clog.h"
 
 // -- the number of letters it takes to write each number in the ones digit
-static const nuint kOnes[] = {
+static const uintn kOnes[] = {
     0,
     3, // one
     3, // two
@@ -28,7 +28,7 @@ static const nuint kOnes[] = {
 };
 
 // -- the number of letters it takes to write each number in the tens digit
-static const nuint kTens[] = {
+static const uintn kTens[] = {
     0,
     0,
     6, // twenty
@@ -41,34 +41,34 @@ static const nuint kTens[] = {
     6, // ninety
 };
 
-static const nuint kHundred = 7;
-static const nuint kAnd = 3;
-static const nuint kOneThousand = 11;
+static const uintn kHundred = 7;
+static const uintn kAnd = 3;
+static const uintn kOneThousand = 11;
 
-static const nuint kAnswer = 21124;
+static const uintn kAnswer = 21124;
 
 // ================================================================================================
 // Problem 17
 // ================================================================================================
 int32 Problem17() {
     // -- get the sum of the numbers from 1 to 9
-    nuint to9 = 0;
-    for(nuint i = 1; i <= 9; ++i)
+    uintn to9 = 0;
+    for(uintn i = 1; i <= 9; ++i)
         to9 += kOnes[i];
 
     // -- get the sum of the numbers 10 to 19
-    nuint to19 = 0;
-    for(nuint i = 10; i <= 19; ++i)
+    uintn to19 = 0;
+    for(uintn i = 10; i <= 19; ++i)
         to19 += kOnes[i];
 
     // -- get the sum of the numbers from 20 to 99
-    nuint to99 = 0;
-    for(nuint i = 2; i <= 9; ++i)
+    uintn to99 = 0;
+    for(uintn i = 2; i <= 9; ++i)
         to99 += kTens[i] * 10 + to9;
     
     // -- now get the sum of all the letters from 100 to 999
-    nuint to999 = 0;
-    for(nuint i = 1; i <= 9; ++i)
+    uintn to999 = 0;
+    for(uintn i = 1; i <= 9; ++i)
         to999 += kHundred * 100 + kOnes[i] * 100 + kAnd * 99 + to9 + to19 + to99;
 
     CLog::Write("Number of letters from 1 to 9 is " NUintFmt_ "\n", to9);
@@ -76,7 +76,7 @@ int32 Problem17() {
     CLog::Write("Number of letters from 20 to 99 is " NUintFmt_ "\n", to99);
     CLog::Write("Number of letters from 100 to 999 is " NUintFmt_ "\n", to999);
 
-    nuint numletters = to9 + to19 + to99 + to999 + kOneThousand;
+    uintn numletters = to9 + to19 + to99 + to999 + kOneThousand;
     CLog::Write("The sum of the number of letters is " NUintFmt_ "\n", numletters);
 
     Assert_(numletters == kAnswer, "The answer should have been " NUintFmt_, kAnswer);

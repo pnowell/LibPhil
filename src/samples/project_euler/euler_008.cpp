@@ -26,21 +26,21 @@ static const char number[] =
 "84580156166097919133875499200524063689912560717606"
 "05886116467109405077541002256983155200055935729725"
 "71636269561882670428252483600823257530420752963450";
-static const nuint kNumberLen = ArraySize_(number);
-static const nuint kNumDigits = 5;
-static const nuint kAnswer = 40824;
+static const uintn kNumberLen = ArraySize_(number);
+static const uintn kNumDigits = 5;
+static const uintn kAnswer = 40824;
 
 // ================================================================================================
 // Find the largest product of 5 consecutive digits of the given number
 // ================================================================================================
 int32 Problem8() {
-    nuint largest = 0;
-    nuint largestidx = 0;
-    nuint last = kNumberLen - kNumDigits;
-    for(nuint i = 0; i < last; ++i) {
-        nuint product = 1;
-        for(nuint j = 0; j < kNumDigits; ++j)
-            product *= nuint(number[i+j] - '0');
+    uintn largest = 0;
+    uintn largestidx = 0;
+    uintn last = kNumberLen - kNumDigits;
+    for(uintn i = 0; i < last; ++i) {
+        uintn product = 1;
+        for(uintn j = 0; j < kNumDigits; ++j)
+            product *= uintn(number[i+j] - '0');
         if(product > largest) {
             largest = product;
             largestidx = i;

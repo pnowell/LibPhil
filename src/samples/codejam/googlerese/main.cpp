@@ -10,7 +10,7 @@ cpointer kDict = "yhesocvxduiglbkrztnwjpfmaq";
 // ------------------------------------------------------------------------------------------------
 // Check if this is a valid string character
 // ------------------------------------------------------------------------------------------------
-nflag IsStringChar(nint c) {
+nflag IsStringChar(intn c) {
     return c == ' ' || (c >= 'a' && c <= 'z');
 }
 
@@ -38,12 +38,12 @@ int main(int32 argc, int8* argv[]) {
     uint32 numtests;
     fscanf_s(fp, "%d", &numtests);
 
-    nint c = fgetc(fp);
+    intn c = fgetc(fp);
     while(IsStringChar(c) == false && c != EOF)
         c = fgetc(fp);
 
     // -- now read one character at a time
-    nuint testidx = 0;
+    uintn testidx = 0;
     while(testidx < numtests && c != EOF) {
         ++testidx;
         CLog::Write("Case #%d: ", testidx);

@@ -24,8 +24,8 @@ typedef int64 pint;
 #define NIntIs64_ 1
 
 // -- natural int types
-typedef int64 nint;
-typedef uint64 nuint;
+typedef int64 intn;
+typedef uint64 uintn;
 
 // -- system int types
 typedef int sint;
@@ -39,7 +39,7 @@ typedef float real32;
 typedef double real64;
 
 // -- natural float type
-typedef real32 nreal;
+typedef real32 realn;
 
 #define NRealIs32_ 1
 #define NRealIs64_ 0
@@ -57,4 +57,4 @@ const uint32 kNeverIndex32 = uint32(-1);
 const uint64 kNeverIndex64 = uint64(-1);
 const puint kNeverIndexP = puint(-1);
 const suint kNeverIndexS = suint(-1);
-const nuint kNeverIndex = nuint(-1);
+const uintn kNeverIndex = uintn(-1);

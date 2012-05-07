@@ -5,8 +5,8 @@
 #include "io/clog.h"
 
 // -- constants
-static const nuint kAllNine = 0x3fe;
-static const nuint kAnswer = 45228;
+static const uintn kAllNine = 0x3fe;
+static const uintn kAnswer = 45228;
 
 // -- all products that satisfy the conditions can be written as
 // -- a x bcde = fghi
@@ -19,9 +19,9 @@ static const nuint kAnswer = 45228;
 // ------------------------------------------------------------------------------------------------
 // Iterate over all the possible multipliers for the given multiplicand
 // ------------------------------------------------------------------------------------------------
-static void FindProducts(nuint a, nuint digitbits, CTable<nuint>& products) {
-    nuint min = 1234 / a;
-    nuint max = 9876 / a;
+static void FindProducts(uintn a, uintn digitbits, CTable<uintn>& products) {
+    uintn min = 1234 / a;
+    uintn max = 9876 / a;
 
     // -- if a is a single digit, then the second operand needs to be 4 digits
     if(a < 10 && min < 1234)
@@ -40,9 +40,9 @@ static void FindProducts(nuint a, nuint digitbits, CTable<nuint>& products) {
         return;
 
     // -- get the digits for the min, and then iterate up through the max
-    nuint digits[4];
-    nuint curr = min - 1;
-    for(nuint i = 0; i < 4; ++i) {
+    uintn digits[4];
+    uintn curr = min - 1;
+    for(uintn i = 0; i < 4; ++i) {
         digits[i] = curr % 10;
         curr /= 10;
     }
@@ -52,7 +52,7 @@ static void FindProducts(nuint a, nuint digitbits, CTable<nuint>& products) {
     while(curr <= max) {
         // -- look until we see a number with digits that don't overlap with the input
         nflag illegal = true;
-        nuint currbits = digitbits;
+        uintn currbits = digitbits;
         while(illegal) {
             // -- increment the ones digit
             ++digits[0];
@@ -77,7 +77,7 @@ static void FindProducts(nuint a, nuint digitbits, CTable<nuint>& products) {
             // -- then check the current digits to see if they are worth checking
             currbits = digitbits;
             illegal = false;
-            for(nuint i = 0; i < 4 && !illegal; ++i) {
+            for(uintn i = 0; i < 4 && !illegal; ++i) {
                 // -- if we're zero and a higher digit is not zero (we're not a leading zero)
                 // -- then this is an invalid number
                 if(digits[i] == 0) {
@@ -88,22 +88,22 @@ static void FindProducts(nuint a, nuint digitbits, CTable<nuint>& products) {
                 }
                 else {
                     // -- if this digit has already been done, keep looking
-                    if((currbits & (nuint(1) << digits[i])) != 0) {
+                    if((currbits & (uintn(1) << digits[i])) != 0) {
                         illegal = true;
                         break;
                     }
                     // -- record this digit in the current bits
-                    currbits = currbits | nuint(1) << digits[i];
+                    currbits = currbits | uintn(1) << digits[i];
                 }
             }
         }
 
-        nuint product = a * curr;
+        uintn product = a * curr;
 
         // -- then look at each digit
         illegal = false;
         while(product > 0) {
-            nuint digit = product % 10;
+            uintn digit = product % 10;
             product /= 10;
 
             // -- check to see if it's zero
@@ -111,11 +111,11 @@ static void FindProducts(nuint a, nuint digitbits, CTable<nuint>& products) {
                 illegal = true;
                 break;
             }
-            if((currbits & (nuint(1) << digit)) != 0) {
+            if((currbits & (uintn(1) << digit)) != 0) {
                 illegal = true;
                 break;
             }
-            currbits = currbits | (nuint(1) << digit);
+            currbits = currbits | (uintn(1) << digit);
         }
 
         // -- if it's not illegal and we've found each digit from 1 to 9
@@ -123,8 +123,8 @@ static void FindProducts(nuint a, nuint digitbits, CTable<nuint>& products) {
             product = a * curr;
 
             // -- look through the existing products, and make sure it's not already there
-            nuint count = products.Count();
-            nuint i = 0;
+            uintn count = products.Count();
+            uintn i = 0;
             for(; i < count; ++i) {
                 if(products[i] == product)
                     break;
@@ -143,27 +143,27 @@ static void FindProducts(nuint a, nuint digitbits, CTable<nuint>& products) {
 // Problem 32
 // ================================================================================================
 int32 Problem32() {
-    CTable<nuint> products;
+    CTable<uintn> products;
 
     // -- first handle single digit numbers
     // -- one can't work, because it would result in identical multiplier and product
-    for(nuint i = 2; i <= 9; ++i)
-        FindProducts(i, nuint(1) << i, products);
+    for(uintn i = 2; i <= 9; ++i)
+        FindProducts(i, uintn(1) << i, products);
 
     // -- then double digit numbers
-    for(nuint i = 1; i <= 9; ++i) {
-        for(nuint j = 1; j <= 9; ++j) {
+    for(uintn i = 1; i <= 9; ++i) {
+        for(uintn j = 1; j <= 9; ++j) {
             if(i == j)
                 continue;
 
-            FindProducts(i*10 + j, nuint(1) << i | nuint(1) << j, products);
+            FindProducts(i*10 + j, uintn(1) << i | uintn(1) << j, products);
         }
     }
 
     // -- add all the products we collected in our table
-    nuint result = 0;
-    nuint count = products.Count();
-    for(nuint i = 0; i < count; ++i)
+    uintn result = 0;
+    uintn count = products.Count();
+    for(uintn i = 0; i < count; ++i)
         result += products[i];
 
     CLog::Write("The sum of the products is " NUintFmt_ "\n", result);

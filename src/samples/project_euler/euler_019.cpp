@@ -4,8 +4,8 @@
 #include "io/clog.h"
 
 // -- constants
-static const nuint kNumMonths = 12;
-static const nuint kNormalMonths[kNumMonths] = {
+static const uintn kNumMonths = 12;
+static const uintn kNormalMonths[kNumMonths] = {
     31, // -- Jan
     28, // -- Feb
     31, // -- Mar
@@ -20,7 +20,7 @@ static const nuint kNormalMonths[kNumMonths] = {
     31, // -- Dec
 };
 
-static const nuint kLeapMonths[kNumMonths] = {
+static const uintn kLeapMonths[kNumMonths] = {
     31, // -- Jan
     29, // -- Feb
     31, // -- Mar
@@ -35,21 +35,21 @@ static const nuint kLeapMonths[kNumMonths] = {
     31, // -- Dec
 };
 
-static const nuint kNumDays = 7;
-static const nuint kAnswer = 171;
+static const uintn kNumDays = 7;
+static const uintn kAnswer = 171;
 
 // ================================================================================================
 // Problem 19
 // ================================================================================================
 int32 Problem19() {
-    nuint year = 1901;
-    nuint day = 2; // jan 1st 1901 was a Tuesday
+    uintn year = 1901;
+    uintn day = 2; // jan 1st 1901 was a Tuesday
    
-    nuint numsundays = 0;
+    uintn numsundays = 0;
     for(; year <= 2000; ++year) {
         nflag leap = (((year % 4) == 0) && ((year % 100) != 0)) || ((year % 400) == 0);
-        const nuint* months = leap ? kLeapMonths : kNormalMonths;
-        for(nuint m = 0; m < kNumMonths; ++m) {
+        const uintn* months = leap ? kLeapMonths : kNormalMonths;
+        for(uintn m = 0; m < kNumMonths; ++m) {
             if(day == 0)
                 ++numsundays;
 

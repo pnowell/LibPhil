@@ -25,40 +25,40 @@ public:
     void Stop();
 
     // -- accessors to timing information
-    nreal GetSeconds() const;
-    nuint GetMicro() const;
+    realn GetSeconds() const;
+    uintn GetMicro() const;
 
     // -- direct accessors
-    nuint GetStart() const;
-    nuint GetStop() const;
-    nuint GetCycles() const;
-    nuint GetFrequency() const;
+    uintn GetStart() const;
+    uintn GetStop() const;
+    uintn GetCycles() const;
+    uintn GetFrequency() const;
 };
 
 // ================================================================================================
 // Accessors
 // ================================================================================================
-inline nreal CTimer::GetSeconds() const {
-    return (stop - start) / nreal(freq);
+inline realn CTimer::GetSeconds() const {
+    return (stop - start) / realn(freq);
 }
 
-inline nuint CTimer::GetMicro() const {
+inline uintn CTimer::GetMicro() const {
     real64 conv = 1000000.0 / real64(freq);
-    return nuint((stop - start) * conv);
+    return uintn((stop - start) * conv);
 }
 
-inline nuint CTimer::GetStart() const {
+inline uintn CTimer::GetStart() const {
     return start;
 }
 
-inline nuint CTimer::GetStop() const {
+inline uintn CTimer::GetStop() const {
     return stop;
 }
 
-inline nuint CTimer::GetCycles() const {
+inline uintn CTimer::GetCycles() const {
     return stop - start;
 }
 
-inline nuint CTimer::GetFrequency() const {
+inline uintn CTimer::GetFrequency() const {
     return freq;
 }

@@ -4,7 +4,7 @@
 #include "io/clog.h"
 
 // -- consts
-static const nuint kGridSize = 21;
+static const uintn kGridSize = 21;
 static const uint64 kAnswer = 137846528820LL;
 
 // ================================================================================================
@@ -14,13 +14,13 @@ int32 Problem15() {
     uint64 grid[kGridSize][kGridSize];
 
     // -- initialize the top row
-    for(nuint i = 0; i < kGridSize; ++i)
+    for(uintn i = 0; i < kGridSize; ++i)
         grid[i][0] = 1;
 
     // -- process all other rows
-    for(nuint j = 1; j < kGridSize; ++j) {
+    for(uintn j = 1; j < kGridSize; ++j) {
         grid[0][j] = 1;
-        for(nuint i = 1; i < kGridSize; ++i)
+        for(uintn i = 1; i < kGridSize; ++i)
             grid[i][j] = grid[i-1][j] + grid[i][j-1];
     }
 

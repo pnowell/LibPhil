@@ -9,10 +9,10 @@
 // Constructors
 // ================================================================================================
 CString::CString(cpointer s) {
-    nuint len = CString::Length(s);
+    uintn len = CString::Length(s);
     str.GrowMultiple(len + 1);
     pointer p = str.GetElem(0);
-    for(nuint i = 0; i < len; ++i)
+    for(uintn i = 0; i < len; ++i)
         p[i] = s[i];
     p[len] = '\0';
 }
@@ -20,7 +20,7 @@ CString::CString(cpointer s) {
 CString::CString(cpointer s, ...) {
     va_list args;
     va_start(args, s);
-    nuint len = _vscprintf(s, args);
+    uintn len = _vscprintf(s, args);
     str.Clear();
     str.GrowMultiple('\0', len + 1); 
     vsnprintf_s(str.GetElem(0), len + 1, len, s, args);
@@ -28,11 +28,11 @@ CString::CString(cpointer s, ...) {
 }
 
 CString::CString(const CString& other) {
-    nuint len = other.Length();
+    uintn len = other.Length();
     str.GrowMultiple(len + 1);
     pointer p = str.GetElem(0);
     cpointer s = other.GetString();
-    for(nuint i = 0; i < len; ++i)
+    for(uintn i = 0; i < len; ++i)
         p[i] = s[i];
     p[len] = '\0';
 }
@@ -52,8 +52,8 @@ int8 CString::ToUpper(int8 c) {
     return c;
 }
 
-nuint CString::Length(cpointer s) {
-    nuint result = 0;
+uintn CString::Length(cpointer s) {
+    uintn result = 0;
     while(s[result] != '\0')
         ++result;
     return result;
@@ -62,8 +62,8 @@ nuint CString::Length(cpointer s) {
 // ================================================================================================
 // Comparison of two strings
 // ================================================================================================
-nint CString::Compare(cpointer left, cpointer right, nflag ignorecase) {
-    nuint i = 0;
+intn CString::Compare(cpointer left, cpointer right, nflag ignorecase) {
+    uintn i = 0;
     while(left[i] != 0 && right[i] != 0) {
         if(ignorecase) {
             int8 l = ToLower(left[i]);

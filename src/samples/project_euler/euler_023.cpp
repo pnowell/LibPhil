@@ -9,8 +9,8 @@
 #include "euler.h"
 
 // -- constants
-static const nuint kLimit = 28123;
-static const nuint kAnswer = 4179871;
+static const uintn kLimit = 28123;
+static const uintn kAnswer = 4179871;
 
 // ================================================================================================
 // Problem 23
@@ -21,18 +21,18 @@ int32 Problem23() {
     issum.GrowMultiple(false, kLimit);
 
     // -- first build a table of abundant numbers
-    CTable<nuint> abundant;
+    CTable<uintn> abundant;
     CPrimeCalculator& primecalc = PrimeCalculator();
-    CTable<nuint> factors;
-    CTable<nuint> divisors;
-    for(nuint i = 2; i < kLimit; ++i) {
+    CTable<uintn> factors;
+    CTable<uintn> divisors;
+    for(uintn i = 2; i < kLimit; ++i) {
         CFactorizer::CollectFactors(i, primecalc, factors);
         CFactorizer::CollectDivisors(factors, divisors);
 
         // -- add all the divisors, except for the last one (which is the number itself)
-        nuint numdivisors = divisors.Count();
-        nuint divisorsum = 0;
-        for(nuint j = 0; j < numdivisors - 1 && divisorsum <= i; ++j)
+        uintn numdivisors = divisors.Count();
+        uintn divisorsum = 0;
+        for(uintn j = 0; j < numdivisors - 1 && divisorsum <= i; ++j)
             divisorsum += divisors[j];
 
         // -- if we have an abundant number
@@ -42,9 +42,9 @@ int32 Problem23() {
 
             // -- combine it with every abundant number (including itself) to cross off
             // -- candidates in the issum table
-            nuint numabundant = abundant.Count();
-            for(nuint j = 0; j < numabundant; ++j) {
-                nuint sum = i + abundant[j];
+            uintn numabundant = abundant.Count();
+            for(uintn j = 0; j < numabundant; ++j) {
+                uintn sum = i + abundant[j];
                 if(sum < kLimit)
                     issum[sum] = true;
             }
@@ -52,8 +52,8 @@ int32 Problem23() {
     }
 
     // -- finally go through the list of flags and sum all the ones that are still false
-    nuint result = 0;
-    for(nuint i = 0; i < kLimit; ++i) {
+    uintn result = 0;
+    for(uintn i = 0; i < kLimit; ++i) {
         if(!issum[i])
             result += i;
     }

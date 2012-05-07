@@ -9,8 +9,8 @@
 #include "euler.h"
 
 // -- constants
-static const nuint kMax = 1000;
-static const nint kAnswer = -59231;
+static const uintn kMax = 1000;
+static const intn kAnswer = -59231;
 
 // ================================================================================================
 // Problem 27
@@ -25,11 +25,11 @@ int32 Problem27() {
     CLog::Write("Making table of is-prime flags ... ");
     // -- make a table of flags to say if each number is prime
     CTable<uint64> isprime;
-    nuint numprimes = calc.NumPrimes();
-    for(nuint i = 0; i < numprimes; ++i) {
-        nuint prime = calc.Prime(i);
-        nuint idx = prime / 64;
-        nuint bit = prime - idx * 64;
+    uintn numprimes = calc.NumPrimes();
+    for(uintn i = 0; i < numprimes; ++i) {
+        uintn prime = calc.Prime(i);
+        uintn idx = prime / 64;
+        uintn bit = prime - idx * 64;
 
         // -- make sure we have enough in the isprime table
         if(idx >= isprime.Count())
@@ -40,43 +40,43 @@ int32 Problem27() {
     }
     CLog::Write("Done\n");
 
-    nint besta = 0;
-    nint bestb = 0;
-    nuint bestlen = 0;
+    intn besta = 0;
+    intn bestb = 0;
+    uintn bestlen = 0;
 
     // -- b has to be a prime since n has to be able to start at zero
-    nuint pidx = 0;
+    uintn pidx = 0;
     for(; calc.Prime(pidx) < 1000; ++pidx) {
         // -- take b as the current prime
-        nint b = nint(calc.Prime(pidx));
+        intn b = intn(calc.Prime(pidx));
 
         // -- we need to calculate a so that 1 + a + b is prime
         // -- so we look through for a in the range b - 999 < a < b + 1000
-        nint mina = -1000;
-        nint maxa = 1000;
+        intn mina = -1000;
+        intn maxa = 1000;
 
         // -- we just want to make sure n=1 still yields a positive number
         if(1 + mina + b < 1)
             mina = -b;
 
         // -- look for the first a to fall in the range (so that 1 + a + b is a prime)
-        nuint apidx = 0;
-        while(nint(calc.Prime(apidx)) - b - 1 < mina)
+        uintn apidx = 0;
+        while(intn(calc.Prime(apidx)) - b - 1 < mina)
             ++apidx;
 
         // -- now for every candidate for a that is within the range, check to see
         // -- how many primes we get
-        for(; nint(calc.Prime(apidx)) < maxa; ++apidx) {
-            nint a = calc.Prime(apidx) - b - 1;
+        for(; intn(calc.Prime(apidx)) < maxa; ++apidx) {
+            intn a = calc.Prime(apidx) - b - 1;
 
-            nuint len = 0;
-            nuint idx = 0;
-            nuint bit = 0;
+            uintn len = 0;
+            uintn idx = 0;
+            uintn bit = 0;
             do {
                 ++len;
 
                 // -- recalculate bit and idx
-                nint candidate = len*len + a*len + b;
+                intn candidate = len*len + a*len + b;
                 if(candidate < 0)
                     break;
                 idx = candidate / 64;

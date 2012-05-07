@@ -9,17 +9,17 @@
 #include "euler.h"
 
 // -- constants
-static const nuint kAnswer = 100;
+static const uintn kAnswer = 100;
 
 // ------------------------------------------------------------------------------------------------
 // Structure to hold a fractional value
 // ------------------------------------------------------------------------------------------------
 struct SFrac {
-    nuint num;
-    nuint den;
+    uintn num;
+    uintn den;
 
     // -- constructor
-    SFrac(nuint n, nuint d) : num(n), den(d) {}
+    SFrac(uintn n, uintn d) : num(n), den(d) {}
 };
 
 // ================================================================================================
@@ -28,9 +28,9 @@ struct SFrac {
 int32 Problem33() {
     CTable<SFrac> fractions;
 
-    nuint id[2];
-    nuint jd[2];
-    for(nuint i = 11; i <= 99; ++i) {
+    uintn id[2];
+    uintn jd[2];
+    for(uintn i = 11; i <= 99; ++i) {
         id[0] = i % 10;
         id[1] = i / 10;
 
@@ -38,7 +38,7 @@ int32 Problem33() {
         if(id[0] == 0)
             continue;
 
-        for(nuint j = i+1; j <= 99; ++j) {
+        for(uintn j = i+1; j <= 99; ++j) {
             jd[0] = j % 10;
             jd[1] = j / 10;
 
@@ -48,8 +48,8 @@ int32 Problem33() {
 
             // -- check for common digits to cancel
             // -- i/j == id[m] / jd[n] 
-            for(nuint m = 0; m < 2; ++m) {
-                for(nuint n = 0; n < 2; ++n) {
+            for(uintn m = 0; m < 2; ++m) {
+                for(uintn n = 0; n < 2; ++n) {
                     if(id[m] == jd[n]) {
                         if(j * id[1-m] == i * jd[1-n]) {
                             fractions.Grow(SFrac(i, j));
@@ -63,12 +63,12 @@ int32 Problem33() {
 
     // -- now multiply all the fractions together, building a list of all the prime factors
     // -- as we go along
-    CTable<nuint> numfactors;
-    CTable<nuint> denfactors;
+    CTable<uintn> numfactors;
+    CTable<uintn> denfactors;
     CPrimeCalculator& primecalc = PrimeCalculator();
-    nuint count = fractions.Count();
+    uintn count = fractions.Count();
     SFrac result(1, 1);
-    for(nuint i = 0; i < count; ++i) {
+    for(uintn i = 0; i < count; ++i) {
         SFrac& curr = fractions[i];
         result.num *= curr.num;
         result.den *= curr.den;
@@ -80,17 +80,17 @@ int32 Problem33() {
                 result.num, result.den);
 
     // -- sort the list of factors for the numerator and denominator
-    numfactors.Sort<CompareBasicTypes<nuint> >();
-    denfactors.Sort<CompareBasicTypes<nuint> >();
+    numfactors.Sort<CompareBasicTypes<uintn> >();
+    denfactors.Sort<CompareBasicTypes<uintn> >();
 
     // -- iterate through the factors together removing common factors
-    nuint i = 0;
-    nuint j = 0;
-    nuint numcount = numfactors.Count();
-    nuint dencount = denfactors.Count();
+    uintn i = 0;
+    uintn j = 0;
+    uintn numcount = numfactors.Count();
+    uintn dencount = denfactors.Count();
     while(i < numcount && j < dencount) {
-        nuint nf = numfactors[i];
-        nuint df = denfactors[j];
+        uintn nf = numfactors[i];
+        uintn df = denfactors[j];
         if(nf == df) {
             result.num /= nf;
             result.den /= df;

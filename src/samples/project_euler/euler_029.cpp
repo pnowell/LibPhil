@@ -10,9 +10,9 @@
 #include "euler.h"
 
 // -- constants
-static const nuint kMaxBase = 100;
-static const nuint kMaxPower = 100;
-static const nuint kAnswer = 9183;
+static const uintn kMaxBase = 100;
+static const uintn kMaxPower = 100;
+static const uintn kAnswer = 9183;
 
 // ================================================================================================
 // Problem 29
@@ -22,15 +22,15 @@ int32 Problem29() {
     CPrimeCalculator& calc = PrimeCalculator();
     calc.FindPrimesUpTo(kMaxBase);
 
-    CTable<nuint> factor;
-    CTable<nuint> factpow;
-    CTable<nuint> commondiv;
-    CTable<nuint> divisor;
+    CTable<uintn> factor;
+    CTable<uintn> factpow;
+    CTable<uintn> commondiv;
+    CTable<uintn> divisor;
 
-    nuint unique = 0;
+    uintn unique = 0;
 
     // -- for each base
-    for(nuint base = 2; base <= kMaxBase; ++base) {
+    for(uintn base = 2; base <= kMaxBase; ++base) {
         // -- get the prime factorization
         CFactorizer::CollectFactors(base, calc, factor);
 
@@ -42,11 +42,11 @@ int32 Problem29() {
         }
 
         // -- get the powers of each prime factor
-        nuint currfact = factor[0];
+        uintn currfact = factor[0];
         factpow.Clear();
         factpow.Grow(1);
-        nuint numfact = factor.Count();
-        for(nuint i = 1; i < numfact; ++i) {
+        uintn numfact = factor.Count();
+        for(uintn i = 1; i < numfact; ++i) {
             if(factor[i] == currfact)
                 factpow[factpow.Count() - 1] += 1;
             else {
@@ -54,24 +54,24 @@ int32 Problem29() {
                 currfact = factor[i];
             }
         }
-        nuint factcount = factpow.Count();
+        uintn factcount = factpow.Count();
 
         // -- loop through all the powers and see if we can reduce the power down to something
         // -- that would have already occurred
-        for(nuint power = 2; power <= kMaxPower; ++power) {
+        for(uintn power = 2; power <= kMaxPower; ++power) {
             // -- for this power we want to know if we can distribute the power to the powers
             // -- of all the prime factors, and rewrite it with a larger overall power (which
             // -- will have reduced the base to a smaller value) and yet still have the power be
             // -- less than or equal 100
             CFactorizer::CollectFactors(factpow[0] * power, calc, factor);
             CFactorizer::CollectDivisors(factor, commondiv);
-            nuint i;
+            uintn i;
             for(i = 1; i < factcount; ++i) {
                 CFactorizer::CollectFactors(factpow[i] * power, calc, factor);
                 CFactorizer::CollectDivisors(factor, divisor);
-                nuint numdivs = divisor.Count();
-                nuint currdiv = 0;
-                for(nuint j = 0; j < commondiv.Count();) {
+                uintn numdivs = divisor.Count();
+                uintn currdiv = 0;
+                for(uintn j = 0; j < commondiv.Count();) {
                     while(currdiv < numdivs && divisor[currdiv] < commondiv[j])
                         currdiv++;
                     if(currdiv == numdivs || divisor[currdiv] != commondiv[j])
@@ -83,7 +83,7 @@ int32 Problem29() {
 
             // -- now that we have all the common divisors in commondiv, just walk through them
             // -- to find a divisor bigger than power but less than or equal to 100
-            nuint numcommon = commondiv.Count();
+            uintn numcommon = commondiv.Count();
             for(i = 0; i < numcommon; ++i) {
                 if(commondiv[i] > power && commondiv[i] <= kMaxPower)
                     break;

@@ -9,21 +9,21 @@
 #include "euler.h"
 
 // -- constants
-static const nuint kLimit = 10000;
-static const nuint kAnswer = 31626;
+static const uintn kLimit = 10000;
+static const uintn kAnswer = 31626;
 
 // ------------------------------------------------------------------------------------------------
 // Calculate the some of all the proper divisors
 // ------------------------------------------------------------------------------------------------
-static nuint SumOfDivisors(nuint num, CPrimeCalculator& primecalc) {
-    CTable<nuint> factors;
-    CTable<nuint> divisors;
+static uintn SumOfDivisors(uintn num, CPrimeCalculator& primecalc) {
+    CTable<uintn> factors;
+    CTable<uintn> divisors;
     CFactorizer::CollectFactors(num, primecalc, factors);
     CFactorizer::CollectDivisors(factors, divisors);
 
-    nuint sum = 0;
-    nuint numdivisors = divisors.Count();
-    for(nuint i = 0; i < numdivisors-1; ++i)
+    uintn sum = 0;
+    uintn numdivisors = divisors.Count();
+    for(uintn i = 0; i < numdivisors-1; ++i)
         sum += divisors[i];
 
     return sum;
@@ -44,12 +44,12 @@ int32 Problem21() {
     // -- check every number up through the limit to see if it's part of an amicable pair
     // -- then add it (and possibly it's paired number) and mark the paired number so that
     // -- we skip it
-    nuint sum = 0;
-    for(nuint i = 2; i < kLimit; ++i) {
+    uintn sum = 0;
+    for(uintn i = 2; i < kLimit; ++i) {
         if(shouldskip[i])
             continue;
 
-        nuint factorsum = SumOfDivisors(i, primecalc);
+        uintn factorsum = SumOfDivisors(i, primecalc);
         if(factorsum != i && factorsum != 1 && SumOfDivisors(factorsum, primecalc) == i) {
             sum += i;
             if(factorsum < kLimit) {

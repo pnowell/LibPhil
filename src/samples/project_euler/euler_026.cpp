@@ -5,24 +5,24 @@
 #include "io/clog.h"
 
 // -- constants
-static const nuint kMax = 1000;
-static const nuint kAnswer = 983;
+static const uintn kMax = 1000;
+static const uintn kAnswer = 983;
 
 // ------------------------------------------------------------------------------------------------
 // Get the length of the recurring cycle (zero if it doesn't repeat at all)
 // ------------------------------------------------------------------------------------------------
-static nuint CycleLength(nuint denom) {
-    nuint curr = 1;
+static uintn CycleLength(uintn denom) {
+    uintn curr = 1;
 
-    CTable<nuint> remain;
+    CTable<uintn> remain;
     while(curr != 0) {
         curr *= 10;
-        nuint div = curr / denom;
+        uintn div = curr / denom;
         curr -= denom * div;
         remain.Grow(curr);
 
         // -- look through the previous remainders to see if we've started repeating
-        for(nuint i = remain.Count() - 1; i > 0;) {
+        for(uintn i = remain.Count() - 1; i > 0;) {
             --i;
             if(remain[i] == curr)
                 return remain.Count() - 1 - i;
@@ -37,11 +37,11 @@ static nuint CycleLength(nuint denom) {
 // Problem 26
 // ================================================================================================
 int32 Problem26() {
-    nuint longest = 0;
-    nuint longestlen = 0;
+    uintn longest = 0;
+    uintn longestlen = 0;
 
-    for(nuint i = 2; i < kMax; ++i) {
-        nuint len = CycleLength(i);
+    for(uintn i = 2; i < kMax; ++i) {
+        uintn len = CycleLength(i);
         if(len > longestlen) {
             longest = i;
             longestlen = len;

@@ -14,7 +14,7 @@
 // Default comparison function (only assumes less-than is implemented)
 // ================================================================================================
 template<typename T> struct CompareBasicTypes {
-    static nint Compare(const T& left, const T& right) {
+    static intn Compare(const T& left, const T& right) {
         return left < right ? -1 : right < left ? 1 : 0;
     }
 };
@@ -28,20 +28,20 @@ protected:
 
     // -- struct used to sort things
     struct SSortRange {
-        nuint low, high;
+        uintn low, high;
 
         // -- constructor
-        SSortRange(nuint l, nuint h) : low(l), high(h) {
+        SSortRange(uintn l, uintn h) : low(l), high(h) {
         }
     };
 
     CDataPtr<int8> mem;
-    nuint count;
-    nuint alloc;
-    nuint expand;
+    uintn count;
+    uintn alloc;
+    uintn expand;
 
-    cpointer GetPointer(nuint idx) const;
-    pointer GetPointer(nuint idx);
+    cpointer GetPointer(uintn idx) const;
+    pointer GetPointer(uintn idx);
 
 public:
 
@@ -50,31 +50,31 @@ public:
     };
 
     // -- constructor / destructor
-    CTable(nuint exp = eDefaultExpand);
+    CTable(uintn exp = eDefaultExpand);
     ~CTable();
 
     // -- accessors
-    nuint Count() const;
-    const T* GetElem(nuint idx) const;
-    T* GetElem(nuint idx);
-    const T& operator[](nuint idx) const;
-    T& operator[](nuint idx);
+    uintn Count() const;
+    const T* GetElem(uintn idx) const;
+    T* GetElem(uintn idx);
+    const T& operator[](uintn idx) const;
+    T& operator[](uintn idx);
 
     // -- add an entry to the table
     void Grow(const T& val);
     void Grow();
-    void GrowMultiple(const T& val, nuint n);
-    void GrowMultiple(nuint n);
+    void GrowMultiple(const T& val, uintn n);
+    void GrowMultiple(uintn n);
 
     // -- insert an item at the specified index
-    void Insert(nuint idx, const T& val);
-    void Insert(nuint idx);
-    void InsertMultiple(nuint idx, const T& val, nuint n);
-    void InsertMultiple(nuint idx, nuint n);
+    void Insert(uintn idx, const T& val);
+    void Insert(uintn idx);
+    void InsertMultiple(uintn idx, const T& val, uintn n);
+    void InsertMultiple(uintn idx, uintn n);
 
     // -- remove a specific entry from the table
-    void Remove(nuint idx);
-    void RemoveMultiple(nuint idx, nuint n);
+    void Remove(uintn idx);
+    void RemoveMultiple(uintn idx, uintn n);
 
     // -- swap memory with the given table
     void Swap(CTable<T>& other);
@@ -83,7 +83,7 @@ public:
     template<typename C> void Sort();
 
     // -- binary search for the given element, return where it should be inserted if not found
-    template<typename C> nflag Search(const T& key, nuint& index);
+    template<typename C> nflag Search(const T& key, uintn& index);
 
     // -- reset the table
     void Clear();
@@ -93,18 +93,18 @@ public:
 // ------------------------------------------------------------------------------------------------
 // Get a pointer to the memory for the given index
 // ------------------------------------------------------------------------------------------------
-template<typename T> inline cpointer CTable<T>::GetPointer(nuint idx) const {
+template<typename T> inline cpointer CTable<T>::GetPointer(uintn idx) const {
     return pointer(mem) + sizeof(T) * idx;
 }
 
-template<typename T> inline pointer CTable<T>::GetPointer(nuint idx) {
+template<typename T> inline pointer CTable<T>::GetPointer(uintn idx) {
     return pointer(mem) + sizeof(T) * idx;
 }
 
 // ================================================================================================
 // Constructor
 // ================================================================================================
-template<typename T> inline CTable<T>::CTable(nuint exp) : mem(NULL), count(0), alloc(0),
+template<typename T> inline CTable<T>::CTable(uintn exp) : mem(NULL), count(0), alloc(0),
                                                            expand(exp) {
 }
 
@@ -118,25 +118,25 @@ template<typename T> inline CTable<T>::~CTable() {
 // ================================================================================================
 // Accessors
 // ================================================================================================
-template<typename T> inline nuint CTable<T>::Count() const {
+template<typename T> inline uintn CTable<T>::Count() const {
     return count;
 }
 
-template<typename T> inline const T* CTable<T>::GetElem(nuint idx) const {
+template<typename T> inline const T* CTable<T>::GetElem(uintn idx) const {
     Assert_(idx < count, "Index " NUintFmt_ " is out of range " NUintFmt_, idx, count);
     return recast_<const T*>(GetPointer(idx));
 }
 
-template<typename T> inline T* CTable<T>::GetElem(nuint idx) {
+template<typename T> inline T* CTable<T>::GetElem(uintn idx) {
     Assert_(idx < count, "Index " NUintFmt_ " is out of range " NUintFmt_, idx, count);
     return recast_<T*>(GetPointer(idx));
 }
 
-template<typename T> inline const T& CTable<T>::operator[](nuint idx) const {
+template<typename T> inline const T& CTable<T>::operator[](uintn idx) const {
     return *GetElem(idx);
 }
 
-template<typename T> inline T& CTable<T>::operator[](nuint idx) {
+template<typename T> inline T& CTable<T>::operator[](uintn idx) {
     return *GetElem(idx);
 }
 
@@ -151,32 +151,32 @@ template<typename T> inline void CTable<T>::Grow() {
     InsertMultiple(kNeverIndex, 1);
 }
 
-template<typename T> inline void CTable<T>::GrowMultiple(const T& val, nuint n) {
+template<typename T> inline void CTable<T>::GrowMultiple(const T& val, uintn n) {
     InsertMultiple(kNeverIndex, val, n);
 }
 
-template<typename T> inline void CTable<T>::GrowMultiple(nuint n) {
+template<typename T> inline void CTable<T>::GrowMultiple(uintn n) {
     InsertMultiple(kNeverIndex, n);
 }
 
 // ================================================================================================
 // Add entries to the table at the specified index
 // ================================================================================================
-template<typename T> inline void CTable<T>::Insert(nuint idx, const T& val) {
+template<typename T> inline void CTable<T>::Insert(uintn idx, const T& val) {
     InsertMultiple(idx, val, 1);
 }
 
-template<typename T> inline void CTable<T>::Insert(nuint idx) {
+template<typename T> inline void CTable<T>::Insert(uintn idx) {
     InsertMultiple(idx, 1);
 }
 
-template<typename T> inline void CTable<T>::InsertMultiple(nuint idx, const T& val, nuint n) {
+template<typename T> inline void CTable<T>::InsertMultiple(uintn idx, const T& val, uintn n) {
     // -- first allocate some new memory, if necessary
-    nuint newcount = count + n;
+    uintn newcount = count + n;
     if(newcount > alloc) {
         // -- get the multiple of expand to allocate that will give us just enough memory
         // -- divide by expand, rounding up, and then multiply by expand again
-        nuint newmem = ((newcount - alloc - 1) / expand + 1) * expand;
+        uintn newmem = ((newcount - alloc - 1) / expand + 1) * expand;
         alloc += newmem;
         mem = recast_<pointer>(CMemory::ReAlloc(pointer(mem), alloc * sizeof(T)));
     }
@@ -186,25 +186,25 @@ template<typename T> inline void CTable<T>::InsertMultiple(nuint idx, const T& v
         idx = count;
     else {
         // -- move the necessary entries
-        nuint tomove = (count - idx) * sizeof(T);
+        uintn tomove = (count - idx) * sizeof(T);
         CMemory::Move(GetPointer(idx+n), GetPointer(idx), tomove);
     }
 
     // -- then construct the memory as a copy of val
-    nuint end = idx + n;
-    for(nuint i = idx; i < end; ++i)
+    uintn end = idx + n;
+    for(uintn i = idx; i < end; ++i)
         new (pointer(mem) + sizeof(T) * i) T(val);
 
     count = newcount;
 }
 
-template<typename T> inline void CTable<T>::InsertMultiple(nuint idx, nuint n) {
+template<typename T> inline void CTable<T>::InsertMultiple(uintn idx, uintn n) {
     // -- first allocate some new memory, if necessary
-    nuint newcount = count + n;
+    uintn newcount = count + n;
     if(newcount > alloc) {
         // -- get the multiple of expand to allocate that will give us just enough memory
         // -- divide by expand, rounding up, and then multiply by expand again
-        nuint newmem = ((newcount - alloc - 1) / expand + 1) * expand;
+        uintn newmem = ((newcount - alloc - 1) / expand + 1) * expand;
         alloc += newmem;
         mem = recast_<pointer>(CMemory::ReAlloc(pointer(mem), alloc * sizeof(T)));
     }
@@ -214,13 +214,13 @@ template<typename T> inline void CTable<T>::InsertMultiple(nuint idx, nuint n) {
         idx = count;
     else {
         // -- move the necessary entries
-        nuint tomove = (count - idx) * sizeof(T);
+        uintn tomove = (count - idx) * sizeof(T);
         CMemory::Move(GetPointer(idx+n), GetPointer(idx), tomove);
     }
 
     // -- then construct the memory as a copy of val
-    nuint end = idx + n;
-    for(nuint i = idx; i < end; ++i)
+    uintn end = idx + n;
+    for(uintn i = idx; i < end; ++i)
         new (pointer(mem) + sizeof(T) * i) T();
 
     count = newcount;
@@ -229,11 +229,11 @@ template<typename T> inline void CTable<T>::InsertMultiple(nuint idx, nuint n) {
 // ================================================================================================
 // Remove an entry from the table
 // ================================================================================================
-template<typename T> void CTable<T>::Remove(nuint idx) {
+template<typename T> void CTable<T>::Remove(uintn idx) {
     RemoveMultiple(idx, 1);
 }
 
-template<typename T> void CTable<T>::RemoveMultiple(nuint idx, nuint n) {
+template<typename T> void CTable<T>::RemoveMultiple(uintn idx, uintn n) {
     if(n == 0)
         return;
 
@@ -241,12 +241,12 @@ template<typename T> void CTable<T>::RemoveMultiple(nuint idx, nuint n) {
             idx, idx + n, count);
 
     // -- destroy the elements to be removed
-    for(nuint i = idx; i < idx + n; ++i)
+    for(uintn i = idx; i < idx + n; ++i)
         CMemory::Destroy<T>(GetElem(i));
 
     // -- move the remaining elements down
     if(idx + n < count) {
-        nuint tomove = (count - idx - n) * sizeof(T);
+        uintn tomove = (count - idx - n) * sizeof(T);
         CMemory::Move(GetPointer(idx), GetPointer(idx+n), tomove);
     }
 
@@ -258,8 +258,8 @@ template<typename T> void CTable<T>::RemoveMultiple(nuint idx, nuint n) {
 // ================================================================================================
 template<typename T> void CTable<T>::Swap(CTable<T>& other) {
     pointer tempmem = pointer(mem);
-    nuint tempcount = count;
-    nuint tempalloc = alloc;
+    uintn tempcount = count;
+    uintn tempalloc = alloc;
 
     mem = other.mem;
     count = other.count;
@@ -281,13 +281,13 @@ template<typename T> template<typename C> inline void CTable<T>::Sort() {
     ranges.Grow(SSortRange(0, count-1));
 
     while(ranges.Count() > 0) {
-        nuint idx = ranges.Count() - 1;
+        uintn idx = ranges.Count() - 1;
         SSortRange r = ranges[idx];
         ranges.Remove(idx);
 
         T& pivot = *GetElem(r.high);
-        nuint store = C::Compare(*GetElem(r.low), pivot) > 0 ? r.low : r.low + 1;
-        for(nuint i = r.low; i < r.high; ++i) {
+        uintn store = C::Compare(*GetElem(r.low), pivot) > 0 ? r.low : r.low + 1;
+        for(uintn i = r.low; i < r.high; ++i) {
             T& left = *GetElem(i);
             if(C::Compare(left, pivot) < 0) {
                 T& swap = *GetElem(store);
@@ -317,12 +317,12 @@ template<typename T> template<typename C> inline void CTable<T>::Sort() {
 // ================================================================================================
 // Search for the given key (assumes the table is already sorted)
 // ================================================================================================
-template<typename T> template<typename C> nflag CTable<T>::Search(const T& key, nuint& index) {
+template<typename T> template<typename C> nflag CTable<T>::Search(const T& key, uintn& index) {
     // -- do a binary search to find where this item should be inserted
-    nuint low = 0;
-    nuint high = count;
-    nuint i;
-    nint comp;
+    uintn low = 0;
+    uintn high = count;
+    uintn i;
+    intn comp;
 
     // -- while our range is non-empty
     while(low < high) {
@@ -356,7 +356,7 @@ template<typename T> template<typename C> nflag CTable<T>::Search(const T& key, 
 // ================================================================================================
 template<typename T> inline void CTable<T>::Clear() {
     // -- iterate through the list of currently allocated items and destroy them
-    for(nuint i = 0; i < count; ++i)
+    for(uintn i = 0; i < count; ++i)
         CMemory::Destroy<T>(GetElem(i));
 
     // -- clear the count

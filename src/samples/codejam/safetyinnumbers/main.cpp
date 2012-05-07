@@ -20,13 +20,13 @@ struct SPerson {
 };
 
 struct SByPoints {
-    static nint Compare(SPerson& a, SPerson& b) {
+    static intn Compare(SPerson& a, SPerson& b) {
         return (a.points < b.points) ? -1 : (a.points > b.points) ? 1 : 0;
     }
 };
 
 struct SByIndex {
-    static nint Compare(SPerson& a, SPerson& b) {
+    static intn Compare(SPerson& a, SPerson& b) {
         return (a.index < b.index) ? -1 : (a.index > b.index) ? 1 : 0;
     }
 };
@@ -56,12 +56,12 @@ int main(int32 argc, int8* argv[]) {
     fscanf_s(fp, "%d", &numtests);
 
     CTable<SPerson> people;
-    for(nuint i = 0; i < numtests; ++i) {
+    for(uintn i = 0; i < numtests; ++i) {
         people.Clear();
         uint32 total = 0;
         uint32 numpeople;
         fscanf_s(fp, "%d", &numpeople);
-        for(nuint j = 0; j < numpeople; ++j) {
+        for(uintn j = 0; j < numpeople; ++j) {
             uint32 pnt;
             fscanf_s(fp, "%d", &pnt);
             people.Grow(SPerson(pnt, uint32(j)));
@@ -78,7 +78,7 @@ int main(int32 argc, int8* argv[]) {
         real64 watermark = real64(people[0].points);
         DebugLog_("Watermark : %Lf\n", watermark);
         nflag usedup = false;
-        for(nuint j = 1; j < numpeople && !usedup; ++j) {
+        for(uintn j = 1; j < numpeople && !usedup; ++j) {
             // -- how much do we need to add to all the people so far to get the watermark
             // -- up to the current entry
             real64 diff = (real64(people[j].points) - watermark) * real64(j) / real64(total);
@@ -98,7 +98,7 @@ int main(int32 argc, int8* argv[]) {
             diff = diff / real64(j);
             DebugLog_("Adjusted diff %Lf, remaining %Lf\n", diff, remaining);
             DebugLog_("People :");
-            for(nuint k = 0; k < j; ++k) {
+            for(uintn k = 0; k < j; ++k) {
                 people[k].min += diff;
                 DebugLog_(" %Lf", people[k].min);
             }
@@ -108,7 +108,7 @@ int main(int32 argc, int8* argv[]) {
         if(!usedup) {
             remaining = remaining / real64(numpeople);
             DebugLog_("Average remaining %Lf\nPeople :", remaining);
-            for(nuint k = 0; k < numpeople; ++k) {
+            for(uintn k = 0; k < numpeople; ++k) {
                 people[k].min += remaining;
                 DebugLog_(" %Lf", people[k].min);
             }
@@ -119,7 +119,7 @@ int main(int32 argc, int8* argv[]) {
         people.Sort<SByIndex>();
 
         Log_("Case #%d:", i+1);
-        for(nuint j = 0; j < numpeople; ++j)
+        for(uintn j = 0; j < numpeople; ++j)
             Log_(" %.6Lf", people[j].min * 100.0f);
         Log_("\n");
     }

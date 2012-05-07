@@ -4,23 +4,23 @@
 #include "io/clog.h"
 
 // -- constants
-static const nuint kAnswer = 443839;
+static const uintn kAnswer = 443839;
 
 // ================================================================================================
 // Problem 30
 // ================================================================================================
 int32 Problem30() {
     // -- calculate an upper limit
-    nuint ninetofive = 9*9*9*9*9;
-    nuint max = ninetofive;
+    uintn ninetofive = 9*9*9*9*9;
+    uintn max = ninetofive;
 
     // -- as an upper bound we just want to make sure its greater than its number
     // -- of digits times 9^5
-    nuint lastnumdigits;
-    nuint numdigits = 0;
+    uintn lastnumdigits;
+    uintn numdigits = 0;
     do {
         lastnumdigits = numdigits;
-        nuint temp = max;
+        uintn temp = max;
         numdigits = 0;
         while(temp > 0) {
             temp /= 10;
@@ -30,13 +30,13 @@ int32 Problem30() {
             max = ninetofive * numdigits;
     } while(lastnumdigits != numdigits);
 
-    nuint result = 0;
-    for(nuint i = 2; i < max; ++i) {
+    uintn result = 0;
+    for(uintn i = 2; i < max; ++i) {
         
-        nuint temp = i;
-        nuint sum = 0;
+        uintn temp = i;
+        uintn sum = 0;
         while(temp > 0) {
-            nuint digit = temp % 10;
+            uintn digit = temp % 10;
             temp /= 10;
             sum += digit * digit * digit * digit * digit;
         }

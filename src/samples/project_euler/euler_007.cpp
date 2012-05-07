@@ -9,8 +9,8 @@
 #include "euler.h"
 
 // -- consts
-static const nuint kWhichPrime = 10001;
-static const nuint kAnswer = 104743;
+static const uintn kWhichPrime = 10001;
+static const uintn kAnswer = 104743;
 
 // ================================================================================================
 // Find the 10001st prime number
@@ -20,7 +20,7 @@ int32 Problem7() {
     while(primecalc.NumPrimes() < kWhichPrime)
         primecalc.CheckNext();
 
-    nuint answer = primecalc.Prime(kWhichPrime-1);
+    uintn answer = primecalc.Prime(kWhichPrime-1);
     CLog::Write("The " NUintFmt_ " prime is " NUintFmt_ "\n", kWhichPrime, answer);
 
     Assert_(answer == kAnswer, "Incorrect answer");

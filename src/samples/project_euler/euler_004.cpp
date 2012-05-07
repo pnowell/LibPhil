@@ -4,19 +4,19 @@
 #include "io/clog.h"
 
 // -- consts
-static const nuint kMaxDigits = 8;
-static const nuint kAnswer = 906609;
+static const uintn kMaxDigits = 8;
+static const uintn kAnswer = 906609;
 
 // ================================================================================================
 // Find the largest palindrome that's a product of a pair of 3 digit numbers
 // ================================================================================================
 int32 Problem4() {
-    nuint f1 = 999;
-    nuint f2 = 999;
-    nuint product;
-    nuint digits[kMaxDigits];
-    nuint i, j;
-    nuint largest = 0;
+    uintn f1 = 999;
+    uintn f2 = 999;
+    uintn product;
+    uintn digits[kMaxDigits];
+    uintn i, j;
+    uintn largest = 0;
 
     while(f2 > 0 && f2 * 999 > largest) {
         product = f1 * f2;

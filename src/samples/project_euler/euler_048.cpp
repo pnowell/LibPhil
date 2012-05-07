@@ -5,8 +5,8 @@
 #include "io/clog.h"
 
 // -- constants
-static const nuint kLastNumber = 1000;
-static const nuint kNumDigits = 10;
+static const uintn kLastNumber = 1000;
+static const uintn kNumDigits = 10;
 static cpointer kAnswer = "9110846700";
 
 // ================================================================================================
@@ -19,7 +19,7 @@ int32 Problem48() {
     CBigInt temp;
     temp.SetDigitLimit(kNumDigits);
 
-    for(nuint i = 1; i <= kLastNumber; ++i) {
+    for(uintn i = 1; i <= kLastNumber; ++i) {
         // -- we don't need to bother with multiples of 10, since
         // -- they'll all end up with at least ten zeros in their least significant digits
         if((i % 10) == 0)
@@ -27,7 +27,7 @@ int32 Problem48() {
 
         // -- initialize temp to 1
         temp = 1;
-        for(nuint j = 0; j < i; ++j) {
+        for(uintn j = 0; j < i; ++j) {
             temp *= i;
         }
         result += temp;
@@ -35,7 +35,7 @@ int32 Problem48() {
 
     CLog::Write("The last " NUintFmt_ " digits of the sum are \"", kNumDigits);
     nflag correct = true;
-    for(nuint i = kNumDigits; i > 0;) {
+    for(uintn i = kNumDigits; i > 0;) {
         --i;
         CLog::Write(NUintFmt_, result.Digit(i));
         if(int8(result.Digit(i) + '0') != kAnswer[kNumDigits-i-1])

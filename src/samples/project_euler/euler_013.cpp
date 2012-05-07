@@ -115,14 +115,14 @@ static cpointer kAnswer = "5537376230390876637302048746832985971773659831892672"
 // ================================================================================================
 int32 Problem13() {
     CBigInt sum;
-    for(nuint i = 0; i < kNumbersSize; ++i)
+    for(uintn i = 0; i < kNumbersSize; ++i)
         sum += CBigInt(kNumbers[i]);
 
     // -- iterate over the ten most significant digits
-    nuint numdigits = sum.NumDigits();
+    uintn numdigits = sum.NumDigits();
     Assert_(numdigits >= 10, "Not enough digits : " NUintFmt_, numdigits);
     nflag correct = true;
-    for(nuint i = numdigits; i > 0; --i) {
+    for(uintn i = numdigits; i > 0; --i) {
         CLog::Write("%c", int8(sum.Digit(i-1) + '0'));
         correct = correct && (kAnswer[numdigits - i] - '0' == int8(sum.Digit(i-1)));
     }

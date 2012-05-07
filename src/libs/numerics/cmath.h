@@ -22,7 +22,7 @@ public:
     static uint64 ISqrt(uint64 n);
 
     // -- convert a string representation of a number to a number
-    static nint AToI(cpointer a);
+    static intn AToI(cpointer a);
 };
 
 // ================================================================================================

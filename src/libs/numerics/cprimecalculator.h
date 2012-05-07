@@ -14,10 +14,10 @@ class CPrimeCalculator {
 protected:
 
     CSieve sieve;
-    nuint currsieve;
-    nuint currnum;
-    nuint currsqrt;
-    CTable<nuint> primes;
+    uintn currsieve;
+    uintn currnum;
+    uintn currsqrt;
+    CTable<uintn> primes;
 
 public:
 
@@ -29,18 +29,18 @@ public:
     void CheckNext();
 
     // -- iterate until we find all the primes less than/equal to a given max
-    void FindPrimesUpTo(nuint max);
+    void FindPrimesUpTo(uintn max);
 
     // -- accessors
-    nuint NumPrimes();
-    nuint Prime(nuint idx);
-    nflag IsPrime(nuint p);
+    uintn NumPrimes();
+    uintn Prime(uintn idx);
+    nflag IsPrime(uintn p);
 };
 
 // ================================================================================================
 // Calculate all the primes up to (and possibly including) the given maximum number
 // ================================================================================================
-inline void CPrimeCalculator::FindPrimesUpTo(nuint max) {
+inline void CPrimeCalculator::FindPrimesUpTo(uintn max) {
     while(currnum <= max)
         CheckNext();
 }
@@ -48,11 +48,11 @@ inline void CPrimeCalculator::FindPrimesUpTo(nuint max) {
 // ================================================================================================
 // Accessors
 // ================================================================================================
-inline nuint CPrimeCalculator::NumPrimes() {
+inline uintn CPrimeCalculator::NumPrimes() {
     return primes.Count();
 }
 
-inline nuint CPrimeCalculator::Prime(nuint idx) {
+inline uintn CPrimeCalculator::Prime(uintn idx) {
     return primes[idx];
 }
 

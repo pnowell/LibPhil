@@ -7,23 +7,23 @@
 // -- local includes
 #include "euler.h"
 
-static const nuint kNumDivisors = 500;
-static const nuint kAnswer = 76576500;
+static const uintn kNumDivisors = 500;
+static const uintn kAnswer = 76576500;
 
 // ================================================================================================
 // Problem 12
 // ================================================================================================
 int32 Problem12() {
     // -- start at the triangle closest to (and not greater than) numdivisors to save a little time
-    nuint triidx = (CMath::ISqrt(1 + 8 * kNumDivisors) - 1) >> 1;
-    nuint trinum = (triidx * (triidx + 1)) >> 1;
+    uintn triidx = (CMath::ISqrt(1 + 8 * kNumDivisors) - 1) >> 1;
+    uintn trinum = (triidx * (triidx + 1)) >> 1;
     CLog::Write("We start triidx off at " NUintFmt_ " which is " NUintFmt_ "\n", triidx, trinum);
-    nuint trisqrt = 1;
+    uintn trisqrt = 1;
 
     // -- initialize our prime list
     CPrimeCalculator& primecalc = PrimeCalculator();
 
-    nuint product = 0;
+    uintn product = 0;
     do {
         // -- move on to the next triangle number
         ++triidx;
@@ -38,11 +38,11 @@ int32 Problem12() {
 
         // -- and take the product of the powers of each prime factor plus one
         product = 1;
-        nuint numprimes = primecalc.NumPrimes();
-        nuint temp = trinum;
-        for(nuint i = 0; i < numprimes && temp > 1; ++i) {
-            nuint currprime = primecalc.Prime(i);
-            nuint factorpow = 1;
+        uintn numprimes = primecalc.NumPrimes();
+        uintn temp = trinum;
+        for(uintn i = 0; i < numprimes && temp > 1; ++i) {
+            uintn currprime = primecalc.Prime(i);
+            uintn factorpow = 1;
             while((temp % currprime) == 0) {
                 ++factorpow;
                 temp = temp / currprime;
@@ -57,11 +57,11 @@ int32 Problem12() {
                 trinum, triidx, product);
 
     CLog::Write(NUintFmt_ " = ", trinum);
-    nuint temp = trinum;
-    nuint numprimes = primecalc.NumPrimes();
-    for(nuint i = 0; i < numprimes && temp > 1; ++i) {
-        nuint currprime = primecalc.Prime(i);
-        nuint factorpow = 0;
+    uintn temp = trinum;
+    uintn numprimes = primecalc.NumPrimes();
+    for(uintn i = 0; i < numprimes && temp > 1; ++i) {
+        uintn currprime = primecalc.Prime(i);
+        uintn factorpow = 0;
         while((temp % currprime) == 0) {
             ++factorpow;
             temp = temp / currprime;

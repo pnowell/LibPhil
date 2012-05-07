@@ -15,11 +15,11 @@
 // Record of a particular level
 // ------------------------------------------------------------------------------------------------
 struct SLevel {
-    nuint req1;
-    nuint req2;
+    uintn req1;
+    uintn req2;
     nflag comp1;
 
-    SLevel(nuint r1, nuint r2) : req1(r1), req2(r2), comp1(false) {}
+    SLevel(uintn r1, uintn r2) : req1(r1), req2(r2), comp1(false) {}
 };
 
 // ------------------------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ struct SLevelPtr {
 // Compare function for sorting increasing req1
 // ------------------------------------------------------------------------------------------------
 struct SByReq1 {
-    static nint Compare(SLevelPtr& left, SLevelPtr& right) {
+    static intn Compare(SLevelPtr& left, SLevelPtr& right) {
         // -- look for levels with lower "1" requirements first
         if(left.lev->req1 < right.lev->req1)
             return -1;
@@ -49,7 +49,7 @@ struct SByReq1 {
 // Compare function for sorting increasing req2
 // ------------------------------------------------------------------------------------------------
 struct SByReq2 {
-    static nint Compare(SLevelPtr& left, SLevelPtr& right) {
+    static intn Compare(SLevelPtr& left, SLevelPtr& right) {
         // -- look for levels with lower "2" requirements first
         if(left.lev->req2 < right.lev->req2)
             return -1;
@@ -89,10 +89,10 @@ int main(int32 argc, int8* argv[]) {
     CTable<SLevel> levs;
     CTable<SLevelPtr> byreq1;
     CTable<SLevelPtr> byreq2;
-    for(nuint i = 0; i < numtests; ++i) {
+    for(uintn i = 0; i < numtests; ++i) {
         fscanf_s(fp, "%d", &numlevs);
         levs.Clear();
-        for(nuint j = 0; j < numlevs; ++j) {
+        for(uintn j = 0; j < numlevs; ++j) {
             fscanf_s(fp, "%d %d", &r1, &r2);
             levs.Grow(SLevel(r1, r2));
         }
@@ -100,7 +100,7 @@ int main(int32 argc, int8* argv[]) {
         // -- fill the three pass tables with pointers to the main table
         byreq1.Clear();
         byreq2.Clear();
-        for(nuint j = 0; j < numlevs; ++j) {
+        for(uintn j = 0; j < numlevs; ++j) {
             SLevel* lev = levs.GetElem(j);
             byreq1.Grow(SLevelPtr(lev));
             byreq2.Grow(SLevelPtr(lev));
@@ -113,12 +113,12 @@ int main(int32 argc, int8* argv[]) {
         uint32 stars = 0;
         nflag possible = true;
         nflag found;
-        nuint numcomplete = 0;
+        uintn numcomplete = 0;
         while(numcomplete < numlevs) {
             // -- look through by increasing req2
-            nuint fallback = kNeverIndex;
+            uintn fallback = kNeverIndex;
             found = false;
-            nuint j;
+            uintn j;
             for(j = 0; j < byreq2.Count(); ++j) {
                 SLevel& lev = *byreq2[j].lev;
                 if(lev.req2 > stars)
@@ -165,8 +165,8 @@ int main(int32 argc, int8* argv[]) {
             // -- now, we should look through the req1 list to see if there's anything at all
             // -- we can do, and find the one with the highest req2 (least likely to be able to
             // -- get to it in time)
-            nuint best = kNeverIndex;
-            nuint bestreq = 0;
+            uintn best = kNeverIndex;
+            uintn bestreq = 0;
             for(j = 0; j < byreq1.Count();) {
                 SLevel& lev = *byreq1[j].lev;
                 if(lev.comp1) {

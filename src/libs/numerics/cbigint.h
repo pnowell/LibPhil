@@ -12,39 +12,39 @@ class CBigInt {
 protected:
 
     CTable<uint8> digits;
-    nuint limit;
+    uintn limit;
 
 public:
 
-    CBigInt(nuint val = 0);
+    CBigInt(uintn val = 0);
     CBigInt(cpointer v);
 
     // -- limit the number of digits
-    void SetDigitLimit(nuint lim);
+    void SetDigitLimit(uintn lim);
     void ClearDigitLimit();
 
     // -- swap memory with the given big int
     void Swap(CBigInt& other);
 
     // -- accessors
-    nuint NumDigits() const;
-    nuint Digit(nuint idx) const;
+    uintn NumDigits() const;
+    uintn Digit(uintn idx) const;
 
     // -- operators
     const CBigInt& operator=(const CBigInt& other);
-    const CBigInt& operator=(nuint other);
+    const CBigInt& operator=(uintn other);
     const CBigInt& operator+=(const CBigInt& other);
-    const CBigInt& operator*=(nuint other);
+    const CBigInt& operator*=(uintn other);
 };
 
 // ================================================================================================
 // Accessors
 // ================================================================================================
-inline nuint CBigInt::NumDigits() const {
+inline uintn CBigInt::NumDigits() const {
     return digits.Count();
 }
 
-inline nuint CBigInt::Digit(nuint idx) const {
+inline uintn CBigInt::Digit(uintn idx) const {
     return digits[idx];
 }
 

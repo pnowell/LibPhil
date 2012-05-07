@@ -7,11 +7,11 @@
 // ------------------------------------------------------------------------------------------------
 // Convert the given number to a table of decimal digits
 // ------------------------------------------------------------------------------------------------
-nuint TopDigit(nuint val) {
+uintn TopDigit(uintn val) {
     if(val == 0)
         return 0;
     val /= 10;
-    nuint result = 1;
+    uintn result = 1;
     while(val > 0) {
         result *= 10;
         val /= 10;
@@ -22,13 +22,13 @@ nuint TopDigit(nuint val) {
 // ------------------------------------------------------------------------------------------------
 // The actual analysis
 // ------------------------------------------------------------------------------------------------
-nuint NumRecycledPairs(nuint a, nuint b) {
-    nuint topdigit = TopDigit(a);
-    nuint result = 0;
+uintn NumRecycledPairs(uintn a, uintn b) {
+    uintn topdigit = TopDigit(a);
+    uintn result = 0;
 
     // -- start from a and march upward
-    for(nuint i = a; i < b; ++i) {
-        nuint rot = i;
+    for(uintn i = a; i < b; ++i) {
+        uintn rot = i;
         // -- rotate through all the variations of this number, ignoring anything less
         // -- than the starting number
         do {
@@ -71,13 +71,13 @@ int main(int32 argc, int8* argv[]) {
     uint32 numtests;
     fscanf_s(fp, "%d", &numtests);
 
-    for(nuint i = 0; i < numtests; ++i) {
+    for(uintn i = 0; i < numtests; ++i) {
         // -- read in the two numbers
         uint32 a, b;
         fscanf_s(fp, "%d", &a);
         fscanf_s(fp, "%d", &b);
 
-        nuint result = NumRecycledPairs(a, b);
+        uintn result = NumRecycledPairs(a, b);
 
         // -- write the result
         CLog::Write("Case #%d: %lld\n", i + 1, result);

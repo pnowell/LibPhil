@@ -10,33 +10,33 @@
 // Struct to describe a single dancer
 // ------------------------------------------------------------------------------------------------
 struct SDancer {
-    nuint total;
-    nuint best;
-    nuint surprisebest;
+    uintn total;
+    uintn best;
+    uintn surprisebest;
 
     // -- constructor
-    SDancer(nuint t) : total(t), best(0), surprisebest(0) {}
+    SDancer(uintn t) : total(t), best(0), surprisebest(0) {}
 };
 
 // ------------------------------------------------------------------------------------------------
 // The actual analysis of a single line
 // ------------------------------------------------------------------------------------------------
-nuint Analyze(CTable<SDancer>& dancers, nuint surprises, nuint besttarget) {
+uintn Analyze(CTable<SDancer>& dancers, uintn surprises, uintn besttarget) {
     // -- keep track of how many dancers beat the besttarget
-    nuint result = 0;
+    uintn result = 0;
 
     // -- we're going to "spend" our surprises on people that need it to get them up
     // -- to the besttarget best score
-    nuint surprisesleft = surprises;
+    uintn surprisesleft = surprises;
 
     // -- go through and compute the best score with and without being a surprise
-    nuint count = dancers.Count();
-    for(nuint i = 0; i < count; ++i) {
+    uintn count = dancers.Count();
+    for(uintn i = 0; i < count; ++i) {
         SDancer& curr = dancers[i];
-        nuint rem = curr.total % 3;
-        nuint div = curr.total / 3;
-        nuint best = div;
-        nuint surprisebest = div;
+        uintn rem = curr.total % 3;
+        uintn div = curr.total / 3;
+        uintn best = div;
+        uintn surprisebest = div;
         if(rem == 0) {
             best = div;
             if(0 < div && div < 10)
@@ -99,7 +99,7 @@ int main(int32 argc, int8* argv[]) {
 
     // -- keep a table of dancers
     CTable<SDancer> dancers;
-    for(nuint i = 0; i < numtests; ++i) {
+    for(uintn i = 0; i < numtests; ++i) {
         uint32 numdancers;
         fscanf_s(fp, "%d", &numdancers);
 
@@ -112,14 +112,14 @@ int main(int32 argc, int8* argv[]) {
         fscanf_s(fp, "%d", &besttarget);
 
         // -- read all the dancers
-        for(nuint j = 0; j < numdancers; ++j) {
+        for(uintn j = 0; j < numdancers; ++j) {
             uint32 total;
             fscanf_s(fp, "%d", &total);
             dancers.Grow(SDancer(total));
         }
 
         // -- do the analysis
-        nuint result = Analyze(dancers, surprises, besttarget);
+        uintn result = Analyze(dancers, surprises, besttarget);
 
         // -- write the result
         CLog::Write("Case #%d: %lld\n", i+1, result);

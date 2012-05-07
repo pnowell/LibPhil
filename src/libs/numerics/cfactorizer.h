@@ -15,16 +15,16 @@ class CFactorizer {
 protected:
 
     // -- recursive function used when collecting divisors
-    static void CollectFactorCombinations(const CTable<nuint>& factors, nuint curr, nuint prod,
-                                          CTable<nuint>& divisors);
+    static void CollectFactorCombinations(const CTable<uintn>& factors, uintn curr, uintn prod,
+                                          CTable<uintn>& divisors);
 
 public:
 
     // -- find all the prime factors of the given number
-    static void CollectFactors(nuint num, CPrimeCalculator& primecalc, CTable<nuint>& factors,
+    static void CollectFactors(uintn num, CPrimeCalculator& primecalc, CTable<uintn>& factors,
                                nflag cleartable = true);
 
     // -- make all the combinations of factors to build a table of divisors
-    static void CollectDivisors(const CTable<nuint>& factors, CTable<nuint>& divisors);
+    static void CollectDivisors(const CTable<uintn>& factors, CTable<uintn>& divisors);
 };
 

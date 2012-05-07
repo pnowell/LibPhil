@@ -13,12 +13,12 @@
 
 struct SClass {
     CTable<SClass*> derived;
-    nuint visited;
+    uintn visited;
 
     SClass() : derived(), visited(kNeverIndex) {}
 };
 
-nflag Trace(SClass* c, nuint idx) {
+nflag Trace(SClass* c, uintn idx) {
     CTable<SClass*> stack;
     stack.Grow(c);
 
@@ -30,7 +30,7 @@ nflag Trace(SClass* c, nuint idx) {
             return true;
         curr->visited = idx;
 
-        for(nuint i = 0; i < curr->derived.Count(); ++i)
+        for(uintn i = 0; i < curr->derived.Count(); ++i)
             stack.Grow(curr->derived[i]);
     }
 
@@ -62,17 +62,17 @@ int main(int32 argc, int8* argv[]) {
     fscanf_s(fp, "%d", &numtests);
 
     CTable<SClass> classes;
-    for(nuint i = 0; i < numtests; ++i) {
-        nuint numclasses;
+    for(uintn i = 0; i < numtests; ++i) {
+        uintn numclasses;
         fscanf_s(fp, "%lld", &numclasses);
         classes.Clear();
         classes.GrowMultiple(numclasses);
-        for(nuint j = 0; j < numclasses; ++j) {
+        for(uintn j = 0; j < numclasses; ++j) {
             SClass& curr = classes[j];
-            nuint numderived;
+            uintn numderived;
             fscanf_s(fp, "%lld", &numderived);
-            for(nuint k = 0; k < numderived; ++k) {
-                nuint idx;
+            for(uintn k = 0; k < numderived; ++k) {
+                uintn idx;
                 fscanf_s(fp, "%lld", &idx);
                 // -- connect the classes
                 SClass& parent = classes[idx-1];
@@ -82,7 +82,7 @@ int main(int32 argc, int8* argv[]) {
 
         // -- now go through each class tracing all the parents looking for a place we touch twice
         nflag found = false;
-        for(nuint j = 0; j < numclasses; ++j) {
+        for(uintn j = 0; j < numclasses; ++j) {
             SClass* curr = &classes[j];
             found = Trace(curr, j);
             if(found)
