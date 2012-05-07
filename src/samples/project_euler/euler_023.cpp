@@ -59,9 +59,9 @@ int32 Problem23() {
     }
 
     CLog::Write("The sum of all numbers that can't be written\n"
-                "as a sum of two abundant numbers is " NUintFmt_ "\n", result);
+                "as a sum of two abundant numbers is " UintNFmt_ "\n", result);
 
-    Assert_(result == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    Assert_(result == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
 
     return 0;
 }

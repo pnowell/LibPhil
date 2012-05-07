@@ -38,8 +38,8 @@ int32 Problem22() {
         score += curr * (i+1);
     }
 
-    CLog::Write("Total name score is " NUintFmt_ "\n", score);
-    Assert_(score == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    CLog::Write("Total name score is " UintNFmt_ "\n", score);
+    Assert_(score == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
     
     return 0;
 }

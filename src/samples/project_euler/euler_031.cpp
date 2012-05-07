@@ -49,8 +49,8 @@ int32 Problem31() {
         }
     }
 
-    CLog::Write("The number of combinations is " NUintFmt_ "\n", result);
-    Assert_(result == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    CLog::Write("The number of combinations is " UintNFmt_ "\n", result);
+    Assert_(result == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
 
     return 0;
 }

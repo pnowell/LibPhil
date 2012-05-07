@@ -56,8 +56,8 @@ void CFactorizer::CollectFactors(uintn num, CPrimeCalculator& primecalc, CTable<
     
     // -- if there's anything left, this number is prime and is it's only factor
     if(leftover > 1) {
-        Assert_(leftover == num, NUintFmt_ " should have been a prime number, "
-                                 "so nothing should have been divided out yet (" NUintFmt_ ")",
+        Assert_(leftover == num, UintNFmt_ " should have been a prime number, "
+                                 "so nothing should have been divided out yet (" UintNFmt_ ")",
                                  num, leftover);
         factors.Grow(num);
     }

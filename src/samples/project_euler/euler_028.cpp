@@ -26,9 +26,9 @@ int32 Problem28() {
         last += level * 8;
     }
 
-    CLog::Write("The sum of the diagonals of the " NUintFmt_ "x" NUintFmt_ " square is "
-                NUintFmt_ "\n", kSize, kSize, sum);
-    Assert_(sum == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    CLog::Write("The sum of the diagonals of the " UintNFmt_ "x" UintNFmt_ " square is "
+                UintNFmt_ "\n", kSize, kSize, sum);
+    Assert_(sum == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
     
     return 0;
 }

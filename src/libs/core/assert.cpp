@@ -15,7 +15,7 @@ void AssertHandler(cpointer file, uintn line, cpointer errorfmt, ...) {
     CLog::Write("\n+===================+\n");
     CLog::Write("| Assertion failure |\n");
     CLog::Write("+===================+\n");
-    CLog::Write("| File  : %s\n| Line  : " NUintFmt_ "\n| Error : ", file, line);
+    CLog::Write("| File  : %s\n| Line  : " UintNFmt_ "\n| Error : ", file, line);
 
     // -- print the error
     va_list args;

@@ -48,10 +48,10 @@ int32 Problem26() {
         }
     }
 
-    CLog::Write("The number with the longest cycle length of " NUintFmt_ " is " NUintFmt_ "\n",
+    CLog::Write("The number with the longest cycle length of " UintNFmt_ " is " UintNFmt_ "\n",
                 longestlen, longest);
 
-    Assert_(longest == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    Assert_(longest == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
 
     return 0;
 }

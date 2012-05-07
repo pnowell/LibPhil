@@ -80,7 +80,7 @@ static void TimeCall(ProblemCB cb) {
     timer.Stop();
 
     // -- print the number of seconds / milliseconds it took to run
-    CLog::Write(" -- %.5f secs (" NUintFmt_ " usecs)\n", timer.GetSeconds(), timer.GetMicro());
+    CLog::Write(" -- %.5f secs (" UintNFmt_ " usecs)\n", timer.GetSeconds(), timer.GetMicro());
 }
 
 // ================================================================================================
@@ -98,7 +98,7 @@ int main(int32 argc, pointer argv[]) {
             for(uintn i = 0; i < kNumProblems; ++i) {
                 if(kProblems[i] != NULL) {
                     CLog::Write("\n\n====================\n");
-                    CLog::Write("Problem " NUintFmt_ "\n", i + 1);
+                    CLog::Write("Problem " UintNFmt_ "\n", i + 1);
                     CLog::Write("====================\n");
                     TimeCall(kProblems[i]);
                 }
@@ -107,7 +107,7 @@ int main(int32 argc, pointer argv[]) {
         else {
             --idx;
             if(idx >= kNumProblems || kProblems[idx] == NULL) {
-                CLog::Write("Problem " NUintFmt_ " isn't solved yet\n", idx+1);
+                CLog::Write("Problem " UintNFmt_ " isn't solved yet\n", idx+1);
             }
             else
                 TimeCall(kProblems[idx]);
@@ -117,7 +117,7 @@ int main(int32 argc, pointer argv[]) {
         TimeCall(kDefault);
 
     timer.Stop();
-    CLog::Write(" ---- Total time %.5f secs (" NUintFmt_ " usecs)\n",
+    CLog::Write(" ---- Total time %.5f secs (" UintNFmt_ " usecs)\n",
            timer.GetSeconds(), timer.GetMicro());
 
     return 0;

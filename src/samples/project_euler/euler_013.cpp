@@ -120,7 +120,7 @@ int32 Problem13() {
 
     // -- iterate over the ten most significant digits
     uintn numdigits = sum.NumDigits();
-    Assert_(numdigits >= 10, "Not enough digits : " NUintFmt_, numdigits);
+    Assert_(numdigits >= 10, "Not enough digits : " UintNFmt_, numdigits);
     nflag correct = true;
     for(uintn i = numdigits; i > 0; --i) {
         CLog::Write("%c", int8(sum.Digit(i-1) + '0'));

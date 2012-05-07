@@ -93,8 +93,8 @@ int32 Problem29() {
         }
     }
 
-    CLog::Write("The number of unique numbers is " NUintFmt_ "\n", unique);
-    Assert_(unique == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    CLog::Write("The number of unique numbers is " UintNFmt_ "\n", unique);
+    Assert_(unique == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
 
     return 0;
 }

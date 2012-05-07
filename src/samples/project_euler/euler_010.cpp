@@ -30,7 +30,7 @@ int32 Problem10() {
         sum += currprime;
     }
 
-    CLog::Write("The sum of all primes less than " NUintFmt_ " is %lld\n", kMaxPrime, sum);
+    CLog::Write("The sum of all primes less than " UintNFmt_ " is %lld\n", kMaxPrime, sum);
     Assert_(sum == kAnswer, "Looks like I got the wrong answer");
 
     return 0;

@@ -21,9 +21,9 @@ int32 Problem20() {
     for(uintn i = 0; i < numdigits; ++i)
         sum += product.Digit(i);
 
-    CLog::Write("The sum of the digits of " NUintFmt_ "! are " NUintFmt_ "\n", kFactorial, sum);
+    CLog::Write("The sum of the digits of " UintNFmt_ "! are " UintNFmt_ "\n", kFactorial, sum);
 
-    Assert_(sum == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    Assert_(sum == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
 
     return 0;
 }

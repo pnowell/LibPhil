@@ -83,7 +83,7 @@ int32 Problem11() {
         }
     }
 
-    CLog::Write("max = " NUintFmt_ "\n", maxproduct);
+    CLog::Write("max = " UintNFmt_ "\n", maxproduct);
 
     Assert_(maxproduct == kAnswer, "Incorrect answer");
 

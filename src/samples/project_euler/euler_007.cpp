@@ -21,7 +21,7 @@ int32 Problem7() {
         primecalc.CheckNext();
 
     uintn answer = primecalc.Prime(kWhichPrime-1);
-    CLog::Write("The " NUintFmt_ " prime is " NUintFmt_ "\n", kWhichPrime, answer);
+    CLog::Write("The " UintNFmt_ " prime is " UintNFmt_ "\n", kWhichPrime, answer);
 
     Assert_(answer == kAnswer, "Incorrect answer");
 

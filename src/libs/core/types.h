@@ -18,8 +18,8 @@ typedef unsigned long long uint64;
 typedef uint64 puint;
 typedef int64 pint;
 
-#define NIntFmt_ "%lld"
-#define NUintFmt_ "%llu"
+#define IntNFmt_ "%lld"
+#define UintNFmt_ "%llu"
 #define NIntIs32_ 0
 #define NIntIs64_ 1
 

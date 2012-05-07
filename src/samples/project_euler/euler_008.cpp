@@ -47,7 +47,7 @@ int32 Problem8() {
         }
     }
 
-    CLog::Write("Largest product is from [" NUintFmt_ "] %c * %c * %c * %c * %c = " NUintFmt_ "\n",
+    CLog::Write("Largest product is from [" UintNFmt_ "] %c * %c * %c * %c * %c = " UintNFmt_ "\n",
                 largestidx, number[largestidx], number[largestidx+1], number[largestidx+2],
                 number[largestidx+3], number[largestidx+4], largest);
 

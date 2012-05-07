@@ -134,7 +134,7 @@ static void FindProducts(uintn a, uintn digitbits, CTable<uintn>& products) {
             else
                 CLog::Write("-repeat- ");
 
-            CLog::Write(NUintFmt_ " x " NUintFmt_ " = " NUintFmt_ "\n", a, curr, product);
+            CLog::Write(UintNFmt_ " x " UintNFmt_ " = " UintNFmt_ "\n", a, curr, product);
         }
     }
 }
@@ -166,8 +166,8 @@ int32 Problem32() {
     for(uintn i = 0; i < count; ++i)
         result += products[i];
 
-    CLog::Write("The sum of the products is " NUintFmt_ "\n", result);
-    Assert_(result == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    CLog::Write("The sum of the products is " UintNFmt_ "\n", result);
+    Assert_(result == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
 
     return 0;
 }

@@ -35,7 +35,7 @@ int32 Problem4() {
         }
 
         if(j >= i) {
-            CLog::Write("Found the palindrome " NUintFmt_ " = " NUintFmt_ " * " NUintFmt_ "\n",
+            CLog::Write("Found the palindrome " UintNFmt_ " = " UintNFmt_ " * " UintNFmt_ "\n",
                         f1 * f2, f1, f2);
             if(f1 * f2 > largest)
                 largest = f1 * f2;
@@ -44,7 +44,7 @@ int32 Problem4() {
             f2 -= 1;
             f1 = 999;
 
-            CLog::Write("f2 * 999 = " NUintFmt_ " * 999 = " NUintFmt_ "\n", f2, f2 * f2);
+            CLog::Write("f2 * 999 = " UintNFmt_ " * 999 = " UintNFmt_ "\n", f2, f2 * f2);
         }
         else {
             f1 -= 1;
@@ -55,7 +55,7 @@ int32 Problem4() {
         }
     }
 
-    CLog::Write("Found the largest is " NUintFmt_ "\n", largest);
+    CLog::Write("Found the largest is " UintNFmt_ "\n", largest);
 
     Assert_(largest == kAnswer, "Incorrect answer");
 

@@ -53,7 +53,7 @@ int32 Problem33() {
                     if(id[m] == jd[n]) {
                         if(j * id[1-m] == i * jd[1-n]) {
                             fractions.Grow(SFrac(i, j));
-                            CLog::Write("Found fraction " NUintFmt_ " / " NUintFmt_ "\n", i, j);
+                            CLog::Write("Found fraction " UintNFmt_ " / " UintNFmt_ "\n", i, j);
                         }
                     }
                 }
@@ -76,7 +76,7 @@ int32 Problem33() {
         CFactorizer::CollectFactors(curr.den, primecalc, denfactors, false);
     }
 
-    CLog::Write("The product of all those is " NUintFmt_ " / " NUintFmt_ "\n",
+    CLog::Write("The product of all those is " UintNFmt_ " / " UintNFmt_ "\n",
                 result.num, result.den);
 
     // -- sort the list of factors for the numerator and denominator
@@ -97,7 +97,7 @@ int32 Problem33() {
             ++i;
             ++j;
 
-            CLog::Write("Removing common factor " NUintFmt_ " -> " NUintFmt_ " / " NUintFmt_ "\n",
+            CLog::Write("Removing common factor " UintNFmt_ " -> " UintNFmt_ " / " UintNFmt_ "\n",
                         nf, result.num, result.den);
         }
         else if(nf < df)
@@ -106,9 +106,9 @@ int32 Problem33() {
             ++j;
     }
 
-    CLog::Write("The denominator is " NUintFmt_ "\n", result.den);
+    CLog::Write("The denominator is " UintNFmt_ "\n", result.den);
 
-    Assert_(result.den == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    Assert_(result.den == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
     
     return 0;
 }

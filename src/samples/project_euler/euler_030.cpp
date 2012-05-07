@@ -41,13 +41,13 @@ int32 Problem30() {
             sum += digit * digit * digit * digit * digit;
         }
         if(sum == i) {
-            CLog::Write(NUintFmt_ " ", sum);
+            CLog::Write(UintNFmt_ " ", sum);
             result += sum;
         }
     }
 
-    CLog::Write("\nThe sum of those is " NUintFmt_ "\n", result);
-    Assert_(result == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    CLog::Write("\nThe sum of those is " UintNFmt_ "\n", result);
+    Assert_(result == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
 
     return 0;
 }

@@ -62,11 +62,11 @@ int32 Problem14() {
     }
 
     // -- now show all the results with that length
-    CLog::Write("Values got up to " NUintFmt_ "\n", maxval);
+    CLog::Write("Values got up to " UintNFmt_ "\n", maxval);
     for(uintn i = 0; i < kMaxResult; ++i) {
         if(lengths[i] == longest) {
-            CLog::Write(NUintFmt_ " starts a chain of length " NUintFmt_ "\n", i+1, longest);
-            Assert_(i+1 == kAnswer, "Answer should have been " NUintFmt_, kAnswer);
+            CLog::Write(UintNFmt_ " starts a chain of length " UintNFmt_ "\n", i+1, longest);
+            Assert_(i+1 == kAnswer, "Answer should have been " UintNFmt_, kAnswer);
         }
     }
     

@@ -58,9 +58,9 @@ int32 Problem19() {
         }
     }
 
-    CLog::Write("Num sundays = " NUintFmt_ "\n", numsundays);
+    CLog::Write("Num sundays = " UintNFmt_ "\n", numsundays);
 
-    Assert_(numsundays == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    Assert_(numsundays == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
 
     return 0;
 }

@@ -21,7 +21,7 @@ static uint64 Permutation(uintn n) {
     }
 
     // -- expect an input from 1 to the number of permutations
-    Assert_(0 < n && n <= limit, "Permutation index " NUintFmt_ " is out of bounds", n);
+    Assert_(0 < n && n <= limit, "Permutation index " UintNFmt_ " is out of bounds", n);
     // -- offset the input to be from 0 to less than the number of permutations
     --n;
 
@@ -60,7 +60,7 @@ static uint64 Permutation(uintn n) {
 // ================================================================================================
 int32 Problem24() {
     uint64 perm = Permutation(kNumPermutation);
-    CLog::Write("The " NUintFmt_ " permutation is %lld \n", kNumPermutation, perm);
+    CLog::Write("The " UintNFmt_ " permutation is %lld \n", kNumPermutation, perm);
 
     Assert_(perm == kAnswer, "The answer should have been %lld", kAnswer);
 

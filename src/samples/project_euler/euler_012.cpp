@@ -17,7 +17,7 @@ int32 Problem12() {
     // -- start at the triangle closest to (and not greater than) numdivisors to save a little time
     uintn triidx = (CMath::ISqrt(1 + 8 * kNumDivisors) - 1) >> 1;
     uintn trinum = (triidx * (triidx + 1)) >> 1;
-    CLog::Write("We start triidx off at " NUintFmt_ " which is " NUintFmt_ "\n", triidx, trinum);
+    CLog::Write("We start triidx off at " UintNFmt_ " which is " UintNFmt_ "\n", triidx, trinum);
     uintn trisqrt = 1;
 
     // -- initialize our prime list
@@ -53,10 +53,10 @@ int32 Problem12() {
         // -- if we've found a number with more than the required number of divisors, we can stop
     } while(product <= kNumDivisors);
 
-    CLog::Write(NUintFmt_ " (the " NUintFmt_ " triangle number) has " NUintFmt_ " divisors\n",
+    CLog::Write(UintNFmt_ " (the " UintNFmt_ " triangle number) has " UintNFmt_ " divisors\n",
                 trinum, triidx, product);
 
-    CLog::Write(NUintFmt_ " = ", trinum);
+    CLog::Write(UintNFmt_ " = ", trinum);
     uintn temp = trinum;
     uintn numprimes = primecalc.NumPrimes();
     for(uintn i = 0; i < numprimes && temp > 1; ++i) {
@@ -67,7 +67,7 @@ int32 Problem12() {
             temp = temp / currprime;
         }
         if(factorpow > 0)
-            CLog::Write(NUintFmt_ "^" NUintFmt_ " ", currprime, factorpow);
+            CLog::Write(UintNFmt_ "^" UintNFmt_ " ", currprime, factorpow);
     }
     CLog::Write("\n");
 

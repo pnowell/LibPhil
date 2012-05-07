@@ -78,7 +78,7 @@ int32 Problem35() {
         // -- do it again to print things out
         decomp = curr;
         do {
-            CLog::Write(" " NUintFmt_, decomp);
+            CLog::Write(" " UintNFmt_, decomp);
             decomp = (decomp % 10) * place[digits - 1] + decomp / 10;
         } while(decomp != curr);
         CLog::Write("\n");
@@ -87,9 +87,9 @@ int32 Problem35() {
         count += toadd;
     }
 
-    CLog::Write("There are " NUintFmt_ " circular primes\n", count);
+    CLog::Write("There are " UintNFmt_ " circular primes\n", count);
 
-    Assert_(count == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    Assert_(count == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
     
     return 0;
 }

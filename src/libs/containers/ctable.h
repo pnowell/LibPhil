@@ -123,12 +123,12 @@ template<typename T> inline uintn CTable<T>::Count() const {
 }
 
 template<typename T> inline const T* CTable<T>::GetElem(uintn idx) const {
-    Assert_(idx < count, "Index " NUintFmt_ " is out of range " NUintFmt_, idx, count);
+    Assert_(idx < count, "Index " UintNFmt_ " is out of range " UintNFmt_, idx, count);
     return recast_<const T*>(GetPointer(idx));
 }
 
 template<typename T> inline T* CTable<T>::GetElem(uintn idx) {
-    Assert_(idx < count, "Index " NUintFmt_ " is out of range " NUintFmt_, idx, count);
+    Assert_(idx < count, "Index " UintNFmt_ " is out of range " UintNFmt_, idx, count);
     return recast_<T*>(GetPointer(idx));
 }
 
@@ -237,7 +237,7 @@ template<typename T> void CTable<T>::RemoveMultiple(uintn idx, uintn n) {
     if(n == 0)
         return;
 
-    Assert_(idx + n <= count, "Indices [" NUintFmt_ ".." NUintFmt_ ") are out of range " NUintFmt_,
+    Assert_(idx + n <= count, "Indices [" UintNFmt_ ".." UintNFmt_ ") are out of range " UintNFmt_,
             idx, idx + n, count);
 
     // -- destroy the elements to be removed

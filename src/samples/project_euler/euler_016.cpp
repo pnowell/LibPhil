@@ -16,11 +16,11 @@ int32 Problem16() {
         power *= 2;
 
     // -- print the number
-    CLog::Write("2^" NUintFmt_ " = ", kMax);
+    CLog::Write("2^" UintNFmt_ " = ", kMax);
     uintn numdigits = power.NumDigits();
     for(uintn i = numdigits; i > 0;) {
         --i;
-        CLog::Write(NUintFmt_, power.Digit(i));
+        CLog::Write(UintNFmt_, power.Digit(i));
     }
     CLog::Write("\n");
 
@@ -28,9 +28,9 @@ int32 Problem16() {
     uintn sum = 0;
     for(uintn i = 0; i < numdigits; ++i)
         sum += power.Digit(i);
-    CLog::Write("Sum of digits = " NUintFmt_ "\n", sum);
+    CLog::Write("Sum of digits = " UintNFmt_ "\n", sum);
 
-    Assert_(sum == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    Assert_(sum == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
 
     return 0;
 }

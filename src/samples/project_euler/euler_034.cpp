@@ -35,7 +35,7 @@ int32 Problem34() {
         value += factorial[9];
         ++maxdigits;
     }
-    CLog::Write("Upper bound is " NUintFmt_ " (greater than its factorial sum " NUintFmt_ ")\n\n",
+    CLog::Write("Upper bound is " UintNFmt_ " (greater than its factorial sum " UintNFmt_ ")\n\n",
                 currnumber, value);
 
     // -- non-recursively iterate through all the possibilities of ordered combinations of digits
@@ -102,7 +102,7 @@ int32 Problem34() {
             numbers.Grow(value);
 
             // -- print them out as we find them
-            CLog::Write("Found a match " NUintFmt_ "\n", value);
+            CLog::Write("Found a match " UintNFmt_ "\n", value);
             decomp = value;
             check.Clear();
             while(decomp > 0) {
@@ -110,7 +110,7 @@ int32 Problem34() {
                 decomp /= 10;
             }
             for(; i > 0; --i) {
-                CLog::Write("    " NUintFmt_ " : " NUintFmt_ "\n",
+                CLog::Write("    " UintNFmt_ " : " UintNFmt_ "\n",
                             check[i-1], factorial[check[i-1]]);
             }
             CLog::Write("\n");
@@ -130,9 +130,9 @@ int32 Problem34() {
     uintn count = numbers.Count();
     for(uintn i = 0; i < count; ++i)
         sum += numbers[i];
-    CLog::Write("The sum is " NUintFmt_ "\n", sum);
+    CLog::Write("The sum is " UintNFmt_ "\n", sum);
 
-    Assert_(sum == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    Assert_(sum == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
     
     return 0;
 }

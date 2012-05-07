@@ -71,15 +71,15 @@ int32 Problem17() {
     for(uintn i = 1; i <= 9; ++i)
         to999 += kHundred * 100 + kOnes[i] * 100 + kAnd * 99 + to9 + to19 + to99;
 
-    CLog::Write("Number of letters from 1 to 9 is " NUintFmt_ "\n", to9);
-    CLog::Write("Number of letters from 10 to 19 is " NUintFmt_ "\n", to19);
-    CLog::Write("Number of letters from 20 to 99 is " NUintFmt_ "\n", to99);
-    CLog::Write("Number of letters from 100 to 999 is " NUintFmt_ "\n", to999);
+    CLog::Write("Number of letters from 1 to 9 is " UintNFmt_ "\n", to9);
+    CLog::Write("Number of letters from 10 to 19 is " UintNFmt_ "\n", to19);
+    CLog::Write("Number of letters from 20 to 99 is " UintNFmt_ "\n", to99);
+    CLog::Write("Number of letters from 100 to 999 is " UintNFmt_ "\n", to999);
 
     uintn numletters = to9 + to19 + to99 + to999 + kOneThousand;
-    CLog::Write("The sum of the number of letters is " NUintFmt_ "\n", numletters);
+    CLog::Write("The sum of the number of letters is " UintNFmt_ "\n", numletters);
 
-    Assert_(numletters == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    Assert_(numletters == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
 
     return 0;
 }

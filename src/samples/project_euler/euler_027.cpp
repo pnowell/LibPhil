@@ -93,13 +93,13 @@ int32 Problem27() {
     }
 
     if(besta < 0)
-        CLog::Write("The best quadratic is n^2 - " NIntFmt_ "*n + " NUintFmt_ "\n", -besta, bestb);
+        CLog::Write("The best quadratic is n^2 - " IntNFmt_ "*n + " UintNFmt_ "\n", -besta, bestb);
     else
-        CLog::Write("The best quadratic is n^2 + " NIntFmt_ "*n + " NUintFmt_ "\n", besta, bestb);
-    CLog::Write("It yields primes in the range n=0 to " NUintFmt_ "\n", bestlen-1);
-    CLog::Write("So the product a*b=" NIntFmt_ "\n", besta*bestb);
+        CLog::Write("The best quadratic is n^2 + " IntNFmt_ "*n + " UintNFmt_ "\n", besta, bestb);
+    CLog::Write("It yields primes in the range n=0 to " UintNFmt_ "\n", bestlen-1);
+    CLog::Write("So the product a*b=" IntNFmt_ "\n", besta*bestb);
 
-    Assert_(besta * bestb == kAnswer, "The answer should have been " NIntFmt_, kAnswer);
+    Assert_(besta * bestb == kAnswer, "The answer should have been " IntNFmt_, kAnswer);
 
     return 0;
 }

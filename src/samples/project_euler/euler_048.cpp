@@ -33,11 +33,11 @@ int32 Problem48() {
         result += temp;
     }
 
-    CLog::Write("The last " NUintFmt_ " digits of the sum are \"", kNumDigits);
+    CLog::Write("The last " UintNFmt_ " digits of the sum are \"", kNumDigits);
     nflag correct = true;
     for(uintn i = kNumDigits; i > 0;) {
         --i;
-        CLog::Write(NUintFmt_, result.Digit(i));
+        CLog::Write(UintNFmt_, result.Digit(i));
         if(int8(result.Digit(i) + '0') != kAnswer[kNumDigits-i-1])
             correct = false;
     }

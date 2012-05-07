@@ -25,10 +25,10 @@ int32 Problem25() {
     }
 
     uintn result = f0.NumDigits() >= kNumDigits ? i0 : i1;
-    CLog::Write("The first fibonacci number to have at least " NUintFmt_ " digits is f"
-                NUintFmt_ "\n", kNumDigits, result);
+    CLog::Write("The first fibonacci number to have at least " UintNFmt_ " digits is f"
+                UintNFmt_ "\n", kNumDigits, result);
 
-    Assert_(result == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    Assert_(result == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
 
     return 0;
 }

@@ -118,6 +118,6 @@ extern uintn Problem18And67(const uintn* tri, const uintn size);
 // ================================================================================================
 int32 Problem67() {
     uintn max = Problem18And67(kTri, kSize);
-    Assert_(max == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    Assert_(max == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
     return 0;
 }

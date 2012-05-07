@@ -59,10 +59,10 @@ int32 Problem21() {
         }
     }
 
-    CLog::Write("The sum of amicable numbers less than " NUintFmt_ " is " NUintFmt_ "\n",
+    CLog::Write("The sum of amicable numbers less than " UintNFmt_ " is " UintNFmt_ "\n",
                 kLimit, sum);
 
-    Assert_(sum == kAnswer, "The answer should have been " NUintFmt_, kAnswer);
+    Assert_(sum == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
 
     return 0;
 }
