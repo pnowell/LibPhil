@@ -70,7 +70,7 @@ uintn Compute(CTable<SItem>& boxes, CTable<SItem>& toys) {
             else
                 state.toydone += min;
 
-            // -- push this state back on to cointnue
+            // -- push this state back on to continue
             stack.Grow(state);
         }
         else {
