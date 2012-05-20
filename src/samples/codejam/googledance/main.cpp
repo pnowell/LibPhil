@@ -76,7 +76,7 @@ uintn Analyze(CTable<SDancer>& dancers, uintn surprises, uintn besttarget) {
 // ================================================================================================
 // Main
 // ================================================================================================
-int main(int32 argc, int8* argv[]) {
+int main(sint32 argc, sint8* argv[]) {
     // -- make sure we're given a file name
     if(argc < 2) {
         CLog::Write("You need to give me a filename, please\n");

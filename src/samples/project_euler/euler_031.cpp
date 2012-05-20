@@ -19,7 +19,7 @@ static const uintn kAnswer = 73682;
 // ================================================================================================
 // Problem 31
 // ================================================================================================
-int32 Problem31() {
+sint32 Problem31() {
     // -- how many ways can we add up to something less than or equal to 200 using
     // -- the above denominations (we don't count the 1p coin, since it can always be
     // -- used to fill in the rest of whatever we're missing)

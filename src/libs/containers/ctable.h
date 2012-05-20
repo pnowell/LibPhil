@@ -14,7 +14,7 @@
 // Default comparison function (only assumes less-than is implemented)
 // ================================================================================================
 template<typename T> struct CompareBasicTypes {
-    static intn Compare(const T& left, const T& right) {
+    static sintn Compare(const T& left, const T& right) {
         return left < right ? -1 : right < left ? 1 : 0;
     }
 };
@@ -35,7 +35,7 @@ protected:
         }
     };
 
-    CDataPtr<int8> mem;
+    CDataPtr<sint8> mem;
     uintn count;
     uintn alloc;
     uintn expand;
@@ -83,7 +83,7 @@ public:
     template<typename C> void Sort();
 
     // -- binary search for the given element, return where it should be inserted if not found
-    template<typename C> nflag Search(const T& key, uintn& index);
+    template<typename C> flagn Search(const T& key, uintn& index);
 
     // -- reset the table
     void Clear();
@@ -144,19 +144,19 @@ template<typename T> inline T& CTable<T>::operator[](uintn idx) {
 // Add entries to the table at the end
 // ================================================================================================
 template<typename T> inline void CTable<T>::Grow(const T& val) {
-    InsertMultiple(kNeverIndex, val, 1);
+    InsertMultiple(kNeverIndexN, val, 1);
 }
 
 template<typename T> inline void CTable<T>::Grow() {
-    InsertMultiple(kNeverIndex, 1);
+    InsertMultiple(kNeverIndexN, 1);
 }
 
 template<typename T> inline void CTable<T>::GrowMultiple(const T& val, uintn n) {
-    InsertMultiple(kNeverIndex, val, n);
+    InsertMultiple(kNeverIndexN, val, n);
 }
 
 template<typename T> inline void CTable<T>::GrowMultiple(uintn n) {
-    InsertMultiple(kNeverIndex, n);
+    InsertMultiple(kNeverIndexN, n);
 }
 
 // ================================================================================================
@@ -317,12 +317,12 @@ template<typename T> template<typename C> inline void CTable<T>::Sort() {
 // ================================================================================================
 // Search for the given key (assumes the table is already sorted)
 // ================================================================================================
-template<typename T> template<typename C> nflag CTable<T>::Search(const T& key, uintn& index) {
+template<typename T> template<typename C> flagn CTable<T>::Search(const T& key, uintn& index) {
     // -- do a binary search to find where this item should be inserted
     uintn low = 0;
     uintn high = count;
     uintn i;
-    intn comp;
+    sintn comp;
 
     // -- while our range is non-empty
     while(low < high) {

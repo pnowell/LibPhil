@@ -13,7 +13,7 @@ static const uintn kAnswer = 76576500;
 // ================================================================================================
 // Problem 12
 // ================================================================================================
-int32 Problem12() {
+sint32 Problem12() {
     // -- start at the triangle closest to (and not greater than) numdivisors to save a little time
     uintn triidx = (CMath::ISqrt(1 + 8 * kNumDivisors) - 1) >> 1;
     uintn trinum = (triidx * (triidx + 1)) >> 1;

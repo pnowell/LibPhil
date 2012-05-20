@@ -5,15 +5,15 @@
 #include "io/clog.h"
 
 // -- constants
-static const int32 kAnswer = 31875000;
+static const sint32 kAnswer = 31875000;
 
 // ================================================================================================
 // Find the triplet of numbers such that a^2 + b^2 = c^2 and a+b+c = 1000
 // ================================================================================================
-int32 Problem9() {
-    int32 a = 1;
-    int32 b = 2;
-    int32 c = 0;
+sint32 Problem9() {
+    sint32 a = 1;
+    sint32 b = 2;
+    sint32 c = 0;
     
     while(b < 1000) {
         c = 1000 - a - b;

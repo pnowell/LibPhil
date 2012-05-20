@@ -17,7 +17,7 @@ static const uintn kNameCount = ArraySize_(kNames);
 // ================================================================================================
 // Problem 22
 // ================================================================================================
-int32 Problem22() {
+sint32 Problem22() {
     CTable<cpointer> names;
 
     // -- first just fill the table of names

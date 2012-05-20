@@ -48,7 +48,7 @@ void CPrimeCalculator::CheckNext() {
     while(currsqrt * currsqrt <= currnum)
         ++currsqrt;
 
-    nflag isprime = true;
+    flagn isprime = true;
     for(uintn i = 0; primes[i] <= currsqrt; ++i) {
         if((currnum % primes[i]) == 0) {
             isprime = false;
@@ -70,7 +70,7 @@ void CPrimeCalculator::CheckNext() {
 // ================================================================================================
 // Do a binary search to see if the given number is prime
 // ================================================================================================
-nflag CPrimeCalculator::IsPrime(uintn p) {
+flagn CPrimeCalculator::IsPrime(uintn p) {
     FindPrimesUpTo(p);
     uintn idx;
     return primes.Search<CompareBasicTypes<uintn> >(p, idx);

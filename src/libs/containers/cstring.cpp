@@ -8,15 +8,6 @@
 // ================================================================================================
 // Constructors
 // ================================================================================================
-CString::CString(cpointer s) {
-    uintn len = CString::Length(s);
-    str.GrowMultiple(len + 1);
-    pointer p = str.GetElem(0);
-    for(uintn i = 0; i < len; ++i)
-        p[i] = s[i];
-    p[len] = '\0';
-}
-
 CString::CString(cpointer s, ...) {
     va_list args;
     va_start(args, s);
@@ -40,13 +31,13 @@ CString::CString(const CString& other) {
 // ================================================================================================
 // Static utilities for frequently used string / character operations
 // ================================================================================================
-int8 CString::ToLower(int8 c) {
+sint8 CString::ToLower(sint8 c) {
     if('A' <= c && c <= 'Z')
         return c - 'A' + 'a';
     return c;
 }
 
-int8 CString::ToUpper(int8 c) {
+sint8 CString::ToUpper(sint8 c) {
     if('a' <= c && c <= 'z')
         return c - 'a' + 'A';
     return c;
@@ -62,12 +53,12 @@ uintn CString::Length(cpointer s) {
 // ================================================================================================
 // Comparison of two strings
 // ================================================================================================
-intn CString::Compare(cpointer left, cpointer right, nflag ignorecase) {
+sintn CString::Compare(cpointer left, cpointer right, flagn ignorecase) {
     uintn i = 0;
     while(left[i] != 0 && right[i] != 0) {
         if(ignorecase) {
-            int8 l = ToLower(left[i]);
-            int8 r = ToLower(right[i]);
+            sint8 l = ToLower(left[i]);
+            sint8 r = ToLower(right[i]);
             if(l != r)
                 return l - r;
         }

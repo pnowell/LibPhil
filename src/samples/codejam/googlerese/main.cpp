@@ -10,14 +10,14 @@ cpointer kDict = "yhesocvxduiglbkrztnwjpfmaq";
 // ------------------------------------------------------------------------------------------------
 // Check if this is a valid string character
 // ------------------------------------------------------------------------------------------------
-nflag IsStringChar(intn c) {
+flagn IsStringChar(sintn c) {
     return c == ' ' || (c >= 'a' && c <= 'z');
 }
 
 // ================================================================================================
 // Main
 // ================================================================================================
-int main(int32 argc, int8* argv[]) {
+int main(sint32 argc, sint8* argv[]) {
     // -- make sure we're given a file name
     if(argc < 2) {
         CLog::Write("You need to give me a filename, please\n");
@@ -38,7 +38,7 @@ int main(int32 argc, int8* argv[]) {
     uint32 numtests;
     fscanf_s(fp, "%d", &numtests);
 
-    intn c = fgetc(fp);
+    sintn c = fgetc(fp);
     while(IsStringChar(c) == false && c != EOF)
         c = fgetc(fp);
 

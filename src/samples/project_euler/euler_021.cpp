@@ -32,13 +32,13 @@ static uintn SumOfDivisors(uintn num, CPrimeCalculator& primecalc) {
 // ================================================================================================
 // Problem 21
 // ================================================================================================
-int32 Problem21() {
+sint32 Problem21() {
     // -- first set up a prime calculator and get all the primes up to half the limit
     CPrimeCalculator& primecalc = PrimeCalculator();
 
     primecalc.FindPrimesUpTo(kLimit);
 
-    CTable<nflag> shouldskip;
+    CTable<flagn> shouldskip;
     shouldskip.GrowMultiple(false, kLimit);
 
     // -- check every number up through the limit to see if it's part of an amicable pair

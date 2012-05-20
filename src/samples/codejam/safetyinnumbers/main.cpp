@@ -20,13 +20,13 @@ struct SPerson {
 };
 
 struct SByPoints {
-    static intn Compare(SPerson& a, SPerson& b) {
+    static sintn Compare(SPerson& a, SPerson& b) {
         return (a.points < b.points) ? -1 : (a.points > b.points) ? 1 : 0;
     }
 };
 
 struct SByIndex {
-    static intn Compare(SPerson& a, SPerson& b) {
+    static sintn Compare(SPerson& a, SPerson& b) {
         return (a.index < b.index) ? -1 : (a.index > b.index) ? 1 : 0;
     }
 };
@@ -34,7 +34,7 @@ struct SByIndex {
 // ================================================================================================
 // Main
 // ================================================================================================
-int main(int32 argc, int8* argv[]) {
+int main(sint32 argc, sint8* argv[]) {
     // -- make sure we're given a file name
     if(argc < 2) {
         Log_("You need to give me a filename, please\n");
@@ -77,7 +77,7 @@ int main(int32 argc, int8* argv[]) {
         real64 remaining = 1.0f;
         real64 watermark = real64(people[0].points);
         DebugLog_("Watermark : %Lf\n", watermark);
-        nflag usedup = false;
+        flagn usedup = false;
         for(uintn j = 1; j < numpeople && !usedup; ++j) {
             // -- how much do we need to add to all the people so far to get the watermark
             // -- up to the current entry

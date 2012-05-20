@@ -10,7 +10,7 @@ static const uintn kAnswer = 906609;
 // ================================================================================================
 // Find the largest palindrome that's a product of a pair of 3 digit numbers
 // ================================================================================================
-int32 Problem4() {
+sint32 Problem4() {
     uintn f1 = 999;
     uintn f2 = 999;
     uintn product;

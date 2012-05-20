@@ -17,7 +17,7 @@ static const uintn kAnswer = 9183;
 // ================================================================================================
 // Problem 29
 // ================================================================================================
-int32 Problem29() {
+sint32 Problem29() {
     // -- first we need all the primes up to 100
     CPrimeCalculator& calc = PrimeCalculator();
     calc.FindPrimesUpTo(kMaxBase);

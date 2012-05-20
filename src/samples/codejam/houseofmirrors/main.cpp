@@ -13,20 +13,20 @@ struct SLayout {
     uintn h;
     uintn w;
     uintn d;
-    intn x;
-    intn y;
+    sintn x;
+    sintn y;
 };
 
 // ------------------------------------------------------------------------------------------------
 // Struct for storing a slope as 2 integers (keep out of floating point land)
 // ------------------------------------------------------------------------------------------------
 struct SSlope {
-    intn neg;
-    intn dx;
-    intn dy;
+    sintn neg;
+    sintn dx;
+    sintn dy;
 
     // -- constructor
-    SSlope(intn x, intn y) {
+    SSlope(sintn x, sintn y) {
         if((y == 0 && x < 0) || y < 0) {
             dx = -x;
             dy = -y;
@@ -40,8 +40,8 @@ struct SSlope {
     }
 
     // -- comparison
-    static intn Compare(SSlope left, SSlope right) {
-        intn det = left.dy * right.dx - left.dx * right.dy;
+    static sintn Compare(SSlope left, SSlope right) {
+        sintn det = left.dy * right.dx - left.dx * right.dy;
         // -- if the determinant isn't zero, we already know we have different slopes
         if(det != 0)
             return det;
@@ -72,7 +72,7 @@ void ParseLayout(FILE* fp, SLayout& layout) {
     fscanf_s(fp, "%lld %lld %lld", &layout.h, &layout.w, &layout.d);
 
     const uintn linesize = 64;
-    int8 line[linesize];
+    sint8 line[linesize];
 
     // -- finish the previous line
     GetLine(fp, line, linesize);
@@ -81,7 +81,7 @@ void ParseLayout(FILE* fp, SLayout& layout) {
     GetLine(fp, line, linesize);
 
     // -- read the middle rows
-    nflag found = false;
+    flagn found = false;
     for(uintn i = 1; i < layout.h-1; ++i) {
         GetLine(fp, line, linesize);
 
@@ -108,11 +108,11 @@ void ParseLayout(FILE* fp, SLayout& layout) {
 // ------------------------------------------------------------------------------------------------
 // Utility for getting the nth reflected position in a particular dimension
 // ------------------------------------------------------------------------------------------------
-intn ReflectedCoord(intn n, intn original, uintn len) {
+sintn ReflectedCoord(sintn n, sintn original, uintn len) {
     if((n & 1) == 0)
         return len * n + original;
 
-    intn k = (n + 1) / 2;
+    sintn k = (n + 1) / 2;
     return 2 * len * k - 1 - original;
 }
 
@@ -131,24 +131,24 @@ uintn NumReflections(SLayout& layout) {
     // -- d / dim rounded up to the nearest even number
     // $$$ Something is wrong here, so I added more checks
     // $$$ Not sure how wrong it is, probably off by 1
-    intn refx = (2 * layout.d / layout.w + 1) / 2 + 3;
-    intn refy = (2 * layout.d / layout.h + 1) / 2 + 3;
-    intn dsqr = layout.d * layout.d;
+    sintn refx = (2 * layout.d / layout.w + 1) / 2 + 3;
+    sintn refy = (2 * layout.d / layout.h + 1) / 2 + 3;
+    sintn dsqr = layout.d * layout.d;
     #if DebugOutput_
         CLog::Write("pos x=%lld, pos y=%lld, Max dsqr=%lld\n", layout.x, layout.y, dsqr);
     #endif
-    for(intn nx = -refx; nx <= refx; ++nx) {
-        intn x = ReflectedCoord(nx, layout.x, layout.w);
-        intn dispx = layout.x - x;
-        intn dispxsqr = dispx * dispx;
-        for(intn ny = -refy; ny <= refy; ++ny) {
+    for(sintn nx = -refx; nx <= refx; ++nx) {
+        sintn x = ReflectedCoord(nx, layout.x, layout.w);
+        sintn dispx = layout.x - x;
+        sintn dispxsqr = dispx * dispx;
+        for(sintn ny = -refy; ny <= refy; ++ny) {
             // -- we don't count our real self
             if(nx == 0 && ny == 0)
                 continue;
 
-            intn y = ReflectedCoord(ny, layout.y, layout.h);
-            intn dispy = layout.y - y;
-            intn dispysqr = dispy * dispy;
+            sintn y = ReflectedCoord(ny, layout.y, layout.h);
+            sintn dispy = layout.y - y;
+            sintn dispysqr = dispy * dispy;
 
             #if DebugOutput_
                 CLog::Write("nx=%lld, ny=%lld, x=%lld, y=%lld", nx, ny, x, y);
@@ -200,7 +200,7 @@ uintn NumReflections(SLayout& layout) {
 // ================================================================================================
 // Main
 // ================================================================================================
-int main(int32 argc, int8* argv[]) {
+int main(sint32 argc, sint8* argv[]) {
     // -- make sure we're given a file name
     if(argc < 2) {
         CLog::Write("You need to give me a filename, please\n");

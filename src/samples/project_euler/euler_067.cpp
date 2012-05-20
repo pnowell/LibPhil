@@ -111,13 +111,11 @@ static const uintn kTri[] = {
 static const uintn kSize = ArraySize_(kTri);
 static const uintn kAnswer = 7273;
 
-extern uintn Problem18And67(const uintn* tri, const uintn size);
+extern sint32 Problem18And67(const uintn* tri, uintn size, uintn answer);
 
 // ================================================================================================
 // Problem 67
 // ================================================================================================
-int32 Problem67() {
-    uintn max = Problem18And67(kTri, kSize);
-    Assert_(max == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
-    return 0;
+sint32 Problem67() {
+    return Problem18And67(kTri, kSize, kAnswer);
 }

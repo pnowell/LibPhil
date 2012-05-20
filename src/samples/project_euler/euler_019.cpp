@@ -41,13 +41,13 @@ static const uintn kAnswer = 171;
 // ================================================================================================
 // Problem 19
 // ================================================================================================
-int32 Problem19() {
+sint32 Problem19() {
     uintn year = 1901;
     uintn day = 2; // jan 1st 1901 was a Tuesday
    
     uintn numsundays = 0;
     for(; year <= 2000; ++year) {
-        nflag leap = (((year % 4) == 0) && ((year % 100) != 0)) || ((year % 400) == 0);
+        flagn leap = (((year % 4) == 0) && ((year % 100) != 0)) || ((year % 400) == 0);
         const uintn* months = leap ? kLeapMonths : kNormalMonths;
         for(uintn m = 0; m < kNumMonths; ++m) {
             if(day == 0)

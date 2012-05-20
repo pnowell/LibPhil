@@ -87,17 +87,17 @@ inline const CDataPtr<T>& CDataPtr<T>::ReCast(const CDataPtr<S>& other) {
 // ================================================================================================
 template<typename T>
 inline void CDataPtr<T>::SetRel(T* p) {
-    data = (uint64(recast_<puint>(p)) << 1) | 1;
+    data = (uint64(recast_<uintp>(p) - recast_<uintp>(this)) << 1) | 1;
 }
 
 template<typename T>
 inline void CDataPtr<T>::SetAbs(T* p) {
-    data = uint64(recast_<puint>(p)) << 1;
+    data = uint64(recast_<uintp>(p)) << 1;
 }
 
 template<typename T>
 inline T* CDataPtr<T>::Get() const {
     uint64 rel = data & 1;
-    return recast_<T*>((data >> 1) + rel * recast_<puint>(this));
+    return recast_<T*>((data >> 1) + rel * recast_<uintp>(this));
 }
 

@@ -51,7 +51,7 @@ static void FindProducts(uintn a, uintn digitbits, CTable<uintn>& products) {
     curr = min - 1;
     while(curr <= max) {
         // -- look until we see a number with digits that don't overlap with the input
-        nflag illegal = true;
+        flagn illegal = true;
         uintn currbits = digitbits;
         while(illegal) {
             // -- increment the ones digit
@@ -142,7 +142,7 @@ static void FindProducts(uintn a, uintn digitbits, CTable<uintn>& products) {
 // ================================================================================================
 // Problem 32
 // ================================================================================================
-int32 Problem32() {
+sint32 Problem32() {
     CTable<uintn> products;
 
     // -- first handle single digit numbers

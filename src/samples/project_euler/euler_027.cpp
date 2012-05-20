@@ -10,12 +10,12 @@
 
 // -- constants
 static const uintn kMax = 1000;
-static const intn kAnswer = -59231;
+static const sintn kAnswer = -59231;
 
 // ================================================================================================
 // Problem 27
 // ================================================================================================
-int32 Problem27() {
+sint32 Problem27() {
     // -- find more primes than we'll need
     CLog::Write("Calculating primes ... ");
     CPrimeCalculator& calc = PrimeCalculator();
@@ -40,20 +40,20 @@ int32 Problem27() {
     }
     CLog::Write("Done\n");
 
-    intn besta = 0;
-    intn bestb = 0;
+    sintn besta = 0;
+    sintn bestb = 0;
     uintn bestlen = 0;
 
     // -- b has to be a prime since n has to be able to start at zero
     uintn pidx = 0;
     for(; calc.Prime(pidx) < 1000; ++pidx) {
         // -- take b as the current prime
-        intn b = intn(calc.Prime(pidx));
+        sintn b = sintn(calc.Prime(pidx));
 
         // -- we need to calculate a so that 1 + a + b is prime
         // -- so we look through for a in the range b - 999 < a < b + 1000
-        intn mina = -1000;
-        intn maxa = 1000;
+        sintn mina = -1000;
+        sintn maxa = 1000;
 
         // -- we just want to make sure n=1 still yields a positive number
         if(1 + mina + b < 1)
@@ -61,13 +61,13 @@ int32 Problem27() {
 
         // -- look for the first a to fall in the range (so that 1 + a + b is a prime)
         uintn apidx = 0;
-        while(intn(calc.Prime(apidx)) - b - 1 < mina)
+        while(sintn(calc.Prime(apidx)) - b - 1 < mina)
             ++apidx;
 
         // -- now for every candidate for a that is within the range, check to see
         // -- how many primes we get
-        for(; intn(calc.Prime(apidx)) < maxa; ++apidx) {
-            intn a = calc.Prime(apidx) - b - 1;
+        for(; sintn(calc.Prime(apidx)) < maxa; ++apidx) {
+            sintn a = calc.Prime(apidx) - b - 1;
 
             uintn len = 0;
             uintn idx = 0;
@@ -76,7 +76,7 @@ int32 Problem27() {
                 ++len;
 
                 // -- recalculate bit and idx
-                intn candidate = len*len + a*len + b;
+                sintn candidate = len*len + a*len + b;
                 if(candidate < 0)
                     break;
                 idx = candidate / 64;

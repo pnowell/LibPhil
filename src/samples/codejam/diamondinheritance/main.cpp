@@ -15,10 +15,10 @@ struct SClass {
     CTable<SClass*> derived;
     uintn visited;
 
-    SClass() : derived(), visited(kNeverIndex) {}
+    SClass() : derived(), visited(kNeverIndexN) {}
 };
 
-nflag Trace(SClass* c, uintn idx) {
+flagn Trace(SClass* c, uintn idx) {
     CTable<SClass*> stack;
     stack.Grow(c);
 
@@ -40,7 +40,7 @@ nflag Trace(SClass* c, uintn idx) {
 // ================================================================================================
 // Main
 // ================================================================================================
-int main(int32 argc, int8* argv[]) {
+int main(sint32 argc, sint8* argv[]) {
     // -- make sure we're given a file name
     if(argc < 2) {
         Log_("You need to give me a filename, please\n");
@@ -81,7 +81,7 @@ int main(int32 argc, int8* argv[]) {
         }
 
         // -- now go through each class tracing all the parents looking for a place we touch twice
-        nflag found = false;
+        flagn found = false;
         for(uintn j = 0; j < numclasses; ++j) {
             SClass* curr = &classes[j];
             found = Trace(curr, j);

@@ -2,6 +2,8 @@
 #include "core/types.h"
 #include "io/clog.h"
 #include "containers/ctable.h"
+
+// -- system includes
 #include <stdio.h>
 
 #define DebugLogging_ 0
@@ -91,10 +93,15 @@ uintn Compute(CTable<SItem>& boxes, CTable<SItem>& toys) {
     return best;
 }
 
+struct STest {
+    CDataPtr<uint64> testing;
+    uint64 pointto;
+};
+
 // ================================================================================================
 // Main
 // ================================================================================================
-int main(int32 argc, int8* argv[]) {
+int main(sint32 argc, sint8* argv[]) {
     // -- make sure we're given a file name
     if(argc < 2) {
         Log_("You need to give me a filename, please\n");

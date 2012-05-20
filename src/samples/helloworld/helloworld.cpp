@@ -9,19 +9,19 @@
 // ================================================================================================
 // Main
 // ================================================================================================
-int main(int32 argc, int8* argv[]) {
-    ShowSize_(intn);
+int main(sint32 argc, sint8* argv[]) {
+    ShowSize_(sintn);
     ShowSize_(uintn);
-    ShowSize_(int8);
+    ShowSize_(sint8);
     ShowSize_(uint8);
-    ShowSize_(int16);
+    ShowSize_(sint16);
     ShowSize_(uint16);
-    ShowSize_(int32);
+    ShowSize_(sint32);
     ShowSize_(uint32);
-    ShowSize_(int64);
+    ShowSize_(sint64);
     ShowSize_(uint64);
 
-    ShowSize_(nflag);
+    ShowSize_(flagn);
 
     ShowSize_(realn);
     ShowSize_(real32);

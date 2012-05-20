@@ -17,7 +17,7 @@
 struct SLevel {
     uintn req1;
     uintn req2;
-    nflag comp1;
+    flagn comp1;
 
     SLevel(uintn r1, uintn r2) : req1(r1), req2(r2), comp1(false) {}
 };
@@ -34,7 +34,7 @@ struct SLevelPtr {
 // Compare function for sorting increasing req1
 // ------------------------------------------------------------------------------------------------
 struct SByReq1 {
-    static intn Compare(SLevelPtr& left, SLevelPtr& right) {
+    static sintn Compare(SLevelPtr& left, SLevelPtr& right) {
         // -- look for levels with lower "1" requirements first
         if(left.lev->req1 < right.lev->req1)
             return -1;
@@ -49,7 +49,7 @@ struct SByReq1 {
 // Compare function for sorting increasing req2
 // ------------------------------------------------------------------------------------------------
 struct SByReq2 {
-    static intn Compare(SLevelPtr& left, SLevelPtr& right) {
+    static sintn Compare(SLevelPtr& left, SLevelPtr& right) {
         // -- look for levels with lower "2" requirements first
         if(left.lev->req2 < right.lev->req2)
             return -1;
@@ -63,7 +63,7 @@ struct SByReq2 {
 // ================================================================================================
 // Main
 // ================================================================================================
-int main(int32 argc, int8* argv[]) {
+int main(sint32 argc, sint8* argv[]) {
     // -- make sure we're given a file name
     if(argc < 2) {
         Log_("You need to give me a filename, please\n");
@@ -111,12 +111,12 @@ int main(int32 argc, int8* argv[]) {
 
         uint32 result = 0;
         uint32 stars = 0;
-        nflag possible = true;
-        nflag found;
+        flagn possible = true;
+        flagn found;
         uintn numcomplete = 0;
         while(numcomplete < numlevs) {
             // -- look through by increasing req2
-            uintn fallback = kNeverIndex;
+            uintn fallback = kNeverIndexN;
             found = false;
             uintn j;
             for(j = 0; j < byreq2.Count(); ++j) {
@@ -165,7 +165,7 @@ int main(int32 argc, int8* argv[]) {
             // -- now, we should look through the req1 list to see if there's anything at all
             // -- we can do, and find the one with the highest req2 (least likely to be able to
             // -- get to it in time)
-            uintn best = kNeverIndex;
+            uintn best = kNeverIndexN;
             uintn bestreq = 0;
             for(j = 0; j < byreq1.Count();) {
                 SLevel& lev = *byreq1[j].lev;
@@ -175,14 +175,14 @@ int main(int32 argc, int8* argv[]) {
                 }
                 if(lev.req1 > stars)
                     break;
-                if(best == kNeverIndex || lev.req2 > bestreq) {
+                if(best == kNeverIndexN || lev.req2 > bestreq) {
                     best = j;
                     bestreq = lev.req2;
                 }
 
                 ++j;
             }
-            if(best != kNeverIndex) {
+            if(best != kNeverIndexN) {
                 SLevel& lev = *byreq1[best].lev;
                 found = true;
                 lev.comp1 = true;

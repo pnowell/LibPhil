@@ -27,7 +27,7 @@ struct SPos {
 // ================================================================================================
 // Main
 // ================================================================================================
-int main(int32 argc, int8* argv[]) {
+int main(sint32 argc, sint8* argv[]) {
     // -- make sure we're given a file name
     if(argc < 2) {
         Log_("You need to give me a filename, please\n");
@@ -76,7 +76,7 @@ int main(int32 argc, int8* argv[]) {
         }
 
         // -- go back through the car positions, and reduce it to a convex hull
-        nflag founddip = true;
+        flagn founddip = true;
         while(founddip) {
             founddip = false;
             for(uintn j = 1; j < car.Count()-1;) {

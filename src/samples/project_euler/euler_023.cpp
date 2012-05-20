@@ -15,9 +15,9 @@ static const uintn kAnswer = 4179871;
 // ================================================================================================
 // Problem 23
 // ================================================================================================
-int32 Problem23() {
+sint32 Problem23() {
     // -- we'll keep a table of flags that says if any number can be the sum of abundant numbers
-    CTable<nflag> issum;
+    CTable<flagn> issum;
     issum.GrowMultiple(false, kLimit);
 
     // -- first build a table of abundant numbers

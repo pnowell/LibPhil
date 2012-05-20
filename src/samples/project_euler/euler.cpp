@@ -10,40 +10,40 @@
 #include "euler.h"
 
 // -- extern the current problem to run
-typedef int32 (*ProblemCB)(void);
-extern int32 Problem4();
-extern int32 Problem7();
-extern int32 Problem8();
-extern int32 Problem9();
-extern int32 Problem10();
-extern int32 Problem11();
-extern int32 Problem12();
-extern int32 Problem13();
-extern int32 Problem14();
-extern int32 Problem15();
-extern int32 Problem16();
-extern int32 Problem17();
-extern int32 Problem18();
-extern int32 Problem19();
-extern int32 Problem20();
-extern int32 Problem21();
-extern int32 Problem22();
-extern int32 Problem23();
-extern int32 Problem24();
-extern int32 Problem25();
-extern int32 Problem26();
-extern int32 Problem27();
-extern int32 Problem28();
-extern int32 Problem29();
-extern int32 Problem30();
-extern int32 Problem31();
-extern int32 Problem32();
-extern int32 Problem33();
-extern int32 Problem34();
-extern int32 Problem35();
-extern int32 Problem36();
-extern int32 Problem48();
-extern int32 Problem67();
+typedef sint32 (*ProblemCB)(void);
+extern sint32 Problem4();
+extern sint32 Problem7();
+extern sint32 Problem8();
+extern sint32 Problem9();
+extern sint32 Problem10();
+extern sint32 Problem11();
+extern sint32 Problem12();
+extern sint32 Problem13();
+extern sint32 Problem14();
+extern sint32 Problem15();
+extern sint32 Problem16();
+extern sint32 Problem17();
+extern sint32 Problem18();
+extern sint32 Problem19();
+extern sint32 Problem20();
+extern sint32 Problem21();
+extern sint32 Problem22();
+extern sint32 Problem23();
+extern sint32 Problem24();
+extern sint32 Problem25();
+extern sint32 Problem26();
+extern sint32 Problem27();
+extern sint32 Problem28();
+extern sint32 Problem29();
+extern sint32 Problem30();
+extern sint32 Problem31();
+extern sint32 Problem32();
+extern sint32 Problem33();
+extern sint32 Problem34();
+extern sint32 Problem35();
+extern sint32 Problem36();
+extern sint32 Problem48();
+extern sint32 Problem67();
 
 static const ProblemCB kDefault = Problem36;
 
@@ -86,7 +86,7 @@ static void TimeCall(ProblemCB cb) {
 // ================================================================================================
 // Entry point
 // ================================================================================================
-int main(int32 argc, pointer argv[]) {
+int main(sint32 argc, pointer argv[]) {
     CTimer timer;
     timer.Start();
 

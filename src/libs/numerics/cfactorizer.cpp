@@ -18,7 +18,7 @@ void CFactorizer::CollectFactorCombinations(const CTable<uintn>& factors, uintn 
         ++end;
 
     // -- figure out if we're the end of the line and so we should be adding into the table
-    nflag record = end == numfactors;
+    flagn record = end == numfactors;
 
     // -- loop over the number of times this factor is repeated and deal with all of them
     for(uintn i = curr; i <= end; ++i) {
@@ -35,7 +35,7 @@ void CFactorizer::CollectFactorCombinations(const CTable<uintn>& factors, uintn 
 // Collect all the prime factors of a number
 // ================================================================================================
 void CFactorizer::CollectFactors(uintn num, CPrimeCalculator& primecalc, CTable<uintn>& factors,
-                                 nflag cleartable) {
+                                 flagn cleartable) {
     // -- make sure the prime calculator has enough primes
     primecalc.FindPrimesUpTo(num >> 1);
 

@@ -12,7 +12,7 @@ static cpointer kAnswer = "9110846700";
 // ================================================================================================
 // Problem 48
 // ================================================================================================
-int32 Problem48() {
+sint32 Problem48() {
     CBigInt result;
     result.SetDigitLimit(kNumDigits);
 
@@ -34,11 +34,11 @@ int32 Problem48() {
     }
 
     CLog::Write("The last " UintNFmt_ " digits of the sum are \"", kNumDigits);
-    nflag correct = true;
+    flagn correct = true;
     for(uintn i = kNumDigits; i > 0;) {
         --i;
         CLog::Write(UintNFmt_, result.Digit(i));
-        if(int8(result.Digit(i) + '0') != kAnswer[kNumDigits-i-1])
+        if(sint8(result.Digit(i) + '0') != kAnswer[kNumDigits-i-1])
             correct = false;
     }
     CLog::Write("\"\n");

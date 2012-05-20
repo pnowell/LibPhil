@@ -58,7 +58,7 @@ static uint64 Permutation(uintn n) {
 // ================================================================================================
 // Problem 24
 // ================================================================================================
-int32 Problem24() {
+sint32 Problem24() {
     uint64 perm = Permutation(kNumPermutation);
     CLog::Write("The " UintNFmt_ " permutation is %lld \n", kNumPermutation, perm);
 

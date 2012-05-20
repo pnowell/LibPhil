@@ -14,7 +14,7 @@ static const uintn kAnswer = 55;
 // ================================================================================================
 // Problem 35
 // ================================================================================================
-int32 Problem35() {
+sint32 Problem35() {
     CPrimeCalculator& primecalc = PrimeCalculator();
     CLog::Write("Calculating primes...");
     primecalc.FindPrimesUpTo(1000000);
@@ -44,7 +44,7 @@ int32 Problem35() {
 
         // -- check each rotation to see if it's a prime
         decomp = curr;
-        nflag smallest = true;
+        flagn smallest = true;
         do {
             decomp = decomp % 10 * place[digits - 1] + decomp / 10;
             if(decomp < curr) {
@@ -60,7 +60,7 @@ int32 Problem35() {
 
         decomp = curr;
         uintn toadd = 0;
-        nflag allprime = true;
+        flagn allprime = true;
         do {
             decomp = decomp % 10 * place[digits - 1] + decomp / 10;
             if(!primecalc.IsPrime(decomp)) {

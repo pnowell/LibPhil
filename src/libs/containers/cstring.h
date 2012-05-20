@@ -10,13 +10,12 @@ class CString {
 
 protected:
 
-    CTable<int8> str;
+    CTable<sint8> str;
 
 public:
 
     // -- constructors
     CString();
-    CString(cpointer s);
     CString(cpointer s, ...);
     CString(const CString& other);
 
@@ -30,14 +29,14 @@ public:
     uintn Length() const;
 
     // -- static utilities
-    static int8 ToLower(int8 c);
-    static int8 ToUpper(int8 c);
+    static sint8 ToLower(sint8 c);
+    static sint8 ToUpper(sint8 c);
     static uintn Length(cpointer s);
 
     // -- static comparison of two strings
-    static intn Compare(const CString& left, const CString& right, nflag ignorecase = false);
-    static intn Compare(const CString* left, const CString* right, nflag ignorecase = false);
-    static intn Compare(cpointer left, cpointer right, nflag ignorecase = false);
+    static sintn Compare(const CString& left, const CString& right, flagn ignorecase = false);
+    static sintn Compare(const CString* left, const CString* right, flagn ignorecase = false);
+    static sintn Compare(cpointer left, cpointer right, flagn ignorecase = false);
 };
 
 // ================================================================================================
@@ -71,11 +70,11 @@ inline uintn CString::Length() const {
 // ================================================================================================
 // Static comparison methods
 // ================================================================================================
-inline intn CString::Compare(const CString& left, const CString& right, nflag ignorecase) {
+inline sintn CString::Compare(const CString& left, const CString& right, flagn ignorecase) {
     return Compare(left.GetString(), right.GetString(), ignorecase);
 }
 
-inline intn CString::Compare(const CString* left, const CString* right, nflag ignorecase) {
+inline sintn CString::Compare(const CString* left, const CString* right, flagn ignorecase) {
     return Compare(left->GetString(), right->GetString(), ignorecase);
 }
 

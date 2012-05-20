@@ -32,7 +32,7 @@ static const uintn kAnswer = 1074;
 // ================================================================================================
 // Do all the work for problem 18 and 67
 // ================================================================================================
-uintn Problem18And67(const uintn* tri, const uintn size) {
+sint32 Problem18And67(const uintn* tri, uintn size, uintn answer) {
     uintn height = (CMath::ISqrt(1 + 8*size) - 1) / 2;
     Assert_(height * (height + 1) / 2 == size, "Are you sure the size you passed in is correct?");
     Assert_(height > 1, "Really?  Why bother with such a small triangle size");
@@ -59,15 +59,14 @@ uintn Problem18And67(const uintn* tri, const uintn size) {
     }
 
     CLog::Write("The maximum total is " UintNFmt_ "\n", maxpaths[0]);
+    Assert_(maxpaths[0] == answer, "The answer should have been " UintNFmt_, kAnswer);
 
-    return maxpaths[0];
+    return 0;
 }
 
 // ================================================================================================
 // Problem 18
 // ================================================================================================
-int32 Problem18() {
-    uintn max = Problem18And67(kTri, kSize);
-    Assert_(max == kAnswer, "The answer should have been " UintNFmt_, kAnswer);
-    return 0;
+sint32 Problem18() {
+    return Problem18And67(kTri, kSize, kAnswer);
 }

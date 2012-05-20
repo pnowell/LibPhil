@@ -15,7 +15,7 @@ static const uint64 kAnswer = 142913828922LL;
 // ================================================================================================
 // Find the sum of all primes less than 2 million
 // ================================================================================================
-int32 Problem10() {
+sint32 Problem10() {
     uintn i;
 
     // -- set up the prime calculator and calculate all the primes up to the limit

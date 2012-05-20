@@ -34,7 +34,7 @@ static const uintn kAnswer = 70600674;
 // Find the largest product of 4 kNumbers in a row from the given grid (horizontal, vertical
 // or diagonal)
 // ================================================================================================
-int32 Problem11() {
+sint32 Problem11() {
     uintn maxproduct = 0;
     uintn product;
     uintn i, j, k;

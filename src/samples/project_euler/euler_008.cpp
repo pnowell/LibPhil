@@ -33,7 +33,7 @@ static const uintn kAnswer = 40824;
 // ================================================================================================
 // Find the largest product of 5 consecutive digits of the given number
 // ================================================================================================
-int32 Problem8() {
+sint32 Problem8() {
     uintn largest = 0;
     uintn largestidx = 0;
     uintn last = kNumberLen - kNumDigits;

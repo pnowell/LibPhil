@@ -22,7 +22,7 @@ public:
 
     // -- find all the prime factors of the given number
     static void CollectFactors(uintn num, CPrimeCalculator& primecalc, CTable<uintn>& factors,
-                               nflag cleartable = true);
+                               flagn cleartable = true);
 
     // -- make all the combinations of factors to build a table of divisors
     static void CollectDivisors(const CTable<uintn>& factors, CTable<uintn>& divisors);

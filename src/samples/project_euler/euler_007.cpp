@@ -15,7 +15,7 @@ static const uintn kAnswer = 104743;
 // ================================================================================================
 // Find the 10001st prime number
 // ================================================================================================
-int32 Problem7() {
+sint32 Problem7() {
     CPrimeCalculator& primecalc = PrimeCalculator();
     while(primecalc.NumPrimes() < kWhichPrime)
         primecalc.CheckNext();
