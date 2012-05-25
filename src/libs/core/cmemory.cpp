@@ -39,7 +39,14 @@ void CMemory::Free(vpointer mem) {
 // ================================================================================================
 // Move memory from one place to another
 // ================================================================================================
-void CMemory::Move(vpointer to, vpointer from, uintn size) {
+void CMemory::Move(vpointer to, cvpointer from, uintn size) {
     memmove(to, from, size);
+}
+
+// ================================================================================================
+// Copy memory from one place to another
+// ================================================================================================
+void CMemory::Copy(vpointer to, cvpointer from, uintn size) {
+    memcpy(to, from, size);
 }
 

@@ -179,7 +179,7 @@ rule HeaderRule {
     local INCLUDEDS = $(2) ;
 
     local NOTIFY = ;
-    on $(INCLUDER) NOTIFY += $(NOTIFYTARG) ;
+    on $(INCLUDER:D) NOTIFY += $(NOTIFYTARG) ;
 
     ## -- first make sure the given library has been processed, with empty entries removed
     LibraryList [ ListSubtract $(INCLUDEDS:D) : "" ] : $(NOTIFY) ;
@@ -207,16 +207,31 @@ rule HeaderRule {
         ## -- files that are just part of an executable won't show up (because they never
         ## -- had a TARGET_LIBFILE associated with them)
         for CURRNTFY in $(NOTIFY) {
+            local NEWNEEDED ;
+            local NEEDEDCOPY ;
+            on $(CURRNTFY) NEEDEDCOPY = $(NEEDEDLIBS) ;
+
+            ## -- if there is a libfile associated with this directory, we're all going to need it
             if $(LIBFILE) {
-                on $(CURRNTFY) if ! ( $(LIBFILE) in $(NEEDEDLIBS) ) {
+                if ! ( $(LIBFILE) in $(NEEDEDCOPY) ) {
                     ## -- add this lib to the neededlibs of the current notify target
-                    NEEDEDLIBS on $(CURRNTFY) += $(LIBFILE) ;
-                    ## -- if this target wants to actually depend on it's needed libs
-                    ## -- (for example, an executable), do that here
-                    on $(CURRNTFY) if ( $(SHOULDDEPENDLIBS) = true ) {
-                        Depends $(CURRNTFY) : $(LIBFILE) ;
-                    }
+                    NEWNEEDED += $(LIBFILE) ;
                 }
+            }
+
+            ## -- for times where RESOLVED had already been processed before us, we need
+            ## -- to distribute the NEEDEDLIBS of its directory to all our notify listeners
+            on $(RESOLVED:D) NEWNEEDED += $(NEEDEDLIBS) ;
+
+            ## -- now we have a comprehensive list of what needs to be sent to this notify target
+            ## -- strip it down to the bare essentials and then do the notification
+            NEWNEEDED = [ ListSubtract $(NEWNEEDED) : $(NEEDEDCOPY) ] ;
+            NEEDEDLIBS on $(CURRNTFY) += $(NEWNEEDED) ;
+
+            ## -- if this target wants to actually depend on it's needed libs
+            ## -- (for example, an executable), do that here
+            on $(CURRNTFY) if ( $(SHOULDDEPENDLIBS) = true ) {
+                Depends $(CURRNTFY) : $(NEWNEEDED) ;
             }
 
             ## -- notify everything that this source is needed
@@ -237,8 +252,8 @@ rule HeaderRule {
         ## -- make sure this included file knows to notify all the things I wanted to notify
         ## -- about needed libs
         local NOTIFYCOPY ;
-        on $(RESOLVED) NOTIFYCOPY = [ ListMerge $(NOTIFYTARG) : $(NOTIFY) ] ;
-        NOTIFYTARG on $(RESOLVED) = $(NOTIFYCOPY) ;
+        on $(RESOLVED:D) NOTIFYCOPY = [ ListMerge $(NOTIFYTARG) : $(NOTIFY) ] ;
+        NOTIFYTARG on $(RESOLVED:D) = $(NOTIFYCOPY) ;
 
         ## -- deal with this resolved include
         Includes $(INCLUDER) : $(RESOLVED) ;
@@ -278,7 +293,7 @@ rule ObjectList {
     SOURCES = $(LIBPHIL_CWD)/$(SOURCES) ;
 
     ## -- let these sources know who to report to as they find out libraries that they need
-    NOTIFYTARG on $(SOURCES) = $(NOTIFY) ;
+    NOTIFYTARG on $(LIBPHIL_CWD) = $(NOTIFY) ;
 
     ## -- also, go ahead and let that notify target know that it needs all of these sources
     for CURRNTFY in $(NOTIFY) {

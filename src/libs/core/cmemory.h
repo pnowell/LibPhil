@@ -19,7 +19,10 @@ public:
     static void Free(vpointer m);
 
     // -- move
-    static void Move(vpointer from, vpointer to, uintn size);
+    static void Move(vpointer to, cvpointer from, uintn size);
+
+    // -- copy
+    static void Copy(vpointer to, cvpointer from, uintn size);
 
     // -- destruction
     template<typename T> static void Destroy(T* t);
